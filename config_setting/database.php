@@ -1,14 +1,14 @@
 <?php
 $dbhost = "localhost";
-$dbuser = "root";
-$dbpass = "";
+$dbuser = "rupamsingh";
+$dbpass = "ea9E@t068";
 $db = "athang";
 
 $link = mysqli_connect($dbhost, $dbuser, $dbpass);
 mysqli_select_db($link, $db);
 
 if ($link->connect_error) {
-   die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
 
@@ -16,8 +16,8 @@ function connectme()
 {
     $dbhost = "localhost";
     $dbuser = "root";
-$dbpass = "";
-$db = "athang";
+    $dbpass = "";
+    $db = "athang";
     $con = mysqli_connect($dbhost, $dbuser, $dbpass);
     mysqli_select_db($con, $db);
 

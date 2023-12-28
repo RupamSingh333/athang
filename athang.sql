@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2023 at 06:29 PM
+-- Generation Time: Dec 28, 2023 at 07:04 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -48709,17 +48709,16 @@ CREATE TABLE `customer` (
   `bank_acc_opening` enum('Y','N') NOT NULL DEFAULT 'N',
   `demate_acc_opening` enum('Y','N') NOT NULL DEFAULT 'N',
   `itr` enum('Y','N') NOT NULL DEFAULT 'N',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`cust_id`, `cust_email`, `cust_phone`, `cust_alter_phone`, `cust_password`, `confirm_password`, `cust_first_name`, `cust_org_name`, `cust_org_type`, `cust_aadhar_no`, `cust_gst_no`, `cust_country`, `cust_state`, `cust_district_id`, `cust_taluka_id`, `cust_pincode`, `cust_address`, `cust_agreement_copy`, `cust_signature`, `cust_pan_card`, `cust_aadhar_card_back`, `cust_aadhar_card_front`, `cust_selfie`, `cust_status`, `cust_desc`, `shop_act_licence`, `food_licence`, `bank_acc_opening`, `demate_acc_opening`, `itr`, `created_at`, `updated_at`) VALUES
-(1, 'vishal@doomshell.com', '08538943677', '08538943677', 'heNwrmMm', '', 'Rupam Singh', 'Doomshell', 'simple', '43443455454343', 'ASDFG', 101, 5, 627, 3, 841438, 'siwana', NULL, NULL, NULL, NULL, NULL, '1386828310_1703698448_selfie', 1, 'this is the testing', 'N', 'N', 'N', 'N', 'N', '2023-12-27 17:34:08', '2023-12-28 16:54:27'),
-(2, 'vishal@doomshell.com', '08538943677', '08538943677', 'heNwrmMm', '', 'Rupam Singh', 'Doomshell', 'simple', '43443455454343', 'ASDFG', 101, 5, 627, 2, 841438, 'siwana', NULL, NULL, NULL, NULL, NULL, '320456510_1703698465_selfie', 0, 'this is the testing', 'N', 'N', 'N', 'N', 'N', '2023-12-27 17:34:25', '2023-12-28 16:24:21');
+INSERT INTO `customer` (`cust_id`, `cust_email`, `cust_phone`, `cust_alter_phone`, `cust_password`, `confirm_password`, `cust_first_name`, `cust_org_name`, `cust_org_type`, `cust_aadhar_no`, `cust_gst_no`, `cust_country`, `cust_state`, `cust_district_id`, `cust_taluka_id`, `cust_pincode`, `cust_address`, `cust_agreement_copy`, `cust_signature`, `cust_pan_card`, `cust_aadhar_card_back`, `cust_aadhar_card_front`, `cust_selfie`, `cust_status`, `cust_desc`, `shop_act_licence`, `food_licence`, `bank_acc_opening`, `demate_acc_opening`, `itr`, `created_at`) VALUES
+(1, 'vishal@doomshell.com', '08538943677', '08538943677', 'heNwrmMm', '', 'Rupam Singh', 'Doomshell', 'simple', '43443455454343', 'ASDFG', 101, 5, 627, 3, 841438, 'siwana', NULL, NULL, NULL, NULL, NULL, '1386828310_1703698448_selfie', 1, 'this is the testing', 'N', 'N', 'N', 'N', 'N', '2023-12-27 17:34:08'),
+(2, 'vishal@doomshell.com', '08538943677', '08538943677', 'heNwrmMm', '', 'Rupam Singh', 'Doomshell', 'simple', '43443455454343', 'ASDFG', 101, 5, 627, 2, 841438, 'siwana', NULL, NULL, NULL, NULL, NULL, '320456510_1703698465_selfie', 0, 'this is the testing', 'N', 'N', 'N', 'N', 'N', '2023-12-27 17:34:25');
 
 -- --------------------------------------------------------
 
@@ -48763,7 +48762,7 @@ CREATE TABLE `reg_user` (
   `user_id` int(4) NOT NULL,
   `first_name` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `user_startfrom` datetime NOT NULL,
-  `user_endat` datetime NOT NULL DEFAULT current_timestamp(),
+  `user_endat` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_pass` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_email` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_type` smallint(2) NOT NULL,
@@ -48785,7 +48784,7 @@ CREATE TABLE `reg_user` (
 --
 
 INSERT INTO `reg_user` (`user_id`, `first_name`, `user_startfrom`, `user_endat`, `user_pass`, `user_email`, `user_type`, `isdeleted`, `user_phone`, `user_country`, `user_state`, `user_district`, `taluka_id`, `user_tel`, `user_logo`, `user_address`, `user_desc`, `user_status`) VALUES
-(1, 'Admin', '2023-12-28 22:42:46', '2023-06-20 20:23:19', 'heNwrmMm', 'vishal@doomshell.com', 1, 0, '08538943677', 101, 33, 622, 2, '841438', '1702571671_logo.jpeg', 'A3 Mall Road Jaipur', 'This is the admin id', '0'),
+(1, 'Admin', '2023-12-28 22:42:46', '2023-06-20 14:53:19', 'heNwrmMm', 'vishal@doomshell.com', 1, 0, '08538943677', 101, 33, 622, 2, '841438', '1702571671_logo.jpeg', 'A3 Mall Road Jaipur', 'This is the admin id', '0'),
 (159, 'Rupam', '2023-12-28 22:42:28', '0000-00-00 00:00:00', 'heNwrmMm', 'rupam@doomshell.com', 0, 0, '8538945025', 101, 5, 627, 3, '841438', '1703395507_rupamsingh.png', 'Siwan', 'This is testing user', '0');
 
 -- --------------------------------------------------------
@@ -52916,17 +52915,17 @@ CREATE TABLE `taluka` (
   `taluka_name` varchar(300) NOT NULL,
   `taluka_desc` text NOT NULL,
   `taluka_status` enum('0','1') NOT NULL DEFAULT '1',
-  `taluka_createdAt` datetime NOT NULL DEFAULT current_timestamp()
+  `taluka_created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `taluka`
 --
 
-INSERT INTO `taluka` (`taluka_id`, `taluka_state_id`, `taluka_district_id`, `taluka_name`, `taluka_desc`, `taluka_status`, `taluka_createdAt`) VALUES
-(1, 5, 627, 'First Taluka', 'testing', '0', '2023-12-23 18:35:52'),
-(2, 33, 622, 'Second', 'testing', '0', '2023-12-23 20:38:57'),
-(3, 5, 627, 'Testing', 'Testing', '1', '2023-12-23 21:00:34');
+INSERT INTO `taluka` (`taluka_id`, `taluka_state_id`, `taluka_district_id`, `taluka_name`, `taluka_desc`, `taluka_status`, `taluka_created_at`) VALUES
+(1, 5, 627, 'First Taluka', 'testing', '0', '2023-12-23 13:05:52'),
+(2, 33, 622, 'Second', 'testing', '0', '2023-12-23 15:08:57'),
+(3, 5, 627, 'Testing', 'Testing', '1', '2023-12-23 15:30:34');
 
 -- --------------------------------------------------------
 
@@ -52942,7 +52941,7 @@ CREATE TABLE `user_permission` (
   `view` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `edit` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `del` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `last_updated` datetime NOT NULL DEFAULT current_timestamp()
+  `last_updated` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -52950,30 +52949,30 @@ CREATE TABLE `user_permission` (
 --
 
 INSERT INTO `user_permission` (`id`, `user_id`, `module`, `add`, `view`, `edit`, `del`, `last_updated`) VALUES
-(1, 1, 'user', '1', '1', '1', '1', '2023-12-23 23:21:35'),
-(2, 1, 'customer', '1', '1', '1', '1', '2023-12-23 23:22:22'),
-(14, 159, 'user', '1', '1', '1', '1', '2023-12-24 10:13:38'),
-(4, 1, 'district', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(5, 1, 'taluka', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(6, 1, 'food_license', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(7, 1, 'shop_act_license', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(8, 1, 'bank_account', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(9, 1, 'demat_account', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(10, 1, 'itr_management', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(11, 1, 'attendance_management', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(12, 1, 'salary_management', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(13, 1, 'report_management', '1', '1', '1', '1', '2023-12-23 23:23:23'),
-(15, 159, 'customer', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(16, 159, 'district', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(17, 159, 'taluka', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(18, 159, 'food_license', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(19, 159, 'shop_act_license', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(20, 159, 'bank_account', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(21, 159, 'demat_account', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(22, 159, 'itr_management', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(23, 159, 'attendance_management', '1', '1', '1', '1', '2023-12-24 10:13:38'),
-(24, 159, 'salary_management', '0', '0', '0', '0', '2023-12-24 10:13:38'),
-(25, 159, 'report_management', '0', '0', '0', '0', '2023-12-24 10:13:38');
+(1, 1, 'user', '1', '1', '1', '1', '2023-12-23 17:51:35'),
+(2, 1, 'customer', '1', '1', '1', '1', '2023-12-23 17:52:22'),
+(14, 159, 'user', '1', '1', '1', '1', '2023-12-24 04:43:38'),
+(4, 1, 'district', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(5, 1, 'taluka', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(6, 1, 'food_license', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(7, 1, 'shop_act_license', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(8, 1, 'bank_account', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(9, 1, 'demat_account', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(10, 1, 'itr_management', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(11, 1, 'attendance_management', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(12, 1, 'salary_management', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(13, 1, 'report_management', '1', '1', '1', '1', '2023-12-23 17:53:23'),
+(15, 159, 'customer', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(16, 159, 'district', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(17, 159, 'taluka', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(18, 159, 'food_license', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(19, 159, 'shop_act_license', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(20, 159, 'bank_account', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(21, 159, 'demat_account', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(22, 159, 'itr_management', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(23, 159, 'attendance_management', '1', '1', '1', '1', '2023-12-24 04:43:38'),
+(24, 159, 'salary_management', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(25, 159, 'report_management', '0', '0', '0', '0', '2023-12-24 04:43:38');
 
 --
 -- Indexes for dumped tables
