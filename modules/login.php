@@ -7,10 +7,10 @@ function check_authorization($login_detail)
 {
     $username = $login_detail['user_email'];
     $userpassword = encryptIt($login_detail['user_pass']);
-    $sql = "select * from " . tbl_login . "  limit 0,1 ";
+    $sql = "select * from " . tbl_login . " where user_email ='" . $username . "' and user_pass='" . $userpassword . "'  and user_status = '0' limit 0,1 ";
+    // print_r($sql);
+    // die;
     $array = FetchRow($sql);
-    print_r($array);
-    die;
     if (empty($array)) {
         $array['error'] = "No records Founds. Pleae try again";
     }

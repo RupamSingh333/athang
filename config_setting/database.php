@@ -15,8 +15,8 @@ if ($link->connect_error) {
 function connectme()
 {
     $dbhost = "localhost";
-    $dbuser = "root";
-    $dbpass = "";
+    $dbuser = "rupamsingh";
+    $dbpass = "ea9E@t068";
     $db = "athang";
     $con = mysqli_connect($dbhost, $dbuser, $dbpass);
     mysqli_select_db($con, $db);
