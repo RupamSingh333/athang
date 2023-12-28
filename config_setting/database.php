@@ -1,7 +1,7 @@
 <?php
 $dbhost = "localhost";
-$dbuser = "root";
-$dbpass = "";
+$dbuser = "rupamsingh";
+$dbpass = "ea9E@t068";
 $db = "athang";
 
 $link = mysqli_connect($dbhost, $dbuser, $dbpass);
