@@ -2,11 +2,9 @@
 @session_start();
 date_default_timezone_set('asia/calcutta');
 define("ABSPATH", $_SERVER['DOCUMENT_ROOT'].'/');
-/*define("ABSPATH", $_SERVER['DOCUMENT_ROOT'].'/');*/
-define("SITEPATH", "https://new.sumiran.co/");
-// define("SITEPATH", "http://localhost/athang/");
-
-
+/*define("ABSPATH", $_SERVER['DOCUMENT_ROOT'].'/');
+define("SITEPATH", "https://www.badabazaars.com/");*/
+define("SITEPATH", "http://localhost/athang/");
 define("NOIMAGE", "upload/noimage.jpg");
 define("DEFAULTCATADDIMG", "upload/thumb/DEFAULTCATADDIMG.png");
 define("USER", "1");
