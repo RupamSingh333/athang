@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+#RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php [L]
+
+RewriteCond %{HTTP_HOST} ^badabazaars.com [NC]
+RewriteRule ^(.*)$ https://www.badabazaars.com/$1 [L,R=301]
+</IfModule>
