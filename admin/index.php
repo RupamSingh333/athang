@@ -63,11 +63,11 @@ include("../system_config.php");
             }
             ?>
             <div class="form-group has-feedback">
-              <input name="txt_userId" type="text" maxlength="50" class="form-control" placeholder="Username">
+              <input name="txt_userId" type="text" required maxlength="50" class="form-control" placeholder="Username">
               <span class="fa fa-unlock form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-              <input name="txt_password" type="password" maxlength="50" class="form-control" placeholder="Password">
+              <input name="txt_password" type="password" required maxlength="50" class="form-control" placeholder="Password">
               <span class="fa fa-key form-control-feedback"></span>
             </div>
             <div class="row">
