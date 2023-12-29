@@ -108,7 +108,7 @@ if ($per['customer']['view'] == 0) { ?>
 
                   <td>
 
-                    <?php if ($customer['cust_status'] == 0) { ?>
+                    <?php if ($rows['cust_status'] == 0) { ?>
                       <i class="fa fa-check-circle" title="Active" style="color: green;"></i>
                     <?php } else { ?>
                       <i class="fa fa-check-circle" title="Inactive" style="color: red;"></i>
@@ -132,7 +132,7 @@ if ($per['customer']['view'] == 0) { ?>
                         <p>Inactive</p>
                       </div>
                       &nbsp;&nbsp;
-                      <a href="<?php echo SITEPATH; ?>admin/Customer/add-new-customer.php?id=<?php echo urlencode(encryptIt($rows['cust_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i>
+                      <a href="<?php echo SITEPATH; ?>admin/customer/add-new-customer.php?id=<?php echo urlencode(encryptIt($rows['cust_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i>
                       </a>
                       <div id="Edit<?php echo $i; ?>" class="hide1">
                         <p>Edit</p>

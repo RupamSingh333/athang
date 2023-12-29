@@ -24,6 +24,31 @@ function connectme()
     return $con;
 }
 
+// $dbhost = "localhost";
+// $dbuser = "root";
+// $dbpass = "";
+// $db = "athang";
+
+// $link = mysqli_connect($dbhost, $dbuser, $dbpass);
+// mysqli_select_db($link, $db);
+
+// if ($link->connect_error) {
+//     die("Connection failed: " . $conn->connect_error);
+// }
+
+
+// function connectme()
+// {
+//     $dbhost = "localhost";
+//     $dbuser = "root";
+//     $dbpass = "";
+//     $db = "athang";
+//     $con = mysqli_connect($dbhost, $dbuser, $dbpass);
+//     mysqli_select_db($con, $db);
+
+//     return $con;
+// }
+
 function FetchAll($sql)
 {
     $link = connectme();
