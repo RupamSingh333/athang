@@ -8,33 +8,28 @@ function sanitizeInput($data)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key'] === 'qwertyupasdfghjklzxcvbnm') {
 
-    // Get and sanitize user input
     $customerId = isset($_POST['customerId']) ? (int)$_POST['customerId'] : null;
-    $first_name = sanitizeInput($_POST['cust_first_name']);
-    $email = sanitizeInput($_POST['cust_email']);
-    $phone = sanitizeInput($_POST['cust_phone']);
-    $cust_alter_phone = sanitizeInput($_POST['cust_alter_phone']);
-    $cust_aadhar_no = sanitizeInput($_POST['cust_aadhar_no']);
-    $cust_state = sanitizeInput($_POST['cust_state']);
-    $cust_district_id = sanitizeInput($_POST['cust_district_id']);
-    $cust_taluka_id = sanitizeInput($_POST['cust_taluka_id']);
-    $cust_pincode = sanitizeInput($_POST['cust_pincode']);
-    $cust_address = sanitizeInput($_POST['cust_address']);
-    $password = sanitizeInput($_POST['cust_password']);
-    $hashed_password = encryptIt($password);
+    $cust_org_name = sanitizeInput($_POST['cust_org_name']);
+    $cust_org_type = sanitizeInput($_POST['cust_org_type']);
+    $user_updated_by = sanitizeInput($_POST['user_updated_by']);
 
-    // Validate required fields
+    $cust_selfie = sanitizeInput($_FILES['cust_selfie']['name']);
+    $cust_agreement_copy = sanitizeInput($_FILES['cust_agreement_copy']['name']);
+    $cust_signature = sanitizeInput($_FILES['cust_signature']['name']);
+    $cust_pan_card = sanitizeInput($_FILES['cust_pan_card']['name']);
+    $cust_aadhar_card_front = sanitizeInput($_FILES['cust_aadhar_card_front']['name']);
+    $cust_aadhar_card_back = sanitizeInput($_FILES['cust_aadhar_card_back']['name']);
+
     $requiredFields = [
-        'first_name' => $first_name,
-        'email' => $email,
-        'phone' => $phone,
-        'password' => $password,
-        'cust_aadhar_no' => $cust_aadhar_no,
-        'cust_district_id' => $cust_district_id,
-        'cust_taluka_id' => $cust_taluka_id,
-        'cust_state' => $cust_state,
-        'cust_address' => $cust_address,
-        'cust_pincode' => $cust_pincode,
+        'Organizer Name' => $cust_org_name,
+        'Organizer Type' => $cust_org_type,
+        'User Login Id' => $user_updated_by,
+        'Selfie' => $cust_selfie,
+        'cust_agreement_copy' => $cust_agreement_copy,
+        'cust_signature' => $cust_signature,
+        'cust_pan_card' => $cust_pan_card,
+        'cust_aadhar_card_front' => $cust_aadhar_card_front,
+        'cust_aadhar_card_back' => $cust_aadhar_card_back
     ];
 
     $emptyFields = [];
@@ -52,56 +47,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     }
 
     // Check if the customer already exists
-    $custExist = getcustomer_byID($email);
+    $custDetails = getcustomer_byID($customerId);
 
-    if ($custExist && !$customerId) {
+    function handleFileUpload($fileKey, $columnName, $customerId)
+    {
+        global $link, $config;
+
+        if (!empty($_FILES[$fileKey]["name"]) && $_FILES[$fileKey]["error"] == 0) {
+            $upcustDetails = getcustomer_byID($customerId); // Optional, depending on your requirements
+            $file_name = $_FILES[$fileKey]["name"];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $customer_img_name = $fileKey . '_' . rand() . '_' . time() . "_" . strtolower(str_replace(" ", "_", $upcustDetails['cust_first_name'] . '.' . $file_ext));
+            $path = '../' . $config['Images'] . $customer_img_name;
+
+            if (move_uploaded_file($_FILES[$fileKey]["tmp_name"], $path)) {
+                unlink('../' . $config['Images'] . $upcustDetails[$columnName]);
+                $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+                $update_stmt = mysqli_prepare($link, $update_sql);
+                mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
+                mysqli_stmt_execute($update_stmt);
+                // echo "Database update successful";
+                // } else {
+                //     echo "Database update failed: " . mysqli_error($link);
+                // }
+            }
+        }
+    }
+
+
+    if ($custDetails && !$customerId) {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'You are already registered. Our team will connect with you shortly.']);
         exit;
     } else {
-        // Prepare SQL statement based on whether it's an insert or update
-        if ($customerId) {
-            // Update existing customer
-            $sql = "UPDATE customer SET cust_first_name=?, cust_aadhar_no=?, cust_alter_phone=?, cust_phone=?, cust_password=?, cust_state=?, cust_district_id=?, cust_taluka_id=?, cust_pincode=?, cust_address=? WHERE cust_id=?";
-            $stmt = mysqli_prepare($link, $sql);
-
-            // Note the correct order of parameters in the next line
-            mysqli_stmt_bind_param($stmt, 'ssssssssssi', $first_name, $cust_aadhar_no, $cust_alter_phone, $phone, $hashed_password, $cust_state, $cust_district_id, $cust_taluka_id, $cust_pincode, $cust_address, $customerId);
-        } 
-        // Execute the SQL statement
+        $sql = "UPDATE customer SET cust_org_name=?, cust_org_type=? ,user_updated_by=?,shop_act_licence=? WHERE cust_id=?";
+        $stmt = mysqli_prepare($link, $sql);
+        $shop_act_licence = 'Y';
+        mysqli_stmt_bind_param($stmt, 'ssssi', $cust_org_name, $cust_org_type, $user_updated_by, $shop_act_licence, $customerId);
         if (mysqli_stmt_execute($stmt)) {
-            // Registration/update successful
-            if ($customerId) {
-                // If it's an update, handle file upload for cust_profile
-                if (!empty($_FILES["cust_selfie"]["name"]) && $_FILES["cust_selfie"]["error"] == 0) {
-                    $file_name = $_FILES["cust_selfie"]["name"];
-                    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                    $customer_img_name = $first_name . '_' . rand() . '_' . microtime() . "_" . strtolower(str_replace(" ", "_", $last_name . '.' . $file_ext));
-                    $path = ABSPATH . $config['Images'] . $customer_img_name;
-                    if (move_uploaded_file($_FILES["cust_selfie"]["tmp_name"], $path)) {
-                        // image unlink 
-                        $custDetails = getcustomer_byID($customerId);
-                        unlink(ABSPATH . $config['Images'] . $custDetails['cust_selfie']);
-                        $update_sql = "UPDATE customer SET cust_selfie = ? WHERE cust_id = ?";
-                        $update_stmt = mysqli_prepare($link, $update_sql);
-                        mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
-                        mysqli_stmt_execute($update_stmt);
-                    }
-                }
 
-                $response = ['status' => true, 'message' => 'Your Profile has been updated successfully.'];
-                http_response_code($customerId ? 200 : 201);
-                header('Content-Type: application/json');
-                echo json_encode($response);
-                exit;
-            }
+            handleFileUpload("cust_selfie", "cust_selfie", $customerId);
+            handleFileUpload("cust_agreement_copy", "cust_agreement_copy", $customerId);
+            handleFileUpload("cust_signature", "cust_signature", $customerId);
+            handleFileUpload("cust_pan_card", "cust_pan_card", $customerId);
+            handleFileUpload("cust_aadhar_card_front", "cust_aadhar_card_front", $customerId);
+            handleFileUpload("cust_aadhar_card_back", "cust_aadhar_card_back", $customerId);
 
-            $response = ['status' => true, 'message' => 'Your registration procedure has been completed. Our team will connect with you shortly.'];
+            $response = ['status' => true, 'message' => 'Shop Act procedure has been update successfully.'];
             http_response_code($customerId ? 200 : 201);
         } else {
             // Registration/update failed
-            $response = ['status' => false, 'error' => 'Registration/update failed. Please try again.'];
+            $response = ['status' => false, 'error' => 'Data not upldate please try after some time.'];
             http_response_code(500);
         }
 

@@ -294,7 +294,7 @@ function getcustomer_byID($id_or_email = null)
     } else {
         $sql = "SELECT * FROM " . tbl_customer . " WHERE cust_email = '" . $id_or_email . "' LIMIT 0,1";
     }
-
+    // pr($sql);exit;
     $array = FetchRow($sql);
     return $array;
 }

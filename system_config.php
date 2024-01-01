@@ -1,7 +1,7 @@
-<?php 
+<?php
 @session_start();
 date_default_timezone_set('asia/calcutta');
-define("ABSPATH", $_SERVER['DOCUMENT_ROOT'].'/');
+define("ABSPATH", $_SERVER['DOCUMENT_ROOT'] . '/');
 define("SITEPATH", "https://new.sumiran.co/");
 // define("SITEPATH", "http://localhost/athang/");
 define("NOIMAGE", "upload/noimage.jpg");
@@ -84,6 +84,17 @@ function pr($data)
     echo "<pre>{$formatted_data}</pre>";
     // die;
 }
+
+// Function to generate a random string
+// function generateRandomString($length = 10)
+// {
+//     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+//     $randomString = '';
+//     for ($i = 0; $i < $length; $i++) {
+//         $randomString .= $characters[rand(0, strlen($characters) - 1)];
+//     }
+//     return $randomString;
+// }
 
 
 include("config_setting/database.php");

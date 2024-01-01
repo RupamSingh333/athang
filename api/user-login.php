@@ -1,27 +1,30 @@
 <?php
-include("./system_config.php");
-include('../admin/common/head.php');
+include("../system_config.php");
 
 
 // Check if the request method is POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['key']=='qwertyupasdfghjklzxcvbnm' && isset($_POST['username'], $_POST['password'], $_POST['userType'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['key'] == 'qwertyupasdfghjklzxcvbnm' && isset($_POST['username'], $_POST['password'], $_POST['user_type'])) {
 
     $email = sanitizeInput($_POST['username']);
     $password = sanitizeInput($_POST['password']);
-    $userType = sanitizeInput($_POST['userType']);
+    $user_type = sanitizeInput($_POST['user_type']);
 
-    if ($userType == 'C' || $userType == 'c') {
-        $sql = "SELECT cust_email, cust_id, cust_status, cust_first_name, cust_last_name, cust_password FROM customer WHERE cust_email = ?";
-    } elseif ($userType == 'D' || $userType == 'd') {
-        $sql = "SELECT dealer_id, dealer_name, dealer_email, password, dealer_status FROM dealer WHERE dealer_email = ?";
-    } else {
+    if ($user_type == 1) {
+        $sql = "SELECT * FROM " . tbl_user . " WHERE user_email = ?";
+    }
+
+    // elseif ($user_type == 'D' || $user_type == 'd') {
+    //     $sql = "SELECT dealer_id, dealer_name, dealer_email, password, dealer_status FROM dealer WHERE dealer_email = ?";
+    // } 
+
+    else {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'Invalid user type']);
         exit;
     }
 
-    $response = handleLogin($sql, $email, $password, $userType);
+    $response = handleLogin($sql, $email, $password, $user_type);
 
     http_response_code($response['status'] ? 200 : 401);
     header('Content-Type: application/json');
@@ -41,7 +44,7 @@ function sanitizeInput($data)
     return htmlspecialchars(strip_tags(trim($data)));
 }
 
-function handleLogin($sql, $email, $password, $userType)
+function handleLogin($sql, $email, $password, $user_type)
 {
     global $link;
 
@@ -53,15 +56,16 @@ function handleLogin($sql, $email, $password, $userType)
     if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
 
-        if ($userType == 'C' || $userType == 'c') {
-            if (encryptIt($password) == $row['cust_password']) {
+        if ($user_type == 1) {
+            if (encryptIt($password) == $row['user_pass']) {
                 return handleCustomerLogin($row);
             }
-        } elseif ($userType == 'D' || $userType == 'd') {
-            if (encryptIt($password) == $row['password']) {
-                return handleDealerLogin($row);
-            }
         }
+        // elseif ($user_type == 'D' || $user_type == 'd') {
+        //     if (encryptIt($password) == $row['password']) {
+        //         return handleDealerLogin($row);
+        //     }
+        // }
     }
 
     return ['status' => false, 'error' => 'Authorization failed'];
@@ -70,12 +74,12 @@ function handleLogin($sql, $email, $password, $userType)
 // Function to handle customer login
 function handleCustomerLogin($row)
 {
-    if ($row['cust_status'] == 0) {
+    if ($row['user_pass'] == 0) {
         return [
             'status' => true,
-            'customerId' => $row['cust_id'],
-            'customerName' => $row['cust_first_name'],
-            'type' => 4,
+            'user_id' => $row['user_id'],
+            'name' => $row['first_name'],
+            'type' => $row['user_type'],
         ];
     } else {
         return ['status' => false, 'error' => 'Account under review'];
@@ -83,19 +87,19 @@ function handleCustomerLogin($row)
 }
 
 // Function to handle dealer login
-function handleDealerLogin($row)
-{
-    if ($row['dealer_status'] == 0) {
-        return [
-            'status' => true,
-            'dealerId' => $row['dealer_id'],
-            'dealerName' => $row['dealer_name'],
-            'type' => 5,
-        ];
-    } else {
-        return [
-            'status' => false,
-            'error' => 'You are already registered. Our team will connect with you shortly.',
-        ];
-    }
-}
+// function handleDealerLogin($row)
+// {
+//     if ($row['dealer_status'] == 0) {
+//         return [
+//             'status' => true,
+//             'dealerId' => $row['dealer_id'],
+//             'dealerName' => $row['dealer_name'],
+//             'type' => 5,
+//         ];
+//     } else {
+//         return [
+//             'status' => false,
+//             'error' => 'You are already registered. Our team will connect with you shortly.',
+//         ];
+//     }
+// }
