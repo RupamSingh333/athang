@@ -9,21 +9,15 @@ function sanitizeInput($data)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key'] === 'qwertyupasdfghjklzxcvbnm') {
 
     $customerId = isset($_POST['customerId']) ? (int)$_POST['customerId'] : null;
-    $cust_org_name = sanitizeInput($_POST['cust_org_name']);
-    $cust_org_type = sanitizeInput($_POST['cust_org_type']);
     $user_updated_by = sanitizeInput($_POST['user_updated_by']);
-
-    $cust_selfie = sanitizeInput($_FILES['cust_selfie']['name']);
-    $cust_agreement_copy = sanitizeInput($_FILES['cust_agreement_copy']['name']);
-    $cust_signature = sanitizeInput($_FILES['cust_signature']['name']);
+    $dmt_acc_name_of_link = sanitizeInput($_POST['dmt_acc_name_of_link']);
+    $dmt_acc_screenshot = sanitizeInput($_FILES['dmt_acc_screenshot']['name']);
 
     $requiredFields = [
-        'cust_org_name' => $cust_org_name,
-        'cust_org_type' => $cust_org_type,
+        'customerId' => $customerId,
         'user_updated_by' => $user_updated_by,
-        'cust_selfie' => $cust_selfie,
-        'cust_agreement_copy' => $cust_agreement_copy,
-        'cust_signature' => $cust_signature
+        'dmt_acc_name_of_link' => $dmt_acc_name_of_link,
+        'dmt_acc_screenshot' => $dmt_acc_screenshot
     ];
 
     $emptyFields = [];
@@ -48,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         global $link, $config;
 
         if (!empty($_FILES[$fileKey]["name"]) && $_FILES[$fileKey]["error"] == 0) {
-            $upcustDetails = getcustomer_byID($customerId); 
+            $upcustDetails = getcustomer_byID($customerId);
             $file_name = $_FILES[$fileKey]["name"];
             $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
             $customer_img_name = $fileKey . '_' . rand() . '_' . time() . "_" . strtolower(str_replace(" ", "_", $upcustDetails['cust_first_name'] . '.' . $file_ext));
@@ -71,16 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         echo json_encode(['status' => false, 'error' => 'Invalid customer details.']);
         exit;
     } else {
-        $sql = "UPDATE customer SET cust_org_name=?, cust_org_type=? ,user_updated_by=?,shop_act_licence_approvedby=?,shop_act_licence=? WHERE cust_id=?";
+        $sql = "UPDATE customer SET dmt_acc_name_of_link=?, user_updated_by=?,demate_acc_opening_approvedby=? ,demate_acc_opening=? WHERE cust_id=?";
         $stmt = mysqli_prepare($link, $sql);
-        $shop_act_licence = 'Y';
-        mysqli_stmt_bind_param($stmt, 'sssssi', $cust_org_name, $cust_org_type, $user_updated_by, $user_updated_by, $shop_act_licence, $customerId);
+        $demate_acc_opening = 'Y';
+        mysqli_stmt_bind_param($stmt, 'siisi', $dmt_acc_name_of_link, $user_updated_by, $user_updated_by, $demate_acc_opening, $customerId);
+        // pr($sql);exit;
         if (mysqli_stmt_execute($stmt)) {
-
-            handleFileUpload("cust_selfie", "cust_selfie", $customerId);
-            handleFileUpload("cust_agreement_copy", "cust_agreement_copy", $customerId);
-            handleFileUpload("cust_signature", "cust_signature", $customerId);
-            $response = ['status' => true, 'message' => 'Shop Act procedure has been update successfully.'];
+            $last_inserted_id = mysqli_insert_id($link);
+            handleFileUpload("dmt_acc_screenshot", "dmt_acc_screenshot", $customerId);
+            $response = ['status' => true, 'message' => 'Demat Account Opening procedure has been update successfully.'];
             http_response_code($customerId ? 200 : 201);
         } else {
             $response = ['status' => false, 'error' => 'Data not update please try after some time.'];
@@ -92,7 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         exit;
     }
 } else {
-    // Invalid request method or key
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode(['status' => false, 'error' => 'Invalid request method or key']);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2023 at 07:04 PM
+-- Generation Time: Jan 03, 2024 at 09:10 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -48680,35 +48680,54 @@ INSERT INTO `country` (`id`, `name`, `sortname`, `cntcode`, `date`, `status`) VA
 
 CREATE TABLE `customer` (
   `cust_id` int(11) NOT NULL,
-  `cust_email` varchar(255) NOT NULL,
-  `cust_phone` varchar(15) NOT NULL,
-  `cust_alter_phone` varchar(15) DEFAULT NULL,
-  `cust_password` varchar(255) NOT NULL,
-  `confirm_password` varchar(255) NOT NULL,
   `cust_first_name` varchar(255) NOT NULL,
-  `cust_org_name` varchar(255) DEFAULT NULL,
-  `cust_org_type` varchar(50) DEFAULT NULL,
+  `cust_email` varchar(255) NOT NULL,
+  `cust_password` varchar(255) NOT NULL,
+  `cust_phone` varchar(15) NOT NULL,
+  `contact_no_with_verify` text DEFAULT NULL,
   `cust_aadhar_no` varchar(20) DEFAULT NULL,
-  `cust_gst_no` varchar(20) DEFAULT NULL,
-  `cust_country` int(11) DEFAULT NULL,
+  `cust_country` int(11) DEFAULT 101,
   `cust_state` int(11) DEFAULT NULL,
   `cust_district_id` int(11) DEFAULT NULL,
   `cust_taluka_id` int(11) DEFAULT NULL,
   `cust_pincode` int(11) DEFAULT NULL,
-  `cust_address` varchar(255) DEFAULT NULL,
-  `cust_agreement_copy` varchar(255) DEFAULT NULL,
-  `cust_signature` varchar(255) DEFAULT NULL,
-  `cust_pan_card` varchar(255) DEFAULT NULL,
-  `cust_aadhar_card_back` varchar(255) DEFAULT NULL,
-  `cust_aadhar_card_front` varchar(255) DEFAULT NULL,
-  `cust_selfie` varchar(255) DEFAULT NULL,
-  `cust_status` int(11) NOT NULL,
+  `cust_address` varchar(300) DEFAULT NULL,
+  `cust_alter_phone` varchar(15) DEFAULT NULL,
+  `aadhar_link_mobile` varchar(20) DEFAULT NULL,
+  `cust_org_name` varchar(255) DEFAULT NULL,
+  `cust_org_type` varchar(50) DEFAULT NULL,
+  `cust_gst_no` varchar(20) DEFAULT NULL,
+  `confirm_password` varchar(255) NOT NULL,
+  `cust_agreement_copy` text DEFAULT NULL,
+  `cust_signature` text DEFAULT NULL,
+  `cust_pan_card` text DEFAULT NULL,
+  `cust_aadhar_card_back` text DEFAULT NULL,
+  `cust_aadhar_card_front` text DEFAULT NULL,
+  `cust_selfie` text DEFAULT NULL,
+  `b_acc_screenshot` text DEFAULT NULL,
+  `b_acc_name_of_link` text DEFAULT NULL,
+  `cust_status` int(11) NOT NULL DEFAULT 1,
   `cust_desc` text DEFAULT NULL,
   `shop_act_licence` enum('Y','N') NOT NULL DEFAULT 'N',
+  `shop_act_licence_approvedby` int(11) DEFAULT NULL,
   `food_licence` enum('Y','N') NOT NULL DEFAULT 'N',
+  `food_licence_approvedby` int(11) DEFAULT NULL,
   `bank_acc_opening` enum('Y','N') NOT NULL DEFAULT 'N',
+  `bank_acc_opening_approvedby` int(11) DEFAULT NULL,
   `demate_acc_opening` enum('Y','N') NOT NULL DEFAULT 'N',
+  `demate_acc_opening_approvedby` int(11) DEFAULT NULL,
+  `dmt_acc_screenshot` text DEFAULT NULL,
+  `dmt_acc_name_of_link` text DEFAULT NULL,
   `itr` enum('Y','N') NOT NULL DEFAULT 'N',
+  `itr_bank_statement` text DEFAULT NULL,
+  `salary_sheet` text DEFAULT NULL,
+  `form16` text DEFAULT NULL,
+  `itr_approvedby` int(11) DEFAULT NULL,
+  `bs` enum('Y','N') NOT NULL DEFAULT 'N',
+  `bs_approvedby` int(11) DEFAULT NULL,
+  `bs_bank_statemenet` text DEFAULT NULL,
+  `proof_of_buiseness` text DEFAULT NULL,
+  `user_updated_by` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -48716,9 +48735,12 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`cust_id`, `cust_email`, `cust_phone`, `cust_alter_phone`, `cust_password`, `confirm_password`, `cust_first_name`, `cust_org_name`, `cust_org_type`, `cust_aadhar_no`, `cust_gst_no`, `cust_country`, `cust_state`, `cust_district_id`, `cust_taluka_id`, `cust_pincode`, `cust_address`, `cust_agreement_copy`, `cust_signature`, `cust_pan_card`, `cust_aadhar_card_back`, `cust_aadhar_card_front`, `cust_selfie`, `cust_status`, `cust_desc`, `shop_act_licence`, `food_licence`, `bank_acc_opening`, `demate_acc_opening`, `itr`, `created_at`) VALUES
-(1, 'vishal@doomshell.com', '08538943677', '08538943677', 'heNwrmMm', '', 'Rupam Singh', 'Doomshell', 'simple', '43443455454343', 'ASDFG', 101, 5, 627, 3, 841438, 'siwana', NULL, NULL, NULL, NULL, NULL, '1386828310_1703698448_selfie', 1, 'this is the testing', 'N', 'N', 'N', 'N', 'N', '2023-12-27 17:34:08'),
-(2, 'vishal@doomshell.com', '08538943677', '08538943677', 'heNwrmMm', '', 'Rupam Singh', 'Doomshell', 'simple', '43443455454343', 'ASDFG', 101, 5, 627, 2, 841438, 'siwana', NULL, NULL, NULL, NULL, NULL, '320456510_1703698465_selfie', 0, 'this is the testing', 'N', 'N', 'N', 'N', 'N', '2023-12-27 17:34:25');
+INSERT INTO `customer` (`cust_id`, `cust_first_name`, `cust_email`, `cust_password`, `cust_phone`, `contact_no_with_verify`, `cust_aadhar_no`, `cust_country`, `cust_state`, `cust_district_id`, `cust_taluka_id`, `cust_pincode`, `cust_address`, `cust_alter_phone`, `aadhar_link_mobile`, `cust_org_name`, `cust_org_type`, `cust_gst_no`, `confirm_password`, `cust_agreement_copy`, `cust_signature`, `cust_pan_card`, `cust_aadhar_card_back`, `cust_aadhar_card_front`, `cust_selfie`, `b_acc_screenshot`, `b_acc_name_of_link`, `cust_status`, `cust_desc`, `shop_act_licence`, `shop_act_licence_approvedby`, `food_licence`, `food_licence_approvedby`, `bank_acc_opening`, `bank_acc_opening_approvedby`, `demate_acc_opening`, `demate_acc_opening_approvedby`, `dmt_acc_screenshot`, `dmt_acc_name_of_link`, `itr`, `itr_bank_statement`, `salary_sheet`, `form16`, `itr_approvedby`, `bs`, `bs_approvedby`, `bs_bank_statemenet`, `proof_of_buiseness`, `user_updated_by`, `created_at`) VALUES
+(1, 'Rupam Singh', 'vishal@gmail.com', 'heNwrmMm', '08538943677', NULL, '43443455454343', 101, 5, 627, 3, 841438, 'siwana', '08538943677', NULL, 'Doomshell', 'simple', 'ASDFG', '', NULL, NULL, NULL, NULL, NULL, '1386828310_1703698448_selfie', NULL, NULL, 1, 'this is the testing', 'N', NULL, 'N', NULL, 'N', NULL, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, '2023-12-27 17:34:08'),
+(2, 'Rupam Singh', 'vikash@gmail.com', 'heNwrmMm', '08538943677', '8538945025', '43443455454343', 101, 5, 627, 2, 841438, 'siwana', '08538943677', NULL, 'websuntech', 'web', 'ASDFG', '', 'cust_agreement_copy_977229119_1704211202_rupam_singh.jpg', 'cust_signature_728971677_1704211202_rupam_singh.png', 'cust_pan_card_1369771615_1704217083_rupam_singh.png', 'cust_aadhar_card_back_1742862759_1704217083_rupam_singh.jpg', 'cust_aadhar_card_front_1098406091_1704217083_rupam_singh.jpg', 'cust_selfie_368769771_1704211202_rupam_singh.jpg', 'b_acc_screenshot_1616752240_1704224448_rupam_singh.jpg', 'http://localhost/athang/api/bank-account-opening.php', 0, 'this is the testing', 'Y', 1, 'Y', 1, 'Y', 1, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, 1, '2023-12-27 17:34:25'),
+(6, 'Nidhu', 'nidhi@gmail.com', 'heNwrmMm', '8538675948', NULL, '4567897678', NULL, 12, 21, 111, 232223, 'Patna Bihar Gopalganj', '8675647678', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 'N', NULL, 'N', NULL, 'N', NULL, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, '2023-12-29 18:30:59'),
+(7, 'sdfsdf', 'sdfidhi@gmail.com', 'heNwrmM=', '76543345654', NULL, '654345676543', 101, 4, 3, 22, 232223, 'Patna Bihar Gopalganj', '876545676543', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 'N', NULL, 'N', NULL, 'N', NULL, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, '2023-12-29 21:05:54'),
+(11, 'Sanjay', 'sanjay@gmail.com', 'heNwrmMm', '8767879876', NULL, '860621998833', 101, 5, 627, 3, 841438, 'Patna Bihar Gopalganj', '8789765678', '8538945989', 'websuntech', 'web', NULL, '', 'cust_agreement_copy_626435851_1704223912_sanjay.jpg', 'cust_signature_1073680504_1704223912_sanjay.png', 'cust_pan_card_604183249_1704223283_sanjay.jpg', 'cust_aadhar_card_back_1462919092_1704223283_sanjay.jpg', 'cust_aadhar_card_front_191949013_1704223283_sanjay.jpg', 'cust_selfie_2138498523_1704223912_sanjay.jpg', 'b_acc_screenshot_1312314541_1704224662_sanjay.jpg', 'http://localhost/athang/api/bank-account-opening.php', 1, NULL, 'Y', 1, 'Y', 1, 'Y', 1, 'Y', 1, 'dmt_acc_screenshot_1809936968_1704305418_sanjay.jpg', 'http://localhost/athang/api/bank-account-opening.php', 'Y', 'itr_bank_statement_722694382_1704307120_sanjay.png', 'salary_sheet_1982114109_1704307120_sanjay.jpg', 'form16_1384187111_1704307120_sanjay.jpg', 1, 'Y', 1, 'bs_bank_statemenet_1561727205_1704307451_sanjay.jpg', 'proof_of_buiseness_619126733_1704307451_sanjay.jpg', 1, '2024-01-02 19:21:23');
 
 -- --------------------------------------------------------
 
@@ -48761,12 +48783,8 @@ INSERT INTO `district` (`district_id`, `district_name`, `url_link`, `district_st
 CREATE TABLE `reg_user` (
   `user_id` int(4) NOT NULL,
   `first_name` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `user_startfrom` datetime NOT NULL,
-  `user_endat` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_pass` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_email` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `user_type` smallint(2) NOT NULL,
-  `isdeleted` tinyint(1) NOT NULL,
   `user_phone` varchar(254) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_country` int(11) DEFAULT 101,
   `user_state` int(11) NOT NULL,
@@ -48775,17 +48793,22 @@ CREATE TABLE `reg_user` (
   `user_tel` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_logo` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_address` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `user_type` smallint(2) NOT NULL,
   `user_desc` text NOT NULL,
-  `user_status` enum('1','0') DEFAULT '0'
+  `user_status` enum('0','1') NOT NULL DEFAULT '1',
+  `user_startfrom` datetime DEFAULT NULL,
+  `isdeleted` tinyint(1) NOT NULL,
+  `user_endat` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `reg_user`
 --
 
-INSERT INTO `reg_user` (`user_id`, `first_name`, `user_startfrom`, `user_endat`, `user_pass`, `user_email`, `user_type`, `isdeleted`, `user_phone`, `user_country`, `user_state`, `user_district`, `taluka_id`, `user_tel`, `user_logo`, `user_address`, `user_desc`, `user_status`) VALUES
-(1, 'Admin', '2023-12-28 22:42:46', '2023-06-20 14:53:19', 'heNwrmMm', 'vishal@doomshell.com', 1, 0, '08538943677', 101, 33, 622, 2, '841438', '1702571671_logo.jpeg', 'A3 Mall Road Jaipur', 'This is the admin id', '0'),
-(159, 'Rupam', '2023-12-28 22:42:28', '0000-00-00 00:00:00', 'heNwrmMm', 'rupam@doomshell.com', 0, 0, '8538945025', 101, 5, 627, 3, '841438', '1703395507_rupamsingh.png', 'Siwan', 'This is testing user', '0');
+INSERT INTO `reg_user` (`user_id`, `first_name`, `user_pass`, `user_email`, `user_phone`, `user_country`, `user_state`, `user_district`, `taluka_id`, `user_tel`, `user_logo`, `user_address`, `user_type`, `user_desc`, `user_status`, `user_startfrom`, `isdeleted`, `user_endat`) VALUES
+(1, 'Admin', 'heNwrmMm', 'admin@gmail.com', '08538943677', 101, 33, 622, 2, '841438', '1702571671_logo.jpeg', 'A3 Mall Road Jaipur', 1, 'This is the admin id', '0', '2023-12-28 22:42:46', 0, '2023-06-20 14:53:19'),
+(159, 'Rupam', 'heNwrmMm', 'rupam@gmail.com', '8538945025', 101, 5, 627, 1, '841438', '1704311961_rupamsingh.png', 'Siwan', 2, 'This is testing user', '0', '2024-01-04 01:29:21', 0, '0000-00-00 00:00:00'),
+(162, 'Vishal', 'gOJ3qQ==', 'vishal@gmail.com', '8658697878', 101, 5, 627, 1, '8538945025', 'user_logo_67161280_1704312419_vishal.png', 'Bihar Gopalganj', 0, '', '1', NULL, 0, '2024-01-03 20:05:57');
 
 -- --------------------------------------------------------
 
@@ -53046,7 +53069,7 @@ ALTER TABLE `country`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `cust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `cust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `district`
@@ -53058,7 +53081,7 @@ ALTER TABLE `district`
 -- AUTO_INCREMENT for table `reg_user`
 --
 ALTER TABLE `reg_user`
-  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
+  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
 
 --
 -- AUTO_INCREMENT for table `states`

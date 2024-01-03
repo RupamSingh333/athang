@@ -17,22 +17,26 @@ define("tbl_number", "number");
 define("tbl_district", "district");
 define("tbl_taluka", "taluka");
 
-function gettaluka_byID($id) {
+function gettaluka_byID($id)
+{
     $sql = "select * from " . tbl_taluka . " where taluka_id='" . $id . "' limit 0,1 ";
     $array = FetchRow($sql);
     return $array;
 }
-function gettaluka_list() {
+function gettaluka_list()
+{
     $sql = "select * from " . tbl_taluka . " order by taluka_id desc";
     $array = FetchAll($sql);
     return $array;
 }
-function getdistrict_byID($id) {
+function getdistrict_byID($id)
+{
     $sql = "select * from " . tbl_district . " where district_id='" . $id . "' limit 0,1 ";
     $array = FetchRow($sql);
     return $array;
 }
-function getdistrict_list() {
+function getdistrict_list()
+{
     $sql = "select * from " . tbl_district . " order by  district_id desc";
     $array = FetchAll($sql);
     return $array;
@@ -44,9 +48,13 @@ function getuser_permission_byID($id = null)
     return $array;
 }
 
-function getuser_byID($id = null)
+function getuser_byID($id_or_email = null)
 {
-    $sql = "select * from " . tbl_user . " where user_id = '" . $id . "' limit 0,1 ";
+    if (is_numeric($id_or_email)) {
+        $sql = "select * from " . tbl_user . " where user_id = '" . $id_or_email . "' limit 0,1 ";
+    } else {
+        $sql = "select * from " . tbl_user . " where user_email = '" . $id_or_email . "' limit 0,1 ";
+    }
     $array = FetchRow($sql);
     return $array;
 }
@@ -59,12 +67,6 @@ function getuser_byList()
     return $array;
 }
 
-function getuser_byList_byuser($id = null)
-{
-    $sql = "select * from " . tbl_user . " where user_id = '" . $id . "' limit 0,1 ";
-    $array = FetchAll($sql);
-    return $array;
-}
 
 function getCountry_list()
 {
@@ -133,31 +135,6 @@ function getbanner_list()
     return $array;
 }
 
-function getbanner_list_status($catIds = null)
-{
-    if ($catIds) {
-        $categoryIds = is_array($catIds) ? $catIds : explode(',', $catIds);
-        $sql = "SELECT * FROM " . tbl_banner . " WHERE banner_status = '0' AND ((";
-        $conditions = array();
-
-        foreach ($categoryIds as $index => $categoryId) {
-            $conditions[] = "FIND_IN_SET('$categoryId', categoryIds) > 0";
-        }
-
-        $sql .= implode(" OR ", $conditions);
-        $sql .= ") OR FIND_IN_SET('all', categoryIds) > 0 ) ORDER BY banner_id ASC";
-
-        $params = $categoryIds;
-    } else {
-        $sql = "SELECT * FROM " . tbl_banner . " WHERE banner_status = '0' ORDER BY banner_id ASC";
-        $params = array();
-    }
-
-    $array = FetchAll($sql, $params);
-
-    return $array;
-}
-
 function getCategory_byID($id)
 {
     $sql = "select * from " . tbl_categories . " where cat_id='" . $id . "' limit 0,1 ";
@@ -214,20 +191,6 @@ function getCategory_list_for_admin($order = null, $catIds = null)
 function getproduct_byID($subCatId)
 {
     $sql = "SELECT * FROM " . tbl_product . " WHERE product_id = " . $subCatId . " limit 0,1 ";
-    $array = FetchRow($sql);
-    return $array;
-}
-
-function getplanDetails($id = null)
-{
-    $sql = "SELECT p.*, c.cat_name, sc.sub_cat_name
-            FROM " . tbl_plans . " AS p
-            LEFT JOIN " . tbl_categories . " AS c ON p.category_id = c.cat_id
-            LEFT JOIN " . tbl_product . " AS sc ON p.product_id = sc.product_id
-            WHERE p.plan_id = '" . $id . "' and status = '0'
-            LIMIT 0, 1";
-    // pr($sql);
-
     $array = FetchRow($sql);
     return $array;
 }

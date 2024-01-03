@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
             exit;
         }
     } else {
-        $customer_query = "SELECT cust_id, cust_first_name FROM " . tbl_customer . " WHERE cust_status = '0' ORDER BY cust_id DESC";
+        $customer_query = "SELECT * FROM " . tbl_customer . " WHERE cust_status = '0' ORDER BY cust_id DESC";
         $result = mysqli_query($link, $customer_query);
 
         $data = array();

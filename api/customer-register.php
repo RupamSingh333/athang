@@ -23,6 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     $password = sanitizeInput($_POST['cust_password']);
     $hashed_password = encryptIt($password);
 
+    $cust_pan_card = sanitizeInput($_FILES['cust_pan_card']['name']);
+    $cust_aadhar_card_front = sanitizeInput($_FILES['cust_aadhar_card_front']['name']);
+    $cust_aadhar_card_back = sanitizeInput($_FILES['cust_aadhar_card_back']['name']);
+
     // Validate required fields
     $requiredFields = [
         'first_name' => $first_name,
@@ -35,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         'cust_state' => $cust_state,
         'cust_address' => $cust_address,
         'cust_pincode' => $cust_pincode,
+        'cust_pan_card' => $cust_pan_card,
+        'cust_aadhar_card_front' => $cust_aadhar_card_front,
+        'cust_aadhar_card_back' => $cust_aadhar_card_back
     ];
 
     $emptyFields = [];
@@ -54,54 +61,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     // Check if the customer already exists
     $custExist = getcustomer_byID($email);
 
+    // fileupload funtion 
+    function handleFileUpload($fileKey, $columnName, $customerId)
+    {
+        global $link, $config;
+
+        if (!empty($_FILES[$fileKey]["name"]) && $_FILES[$fileKey]["error"] == 0) {
+            $findCustomer = getcustomer_byID($customerId);
+            $file_name = $_FILES[$fileKey]["name"];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $customer_img_name = $fileKey . '_' . rand() . '_' . time() . "_" . strtolower(str_replace(" ", "_", $findCustomer['cust_first_name'] . '.' . $file_ext));
+            $path = '../' . $config['Images'] . $customer_img_name;
+
+            if (move_uploaded_file($_FILES[$fileKey]["tmp_name"], $path)) {
+                unlink('../' . $config['Images'] . $findCustomer[$columnName]);
+                $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+                $update_stmt = mysqli_prepare($link, $update_sql);
+                mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
+                mysqli_stmt_execute($update_stmt);
+            }
+        }
+    }
+
+
     if ($custExist && !$customerId) {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'You are already registered. Our team will connect with you shortly.']);
         exit;
     } else {
-        // Prepare SQL statement based on whether it's an insert or update
         if ($customerId) {
-            // Update existing customer
             $sql = "UPDATE customer SET cust_first_name=?, cust_aadhar_no=?, cust_alter_phone=?, cust_phone=?, cust_password=?, cust_state=?, cust_district_id=?, cust_taluka_id=?, cust_pincode=?, cust_address=? WHERE cust_id=?";
             $stmt = mysqli_prepare($link, $sql);
-
-            // Note the correct order of parameters in the next line
             mysqli_stmt_bind_param($stmt, 'ssssssssssi', $first_name, $cust_aadhar_no, $cust_alter_phone, $phone, $hashed_password, $cust_state, $cust_district_id, $cust_taluka_id, $cust_pincode, $cust_address, $customerId);
         } else {
-
-            // Insert new customer
             $sql = "INSERT INTO customer (cust_first_name, cust_aadhar_no, cust_email, cust_phone, cust_alter_phone, cust_state, cust_district_id, cust_taluka_id, cust_pincode, cust_address, cust_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = mysqli_prepare($link, $sql);
             mysqli_stmt_bind_param($stmt, 'sssssssssss', $first_name, $cust_aadhar_no, $email, $phone, $cust_alter_phone, $cust_state, $cust_district_id, $cust_taluka_id, $cust_pincode, $cust_address, $hashed_password);
         }
-        // Execute the SQL statement
         if (mysqli_stmt_execute($stmt)) {
-            // Registration/update successful
+            $last_inserted_id = mysqli_insert_id($link);
             if ($customerId) {
-                // If it's an update, handle file upload for cust_profile
-                if (!empty($_FILES["cust_selfie"]["name"]) && $_FILES["cust_selfie"]["error"] == 0) {
-                    $file_name = $_FILES["cust_selfie"]["name"];
-                    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                    $customer_img_name = $first_name . '_' . rand() . '_' . microtime() . "_" . strtolower(str_replace(" ", "_", $last_name . '.' . $file_ext));
-                    $path = ABSPATH . $config['Images'] . $customer_img_name;
-                    if (move_uploaded_file($_FILES["cust_selfie"]["tmp_name"], $path)) {
-                        // image unlink 
-                        $custDetails = getcustomer_byID($customerId);
-                        unlink(ABSPATH . $config['Images'] . $custDetails['cust_selfie']);
-                        $update_sql = "UPDATE customer SET cust_selfie = ? WHERE cust_id = ?";
-                        $update_stmt = mysqli_prepare($link, $update_sql);
-                        mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
-                        mysqli_stmt_execute($update_stmt);
-                    }
-                }
 
+                handleFileUpload("cust_pan_card", "cust_pan_card", $customerId);
+                handleFileUpload("cust_aadhar_card_front", "cust_aadhar_card_front", $customerId);
+                handleFileUpload("cust_aadhar_card_back", "cust_aadhar_card_back", $customerId);
                 $response = ['status' => true, 'message' => 'Your Profile has been updated successfully.'];
                 http_response_code($customerId ? 200 : 201);
                 header('Content-Type: application/json');
                 echo json_encode($response);
                 exit;
             }
+
+            handleFileUpload("cust_pan_card", "cust_pan_card", $last_inserted_id);
+            handleFileUpload("cust_aadhar_card_front", "cust_aadhar_card_front", $last_inserted_id);
+            handleFileUpload("cust_aadhar_card_back", "cust_aadhar_card_back", $last_inserted_id);
 
             $response = ['status' => true, 'message' => 'Your registration procedure has been completed. Our team will connect with you shortly.'];
             http_response_code($customerId ? 200 : 201);

@@ -375,13 +375,13 @@ if (isset($_GET['id'])) {
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>District Name</label>
-                  <select id="district_id" name="district_id" class="form-control" onchange="getTaluka(this.value)" required <?php echo empty($res['district_id']) ? 'disabled' : ''; ?>>
+                  <select id="district_id" name="district_id" class="form-control" onchange="getTaluka(this.value)" required <?php echo empty($res['user_district']) ? 'disabled' : ''; ?>>
                     <option>Select a State first</option>
                     <?php
-                    if (!empty($res['district_id'])) {
+                    if (!empty($res['user_district'])) {
                       $rows_list = getdistrict_list();
                       foreach ($rows_list as $distDetails) { ?>
-                        <option value="<?php echo $distDetails['district_id']; ?>" <?php if ($distDetails['district_id'] == $res['district_id'])  echo "selected"; ?>><?php echo $distDetails['district_name']; ?></option>
+                        <option value="<?php echo $distDetails['district_id']; ?>" <?php if ($distDetails['district_id'] == $res['user_district'])  echo "selected"; ?>><?php echo $distDetails['district_name']; ?></option>
                     <?php }
                     } ?>
                   </select>

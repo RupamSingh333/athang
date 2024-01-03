@@ -4,7 +4,7 @@ include_once("../common/head.php");
 if ($r['user_type'] == "1") {
   $rows_list = getuser_byList();
 } else {
-  $rows_list = getuser_byList_byuser($_SESSION['AdminLogin']);
+  $rows_list = getuser_byID($_SESSION['AdminLogin']);
 }
 
 if ($per['user']['view'] == 0) { ?>

@@ -9,22 +9,19 @@ function sanitizeInput($data)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key'] === 'qwertyupasdfghjklzxcvbnm') {
 
     $customerId = isset($_POST['customerId']) ? (int)$_POST['customerId'] : null;
-    $cust_org_name = sanitizeInput($_POST['cust_org_name']);
-    $cust_org_type = sanitizeInput($_POST['cust_org_type']);
     $user_updated_by = sanitizeInput($_POST['user_updated_by']);
-
-    $cust_selfie = sanitizeInput($_FILES['cust_selfie']['name']);
-    $cust_agreement_copy = sanitizeInput($_FILES['cust_agreement_copy']['name']);
-    $cust_signature = sanitizeInput($_FILES['cust_signature']['name']);
+    $aadhar_link_mobile = sanitizeInput($_POST['aadhar_link_mobile']);
+    $proof_of_buiseness = sanitizeInput($_FILES['proof_of_buiseness']['name']);
+    $bs_bank_statemenet = sanitizeInput($_FILES['bs_bank_statemenet']['name']);
 
     $requiredFields = [
-        'cust_org_name' => $cust_org_name,
-        'cust_org_type' => $cust_org_type,
+        'customerId' => $customerId,
         'user_updated_by' => $user_updated_by,
-        'cust_selfie' => $cust_selfie,
-        'cust_agreement_copy' => $cust_agreement_copy,
-        'cust_signature' => $cust_signature
+        'aadhar_link_mobile' => $aadhar_link_mobile,
+        'proof_of_buiseness' => $proof_of_buiseness,
+        'bs_bank_statemenet' => $bs_bank_statemenet
     ];
+
 
     $emptyFields = [];
     foreach ($requiredFields as $fieldName => $fieldValue) {
@@ -48,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         global $link, $config;
 
         if (!empty($_FILES[$fileKey]["name"]) && $_FILES[$fileKey]["error"] == 0) {
-            $upcustDetails = getcustomer_byID($customerId); 
+            $upcustDetails = getcustomer_byID($customerId);
             $file_name = $_FILES[$fileKey]["name"];
             $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
             $customer_img_name = $fileKey . '_' . rand() . '_' . time() . "_" . strtolower(str_replace(" ", "_", $upcustDetails['cust_first_name'] . '.' . $file_ext));
@@ -71,16 +68,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         echo json_encode(['status' => false, 'error' => 'Invalid customer details.']);
         exit;
     } else {
-        $sql = "UPDATE customer SET cust_org_name=?, cust_org_type=? ,user_updated_by=?,shop_act_licence_approvedby=?,shop_act_licence=? WHERE cust_id=?";
+        $sql = "UPDATE customer SET aadhar_link_mobile=?, user_updated_by=?,bs_approvedby=? ,bs=? WHERE cust_id=?";
         $stmt = mysqli_prepare($link, $sql);
-        $shop_act_licence = 'Y';
-        mysqli_stmt_bind_param($stmt, 'sssssi', $cust_org_name, $cust_org_type, $user_updated_by, $user_updated_by, $shop_act_licence, $customerId);
+        $bs = 'Y';
+        mysqli_stmt_bind_param($stmt, 'siisi', $aadhar_link_mobile, $user_updated_by, $user_updated_by, $bs, $customerId);
+        // pr($sql);exit;
         if (mysqli_stmt_execute($stmt)) {
-
-            handleFileUpload("cust_selfie", "cust_selfie", $customerId);
-            handleFileUpload("cust_agreement_copy", "cust_agreement_copy", $customerId);
-            handleFileUpload("cust_signature", "cust_signature", $customerId);
-            $response = ['status' => true, 'message' => 'Shop Act procedure has been update successfully.'];
+            $last_inserted_id = mysqli_insert_id($link);
+            handleFileUpload("proof_of_buiseness", "proof_of_buiseness", $customerId);
+            handleFileUpload("bs_bank_statemenet", "bs_bank_statemenet", $customerId);
+            $response = ['status' => true, 'message' => 'ITR procedure has been update successfully.'];
             http_response_code($customerId ? 200 : 201);
         } else {
             $response = ['status' => false, 'error' => 'Data not update please try after some time.'];
@@ -92,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         exit;
     }
 } else {
-    // Invalid request method or key
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode(['status' => false, 'error' => 'Invalid request method or key']);
