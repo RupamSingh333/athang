@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
             $last_inserted_id = mysqli_insert_id($link);
             handleFileUpload("proof_of_buiseness", "proof_of_buiseness", $customerId);
             handleFileUpload("bs_bank_statemenet", "bs_bank_statemenet", $customerId);
-            $response = ['status' => true, 'message' => 'ITR procedure has been update successfully.'];
+            $response = ['status' => true, 'message' => 'B/S procedure has been update successfully.'];
             http_response_code($customerId ? 200 : 201);
         } else {
             $response = ['status' => false, 'error' => 'Data not update please try after some time.'];

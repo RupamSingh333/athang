@@ -1,22 +1,29 @@
 <?php
 include("../../system_config.php");
 include_once("../common/head.php");
-$rows_list = gettaluka_list();
+$customer_list = getcustomer_byList();
 
-?>
+if ($per['customer']['view'] == 0) { ?>
+  <script>
+    window.location.href = "../dashboard.php";
+  </script>
+<?php } ?>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini fixed">
   <div class="wrapper">
     <?php include_once("../common/left_menu.php"); ?>
     <div class="content-wrapper">
+      <!-- Content Header -->
       <section class="content-header">
-        <h1>Taluka Management</h1>
+        <h1>Shop Act License</h1>
         <ol class="breadcrumb">
-          <li><a href="<?php echo SITEPATH; ?>admin/dashboard.php"><i class="fa fa-dashboard"></i>Home</a></li>
-          <li class="active">View All Taluka</li>
+          <li><a href="<?php echo SITEPATH; ?>admin/dashboard.php"><i class="fa fa-dashboard"></i> Home</a></li>
+          <li class="active">Shop Act License</li>
         </ol>
       </section>
+      <!-- Main content -->
 
       <?php
       // Display the flash message using SweetAlert
@@ -28,6 +35,7 @@ $rows_list = gettaluka_list();
           Swal.fire({
           icon: 'success',
           title: 'Success!',
+          position: 'top',
           text: '" . $message . "',
           timer: 3000, // Display for 3 seconds
           showConfirmButton: false
@@ -36,102 +44,97 @@ $rows_list = gettaluka_list();
       }
       ?>
 
-      
       <section class="content">
-        <h1 align="center" style="color: #337ab7;"><?php echo $_SESSION['message'];
-                                                    unset($_SESSION['message']); ?></h1>
+
         <div class="table-responsive" style="overflow-x: auto;">
           <table id="exportable" align="center" class="table table-bordered table-condensed table-hover">
             <thead>
               <tr>
-                <td><strong>Sr No.</strong></td>
-                <!-- <td><strong>Image</strong></td> -->
-                <td><strong>Taluka Name</strong></td>
-                <td><strong>State Name</strong></td>
-                <td><strong>District Name</strong></td>
-                <td><strong>District Start Date</strong></td>
-                <td><strong>Description</strong></td>
+                <td><strong>Sr.No</strong></td>
+                <td><strong>Selfie</strong></td>
+                <td><strong>Name</strong></td>
+                <td><strong>Email</strong></td>
+                <td><strong>Organization</strong></td>
+                <td><strong>Documents</strong></td>
+                <td><strong>Approved By</strong></td>
+                <td><strong>Status</strong></td>
                 <td><strong>Action</strong></td>
               </tr>
             </thead>
             <tbody>
               <?php
               $i = 1;
-              foreach ($rows_list as $rows) {
-                $stateName = getState_byID($rows['taluka_state_id']);
-                $taluka_district = getdistrict_byID($rows['taluka_district_id']);
+              foreach ($customer_list as $rows) {
+                $custState = getState_byID($rows['cust_state']);
+                $cust_taluka = gettaluka_byID($rows['cust_taluka_id']);
+                $getdistrict_byID = getdistrict_byID($rows['cust_district_id']);
+                $shop_act_licence_approvedby = getuser_byID($rows['shop_act_licence_approvedby']);
+                // pr($shop_act_licence_approvedby);exit;
 
               ?>
                 <tr>
                   <td><?php echo $i; ?></td>
-                  <!-- <td><a class="iframe" href="#"><img src="<?php //echo SITEPATH; 
-                                                                ?>upload/thumb/<?php //echo $rows['district_img']; 
-                                                                                ?>" width="50px" height="50px"></a></td> -->
-                  <td><?php echo $rows['taluka_name']; ?></td>
-                  <td><?php echo $stateName['name']; ?></td>
-                  <td><?php echo $taluka_district['district_name']; ?></td>
-                  <td><?php echo $rows['taluka_createdAt']; ?></td>
-                  <td><?php echo $rows['taluka_desc']; ?></td>
+                  <td><a href="#">
+                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['cust_profile']) ? 'upload/Images/' . $rows['cust_profile'] : NOIMAGE; ?>" width="60px" height="50px">
+                    </a>
+                  </td>
+                  <td><b><?php echo $rows['cust_first_name']; ?></b></td>
+                  <td><?php echo $rows['cust_email']; ?></td>
+                  <td>
+                    <strong>Name:</strong> <?php echo $rows['cust_org_name']; ?> <br>
+                    <strong>Type:</strong> <?php echo $rows['cust_org_type']; ?>
+                  </td>
 
-                  <td id="font12" width="15%">
-                    <a href="<?php echo SITEPATH; ?>admin/action/taluka.php?action=status&id=<?php echo  urlencode(encryptIt($rows['taluka_id'])); ?>" <?php if ($rows['taluka_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')"><i class="fa fa-angle-double-up"></i>
-                    <?php } else { ?>
-                      onMouseOver="showbox('inactive<?php echo $i; ?>')" onMouseOut="hidebox('inactive<?php echo $i; ?>')">
-                      <i class="fa fa-angle-double-down"></i>
+                  <td>
+                    <?php
+                    if ($rows['cust_agreement_copy']) { ?>
+                      <a href="<?php echo SITEPATH; ?><?php echo ($rows['cust_agreement_copy']) ? 'upload/Images/' . $rows['cust_agreement_copy'] : NOIMAGE; ?>" target="_blank">View Agreement Copy</a>
                     <?php } ?>
-                    </a>
-                    <div id="active<?php echo $i; ?>" class="hide1">
-                      <p>Active</p>
-                    </div>
-                    <div id="inactive<?php echo $i; ?>" class="hide1">
-                      <p>Inactive</p>
-                    </div>
-                    &nbsp;&nbsp;
-                    <a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php?id=<?php echo  urlencode(encryptIt($rows['taluka_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i>
-                    </a>
-                    <div id="Edit<?php echo $i; ?>" class="hide1">
-                      <p>Edit</p>
-                    </div>
-                    &nbsp;&nbsp;
-                    <a href="#" onClick="return confirmDelete('<?php echo urlencode(encryptIt($rows['taluka_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i>
-                    </a>
-                    <div id="Delete<?php echo $i; ?>" class="hide1">
-                      <p>Delete</p>
-                    </div>
+                    <br>
+                    <?php if ($rows['cust_signature']) { ?>
+                      <a href="<?php echo SITEPATH; ?><?php echo ($rows['cust_signature']) ? 'upload/Images/' . $rows['cust_signature'] : NOIMAGE; ?>" target="_blank">View Customer Signature</a>
+                    <?php } ?>
+                  </td>
+
+
+                  <td><?php echo $shop_act_licence_approvedby['first_name']; ?></td>
+
+                  <td>
+
+                    <?php if ($rows['shop_act_licence'] == 'Y') { ?>
+                      <i class="fa fa-check-circle" title="Approved" style="color: green;"></i>
+                    <?php } else if ($rows['shop_act_licence'] == 'N') { ?>
+                      <i class="fa fa-times-circle" title="Pending" style="color: red;"></i>
+                    <?php } else { ?>
+                      <i class="fa fa-question-circle" title="Pending" style="color: orange;"></i>
+                    <?php } ?>
+
+
+                  <td id="font12" style="width:10%">
+
+                    <?php if ($per['customer']['edit'] == 1) { ?>
+
+                      <a href="<?php echo SITEPATH; ?>admin/customer/add-new-customer.php?id=<?php echo urlencode(encryptIt($rows['cust_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i>
+                      </a>
+                      <div id="Edit<?php echo $i; ?>" class="hide1">
+                        <p>Edit</p>
+                      </div>
+
+                    <?php } ?>
                   </td>
                 </tr>
+
               <?php
                 $i++;
-              }
-              ?>
+              } ?>
             </tbody>
           </table>
-
-          <script>
-            function confirmDelete(id) {
-              // console.log(id);
-              Swal.fire({
-                title: 'Confirmation',
-                text: 'Are you sure you want to delete?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Delete',
-                cancelButtonText: 'Cancel',
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  var deleteUrl = "<?php echo SITEPATH; ?>admin/action/taluka.php?action=del&id=" + id;
-                  window.location.href = deleteUrl;
-                }
-              });
-
-              return false;
-            }
-          </script>
 
 
         </div>
       </section>
     </div>
+    <!--close page contets , start footer-->
     <footer class="main-footer">
       <?php include_once("../common/copyright.php"); ?>
     </footer>

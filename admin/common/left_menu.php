@@ -130,10 +130,10 @@
           <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Food License</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['food_license']['add'] == 1) { ?>
-              <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
+              <!-- <li><a href="<?php //echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['food_license']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/food_license.php"><i class="fa fa-caret-right"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>
@@ -147,7 +147,7 @@
               <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['shop_act_license']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/shop_act_license.php"><i class="fa fa-caret-right"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>
@@ -161,7 +161,7 @@
               <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['bank_account']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/bank_account.php"><i class="fa fa-caret-right"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>
@@ -169,13 +169,13 @@
 
       <?php if ($per['demat_account']['add'] == 1 or $per['demat_account']['view'] == 1) { ?>
         <li class="treeview">
-          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Demate Account</span> <i class="fa fa-angle-left pull-right"></i> </a>
+          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Demat Account</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['demat_account']['add'] == 1) { ?>
               <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['demat_account']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/demate_account.php"><i class="fa fa-caret-right"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>
@@ -189,7 +189,21 @@
               <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['itr_management']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/itr_management.php"><i class="fa fa-caret-right"></i> View All</a></li>
+            <?php } ?>
+          </ul>
+        </li>
+      <?php } ?>
+
+      <?php if ($per['bs']['add'] == 1 or $per['bs']['view'] == 1) { ?>
+        <li class="treeview">
+          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>B/S</span> <i class="fa fa-angle-left pull-right"></i> </a>
+          <ul class="treeview-menu">
+            <?php if ($per['bs']['add'] == 1) { ?>
+              <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
+            <?php }
+            if ($per['bs']['view'] == 1) { ?>
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/bs.php"><i class="fa fa-caret-right"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>

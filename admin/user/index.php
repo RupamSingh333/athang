@@ -100,7 +100,7 @@ if ($per['user']['view'] == 0) { ?>
                     <?php if ($rows['user_status'] == 0) { ?>
                       <i class="fa fa-check-circle" title="Active" style="color: green;"></i>
                     <?php } else { ?>
-                      <i class="fa fa-check-circle" title="Inactive" style="color: red;"></i>
+                      <i class="fa fa-times-circle" title="Pending" style="color: red;"></i>
                     <?php  } ?>
                   </td>
 
