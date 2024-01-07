@@ -3,6 +3,8 @@ include("../../system_config.php");
 $action = get_safe_get('action');
 $url_return = "../customer";
 
+
+
 switch ($action) {
 	case "save":
 		$primary_value = get_safe_post('data_id');
@@ -24,12 +26,20 @@ switch ($action) {
 		$field['cust_address'] = get_safe_post('cust_address');
 		$field['cust_country'] = 101;
 		$field['cust_status'] = get_safe_post('cust_status');
+		$field['shop_act_licence'] = get_safe_post('shop_act_licence');
+		$field['food_licence'] = get_safe_post('food_licence');
+		$field['bank_acc_opening'] = get_safe_post('bank_acc_opening');
+		$field['demate_acc_opening'] = get_safe_post('demate_acc_opening');
+		$field['itr'] = get_safe_post('itr');
+		$field['bs'] = get_safe_post('bs');
+		
+
 		$field['cust_desc'] = get_safe_post('cust_desc');
 
 		if ($_FILES["cust_selfie"]["error"] == 0) {
 			$file_name = $_FILES["cust_selfie"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-			$img_name = rand() . '_' . time() . "_selfie" . $file_ext;
+			$img_name = rand() . '_' . time() . "_selfie." . $file_ext;
 			move_uploaded_file($_FILES["cust_selfie"]["tmp_name"], "../../" . $config['Images'] . $img_name);
 			$field['cust_selfie'] = $img_name;
 
@@ -40,7 +50,7 @@ switch ($action) {
 		} else if ($_FILES["cust_agreement_copy"]["error"] == 0) {
 			$file_name = $_FILES["cust_agreement_copy"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-			$img_name = rand() . '_' . time() . "_agreement_copy" . $file_ext;
+			$img_name = rand() . '_' . time() . "_agreement_copy." . $file_ext;
 			move_uploaded_file($_FILES["cust_agreement_copy"]["tmp_name"], "../../" . $config['Images'] . $img_name);
 			$field['cust_agreement_copy'] = $img_name;
 
@@ -51,7 +61,7 @@ switch ($action) {
 		} else if ($_FILES["cust_signature"]["error"] == 0) {
 			$file_name = $_FILES["cust_signature"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-			$img_name = rand() . '_' . time() . "_signature" . $file_ext;
+			$img_name = rand() . '_' . time() . "_signature." . $file_ext;
 			move_uploaded_file($_FILES["cust_signature"]["tmp_name"], "../../" . $config['Images'] . $img_name);
 			$field['cust_signature'] = $img_name;
 
@@ -62,7 +72,7 @@ switch ($action) {
 		} else if ($_FILES["cust_pan_card"]["error"] == 0) {
 			$file_name = $_FILES["cust_pan_card"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-			$img_name = rand() . '_' . time() . "_pan_card" . $file_ext;
+			$img_name = rand() . '_' . time() . "_pan_card." . $file_ext;
 			move_uploaded_file($_FILES["cust_pan_card"]["tmp_name"], "../../" . $config['Images'] . $img_name);
 			$field['cust_pan_card'] = $img_name;
 
@@ -73,7 +83,7 @@ switch ($action) {
 		} else if ($_FILES["cust_aadhar_card_back"]["error"] == 0) {
 			$file_name = $_FILES["cust_aadhar_card_back"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-			$img_name = rand() . '_' . time() . "_aadhar_card_back" . $file_ext;
+			$img_name = rand() . '_' . time() . "_aadhar_card_back." . $file_ext;
 			move_uploaded_file($_FILES["cust_aadhar_card_back"]["tmp_name"], "../../" . $config['Images'] . $img_name);
 			$field['cust_aadhar_card_back'] = $img_name;
 
@@ -84,7 +94,7 @@ switch ($action) {
 		} else if ($_FILES["cust_aadhar_card_front"]["error"] == 0) {
 			$file_name = $_FILES["cust_aadhar_card_front"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-			$img_name = rand() . '_' . time() . "_aadhar_card_front" . $file_ext;
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
 			move_uploaded_file($_FILES["cust_aadhar_card_front"]["tmp_name"], "../../" . $config['Images'] . $img_name);
 			$field['cust_aadhar_card_front'] = $img_name;
 
@@ -92,7 +102,85 @@ switch ($action) {
 				$custDetails = getcustomer_byID($primary_value);
 				unlink("../../" . $config['Images'] . $custDetails['cust_aadhar_card_front']);
 			}
+		} else if ($_FILES["b_acc_screenshot"]["error"] == 0) {
+			$file_name = $_FILES["b_acc_screenshot"]["name"];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
+			move_uploaded_file($_FILES["b_acc_screenshot"]["tmp_name"], "../../" . $config['Images'] . $img_name);
+			$field['b_acc_screenshot'] = $img_name;
+
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['b_acc_screenshot']);
+			}
+		} else if ($_FILES["dmt_acc_screenshot"]["error"] == 0) {
+			$file_name = $_FILES["dmt_acc_screenshot"]["name"];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
+			move_uploaded_file($_FILES["dmt_acc_screenshot"]["tmp_name"], "../../" . $config['Images'] . $img_name);
+			$field['dmt_acc_screenshot'] = $img_name;
+
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['dmt_acc_screenshot']);
+			}
+		} else if ($_FILES["itr_bank_statement"]["error"] == 0) {
+			$file_name = $_FILES["itr_bank_statement"]["name"];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
+			move_uploaded_file($_FILES["itr_bank_statement"]["tmp_name"], "../../" . $config['Images'] . $img_name);
+			$field['itr_bank_statement'] = $img_name;
+
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['itr_bank_statement']);
+			}
+		} else if ($_FILES["salary_sheet"]["error"] == 0) {
+			$file_name = $_FILES["salary_sheet"]["name"];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
+			move_uploaded_file($_FILES["salary_sheet"]["tmp_name"], "../../" . $config['Images'] . $img_name);
+			$field['salary_sheet'] = $img_name;
+
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['salary_sheet']);
+			}
+		} else if ($_FILES["form16"]["error"] == 0) {
+			$file_name = $_FILES["form16"]["name"];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
+			move_uploaded_file($_FILES["form16"]["tmp_name"], "../../" . $config['Images'] . $img_name);
+			$field['form16'] = $img_name;
+
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['form16']);
+			}
+		} else if ($_FILES["bs_bank_statemenet"]["error"] == 0) {
+			$file_name = $_FILES["bs_bank_statemenet"]["name"];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
+			move_uploaded_file($_FILES["bs_bank_statemenet"]["tmp_name"], "../../" . $config['Images'] . $img_name);
+			$field['bs_bank_statemenet'] = $img_name;
+
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['bs_bank_statemenet']);
+			}
+		} else if ($_FILES["proof_of_buiseness"]["error"] == 0) {
+			$file_name = $_FILES["proof_of_buiseness"]["name"];
+			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+			$img_name = rand() . '_' . time() . "_aadhar_card_front." . $file_ext;
+			move_uploaded_file($_FILES["proof_of_buiseness"]["tmp_name"], "../../" . $config['Images'] . $img_name);
+			$field['proof_of_buiseness'] = $img_name;
+
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['proof_of_buiseness']);
+			}
 		}
+
 		$output =  save_command(tbl_customer, $field, "cust_id", $primary_value);
 		$_SESSION['msg'] = $output;
 		break;

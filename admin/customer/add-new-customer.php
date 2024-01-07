@@ -2,7 +2,6 @@
 include("../../system_config.php");
 include_once("../common/head.php");
 $name = "Add New Customer";
-
 if (isset($_GET['id'])) {
   $name = "Update Customer";
   $id = decryptIt($_GET['id']);
@@ -180,7 +179,8 @@ if ($per['user']['add'] == 0) { ?>
               <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Password</label>
-                  <input class="form-control" name="cust_password" id="password" placeholder="Enter Password" minlength=6 value="<?php if (!$res['cust_password'] == "") {  echo decryptIt($res['cust_password']);  } ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  <input class="form-control" name="cust_password" id="password" placeholder="Enter Password" minlength="6" value="<?= !empty($res['cust_password']) ? decryptIt($res['cust_password']) : '' ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
@@ -188,7 +188,7 @@ if ($per['user']['add'] == 0) { ?>
               <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Confirm Password</label>
-                  <input class="form-control" name="confirm_password" id="confirm_password" minlength=6 placeholder="Confirm Password" value="<?php if (!$res['cust_password'] == "") {  echo decryptIt($res['cust_password']);  } ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  <input class="form-control" name="confirm_password" id="confirm_password" minlength="6" placeholder="Confirm Password" value="<?= !empty($res['cust_password']) ? decryptIt($res['cust_password']) : '' ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
@@ -237,6 +237,14 @@ if ($per['user']['add'] == 0) { ?>
                   </div>
                 </div>
 
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Aadhar Link Mobile</label>
+                    <input class="form-control" required id="aadhar_link_mobile" name="aadhar_link_mobile" placeholder="Aadhar Link Mobile" type="number" value="<?php echo $res['aadhar_link_mobile']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                    <label class="label-brdr" style="width: 0%;"></label>
+                  </div>
+                </div>
+
                 <div class="col-sm-3 col-md-3 col-lg-3" id="cust_gst_no">
                   <div class="form-group">
                     <label>GST Number</label>
@@ -244,6 +252,24 @@ if ($per['user']['add'] == 0) { ?>
                     <label class="label-brdr" style="width: 0%;"></label>
                   </div>
                 </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3" id="b_acc_name_of_link">
+                  <div class="form-group">
+                    <label>Bank Acc Name of Link</label>
+                    <input class="form-control" required id="b_acc_name_of_link" name="b_acc_name_of_link" placeholder="Bank Acc Name of Link" type="link" value="<?php echo $res['b_acc_name_of_link']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                    <label class="label-brdr" style="width: 0%;"></label>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3" id="dmt_acc_name_of_link">
+                  <div class="form-group">
+                    <label>Demat Acc Name of Link</label>
+                    <input class="form-control" required id="dmt_acc_name_of_link" name="dmt_acc_name_of_link" placeholder="Bank Acc Name of Link" type="link" value="<?php echo $res['dmt_acc_name_of_link']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                    <label class="label-brdr" style="width: 0%;"></label>
+                  </div>
+                </div>
+
+                <div class="clearfix"></div>
 
                 <div class="col-sm-3 col-md-3 col-lg-3">
                   <div class="form-group">
@@ -266,8 +292,6 @@ if ($per['user']['add'] == 0) { ?>
                   </div>
                 </div>
 
-                <div class="clearfix"></div>
-
                 <div class="col-sm-3 col-md-3 col-lg-3">
                   <div class="form-group">
                     <label>Pan Card</label>
@@ -286,6 +310,55 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Agreement Copy</label>
                     <input type="file" name="cust_agreement_copy" id="cust_agreement" accept=".jpg, .jpeg, .png" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Bank Account Screenshot</label>
+                    <input type="file" name="b_acc_screenshot" id="b_acc_screenshot" accept=".jpg, .jpeg, .png" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Demat Account Screenshot</label>
+                    <input type="file" name="dmt_acc_screenshot" id="dmt_acc_screenshot" accept=".jpg, .jpeg, .png" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>ITR Bank Statement</label>
+                    <input type="file" name="itr_bank_statement" id="itr_bank_statement" accept=".jpg, .jpeg, .png" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Salary Sheet</label>
+                    <input type="file" name="salary_sheet" id="salary_sheet" accept=".jpg, .jpeg, .png" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Form16</label>
+                    <input type="file" name="form16" id="form16" accept=".jpg, .jpeg, .png" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>B/S Bank Statement</label>
+                    <input type="file" name="bs_bank_statemenet" id="bs_bank_statemenet" accept=".jpg, .jpeg, .png" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label>Proof of Business</label>
+                    <input type="file" name="proof_of_buiseness" id="proof_of_buiseness" accept=".jpg, .jpeg, .png" class="form-control">
                   </div>
                 </div>
 
@@ -454,7 +527,67 @@ if ($per['user']['add'] == 0) { ?>
                   <h4 class="divd">Other Information</h4>
                 </div>
 
-                <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                  <div class="form-group">
+                    <label>Shop Act License</label>
+                    <select id="shop_act_licence" name="shop_act_licence" class="form-control">
+                      <option value="N">N</option>
+                      <option value="Y" <?= ($res['shop_act_licence'] == 'Y') ? 'selected' : ''; ?>>Y</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                  <div class="form-group">
+                    <label>Food License</label>
+                    <select id="food_licence" name="food_licence" class="form-control">
+                      <option value="N">N</option>
+                      <option value="Y" <?= ($res['food_licence'] == 'Y') ? 'selected' : ''; ?>>Y</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                  <div class="form-group">
+                    <label>Bank Acc Opening</label>
+                    <select id="bank_acc_opening" name="bank_acc_opening" class="form-control">
+                      <option value="Y">Y</option>
+                      <option value="N">N</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                  <div class="form-group">
+                    <label>Demat Acc Opening</label>
+                    <select id="demate_acc_opening" name="demate_acc_opening" class="form-control">
+                      <option value="N">N</option>
+                      <option value="Y" <?= ($res['demate_acc_opening'] == 'Y') ? 'selected' : ''; ?>>Y</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                  <div class="form-group">
+                    <label>ITR</label>
+                    <select id="itr" name="itr" class="form-control">
+                      <option value="N">N</option>
+                      <option value="Y" <?= ($res['itr'] == 'Y') ? 'selected' : ''; ?>>Y</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-sm-2 col-md-2 col-lg-2">
+                  <div class="form-group">
+                    <label>B/S</label>
+                    <select id="bs" name="bs" class="form-control">
+                      <option value="N">N</option>
+                      <option value="Y" <?= ($res['bs'] == 'Y') ? 'selected' : ''; ?>>Y</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-sm-2 col-md-2 col-lg-2">
                   <div class="form-group">
                     <label>Status</label>
                     <select id="cust_status" name="cust_status" class="form-control">
@@ -467,6 +600,7 @@ if ($per['user']['add'] == 0) { ?>
                     </select>
                   </div>
                 </div>
+
 
                 <div class="col-sm-12 col-md-12 col-lg-12">
                   <div class="form-group">

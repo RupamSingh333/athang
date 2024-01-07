@@ -58,7 +58,7 @@ if ($per['customer']['view'] == 0) { ?>
                 <td><strong>Number</strong></td>
                 <td><strong>Organization</strong></td>
                 <td><strong>Address</strong></td>
-                <td><strong>Description</strong></td>
+                <td><strong>Document</strong></td>
                 <td><strong>Status</strong></td>
                 <td><strong>Action</strong></td>
               </tr>
@@ -70,13 +70,13 @@ if ($per['customer']['view'] == 0) { ?>
                 $custState = getState_byID($rows['cust_state']);
                 $cust_taluka = gettaluka_byID($rows['cust_taluka_id']);
                 $getdistrict_byID = getdistrict_byID($rows['cust_district_id']);
-                // pr($custCity);exit;
+                // pr($rows);exit;
 
               ?>
                 <tr>
                   <td><?php echo $i; ?></td>
-                  <td><a href="#">
-                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['cust_profile']) ? 'upload/Images/' . $rows['cust_profile'] : NOIMAGE; ?>" width="80px" height="50px">
+                  <td><a href="javascript:void(0)">
+                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['cust_selfie']) ? 'upload/Images/' . $rows['cust_selfie'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
                     </a>
                   </td>
                   <td><b><?php echo $rows['cust_first_name']; ?></b></td>
@@ -104,7 +104,33 @@ if ($per['customer']['view'] == 0) { ?>
                     </div>
                   </td>
 
-                  <td><?php echo $rows['cust_desc']; ?></td>
+                  <td>
+                    <?php
+                    $documentTypes = [
+                      'cust_signature' => 'Customer Signature',
+                      'cust_agreement_copy' => 'Agreement Copy',
+                      'cust_selfie' => 'Selfie',
+                      'cust_pan_card' => 'Pan',
+                      'cust_aadhar_card_front' => 'Aadhar Front',
+                      'cust_aadhar_card_back' => 'Aadhar Back',
+                      'b_acc_screenshot' => 'Bank Acc Screenshot',
+                      'dmt_acc_screenshot' => 'Demat Acc Screenshot',
+                      'itr_bank_statement' => 'ITR Bank Statement',
+                      'salary_sheet' => 'Salary Sheet',
+                      'form16' => 'Form16',
+                      'bs_bank_statemenet' => 'B/S Bank Statement',
+                      'proof_of_buiseness' => 'Business Proof',
+                    ];
+
+                    foreach ($documentTypes as $fieldName => $label) {
+                      if ($rows[$fieldName]) {
+                        $imageUrl = SITEPATH . ($rows[$fieldName] ? 'upload/Images/' . $rows[$fieldName] : NOIMAGE);
+                        echo "<a href='$imageUrl' target='_blank'>View $label</a><br>";
+                      }
+                    }
+                    ?>
+                  </td>
+
 
                   <td>
 

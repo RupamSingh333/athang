@@ -83,9 +83,8 @@ if ($per['user']['view'] == 0) { ?>
               ?>
                 <tr>
                   <td><?php echo $i; ?></td>
-                  <td>
-                    <a href="#">
-                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['user_logo']) ? '/upload/thumb/' . $rows['user_logo'] : NOIMAGE; ?>" width="80px" height="50px">
+                  <td><a href="javascript:void(0)">
+                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['user_logo']) ? '/upload/thumb/' . $rows['user_logo'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
 
                     </a>
                   </td>

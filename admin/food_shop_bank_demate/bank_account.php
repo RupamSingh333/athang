@@ -3,7 +3,7 @@ include("../../system_config.php");
 include_once("../common/head.php");
 $customer_list = getcustomer_byList();
 
-if ($per['customer']['view'] == 0) { ?>
+if ($per['bank_account']['view'] == 0) { ?>
     <script>
         window.location.href = "../dashboard.php";
     </script>
@@ -73,10 +73,10 @@ if ($per['customer']['view'] == 0) { ?>
                             ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
-                                    <td><a href="#">
-                                            <img src="<?php echo SITEPATH; ?><?php echo ($rows['cust_profile']) ? 'upload/Images/' . $rows['cust_profile'] : NOIMAGE; ?>" width="60px" height="50px">
-                                        </a>
-                                    </td>
+                  <td><a href="javascript:void(0)">
+                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['cust_selfie']) ? 'upload/Images/' . $rows['cust_selfie'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
+                    </a>
+                  </td>
                                     <td><b><?php echo $rows['cust_first_name']; ?></b></td>
                                     <td><?php echo $rows['cust_email']; ?></td>
 
