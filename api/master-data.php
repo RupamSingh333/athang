@@ -40,7 +40,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         $distId = sanitizeInput($_POST['distId']);
         $district_query = "SELECT taluka_id, taluka_name FROM taluka WHERE taluka_district_id = $distId";
         getResults($link, $district_query, 'talukas');
+    } elseif (!empty($_POST['action'])) {
+        $action = sanitizeInput($_POST['action']);
+        if ($action == 'bank_links') {
+            $bank_links = "SELECT * FROM `bank_link` WHERE status = 'Y' ORDER BY bank_link_id DESC";
+            getResults($link, $bank_links, 'bank_link');
+        } else if ($action == 'demat_links') {
+            $demat_links = "SELECT * FROM `demat_link` WHERE status = 'Y' ORDER BY demat_link_id DESC";
+            getResults($link, $demat_links, 'demat_link');
+        }
     }
+    
 
     http_response_code(400);
     header('Content-Type: application/json');

@@ -1,7 +1,7 @@
 <?php
 include("../../system_config.php");
 include_once("../common/head.php");
-$name = "Add New User";
+$name = "Add New Employee";
 if (isset($_GET['id'])) {
   $name = "Update User";
   $id = decryptIt($_GET['id']);

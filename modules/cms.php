@@ -16,6 +16,8 @@ define("tbl_dealer", "dealer");
 define("tbl_number", "number");
 define("tbl_district", "district");
 define("tbl_taluka", "taluka");
+define("tbl_demat_link", "demat_link");
+define("tbl_bank_link", "bank_link");
 
 function gettaluka_byID($id)
 {
@@ -139,6 +141,42 @@ function getCategory_byID($id)
 {
     $sql = "select * from " . tbl_categories . " where cat_id='" . $id . "' limit 0,1 ";
     $array = FetchRow($sql);
+    return $array;
+}
+
+function getDematLink_byID($id_or_link)
+{
+    if (is_numeric($id_or_link)) {
+        $sql = "select * from " . tbl_demat_link . " where demat_link_id ='" . $id_or_link . "' limit 0,1 ";
+    } else {
+        $sql = "select * from " . tbl_demat_link . " where link ='" . $id_or_link . "' limit 0,1 ";
+    }
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getDematLink_list()
+{
+    $sql = "select * from " . tbl_demat_link . "  order by demat_link_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getBankLink_byID($id_or_link)
+{
+    if (is_numeric($id_or_link)) {
+        $sql = "select * from " . tbl_bank_link . " where bank_link_id ='" . $id_or_link . "' limit 0,1 ";
+    } else {
+        $sql = "select * from " . tbl_bank_link . " where link ='" . $id_or_link . "' limit 0,1 ";
+    }
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getBankLink_list()
+{
+    $sql = "select * from " . tbl_bank_link . "  order by bank_link_id desc";
+    $array = FetchAll($sql);
     return $array;
 }
 

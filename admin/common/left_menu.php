@@ -72,7 +72,7 @@
       <?php
       // pr($per);exit;
       if ($per['user']['add'] == 1 or $per['user']['view'] == 1) { ?>
-        <li class="treeview"> <a> <i class="fa  fa-rss-square nav_icon"></i> <span>User Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
+        <li class="treeview"> <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Employee Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['user']['add'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/user/add-new-user.php"><i class="fa fa-caret-right"></i>Add New</a></li>
@@ -130,7 +130,8 @@
           <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Food License</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['food_license']['add'] == 1) { ?>
-              <!-- <li><a href="<?php //echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
+              <!-- <li><a href="<?php //echo SITEPATH; 
+                                ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['food_license']['view'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/food_license.php"><i class="fa fa-caret-right"></i> View All</a></li>
@@ -158,7 +159,7 @@
           <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Bank Account</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['bank_account']['add'] == 1) { ?>
-              <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/add_view_bank_link.php"><i class="fa fa-caret-right"></i>Add New Link</a></li>
             <?php }
             if ($per['bank_account']['view'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/bank_account.php"><i class="fa fa-caret-right"></i> View All</a></li>
@@ -172,7 +173,7 @@
           <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Demat Account</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['demat_account']['add'] == 1) { ?>
-              <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
+              <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/add_view_demat_link.php"><i class="fa fa-caret-right"></i>Add New Link</a></li>
             <?php }
             if ($per['demat_account']['view'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/demate_account.php"><i class="fa fa-caret-right"></i> View All</a></li>

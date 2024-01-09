@@ -22,14 +22,14 @@ if ($per['user']['view'] == 0) { ?>
       <section class="content-header">
         <h1>
           <?php if ($r['user_type'] == "1") { ?>
-            <a style="text-decoration: underline;" href="<?php echo SITEPATH; ?>admin/user/add-new-user.php">Add New User</a>
+            <a style="text-decoration: underline;" href="<?php echo SITEPATH; ?>admin/user/add-new-user.php">Add New Employee</a>
           <?php } ?>
         </h1>
         <ol class="breadcrumb">
           <li><a href="<?php echo SITEPATH; ?>admin/dashboard.php"><i class="fa fa-dashboard"></i> Home</a></li>
           <li class="active">
             <?php if ($per['user']['view'] == 1) { ?>
-              View All Users
+              View All Employee
             <?php } ?>
           </li>
         </ol>
@@ -58,7 +58,7 @@ if ($per['user']['view'] == 0) { ?>
           <table id="exportable" align="center" class="table table-bordered table-condensed table-hover">
             <thead>
               <tr>
-                <td><strong>Sr no</strong></td>
+                <td><strong>Sr No</strong></td>
                 <td>Image</td>
                 <td><strong>Name</strong></td>
                 <td><strong>Email</strong></td>
