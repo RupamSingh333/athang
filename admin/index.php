@@ -37,7 +37,11 @@ include("../system_config.php");
       <div class="col-sm-7" style="border:0px solid "> </div>
       <div class="col-sm-5" style="border:0px solid ">
         <div class="login-box">
-          <div class="login-logo"> <a href=""><img src="<?php echo SITEPATH; ?>upload/logo.jpeg" class="img-responsive center-block"></a> </div>
+          <div class="login-logo"> 
+            <a href="">
+              <img src="<?php echo SITEPATH; ?>upload/logo.jpeg" class="img-responsive center-block">
+          </a> 
+          </div>
         </div>
         <form class='input-form' action='action/login.php?action=login' method="post" name="form">
           <div class="login-box-body" style="padding: 10px;">
