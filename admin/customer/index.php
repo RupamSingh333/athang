@@ -65,6 +65,20 @@ if ($per['customer']['view'] == 0) { ?>
             </thead>
             <tbody>
               <?php
+
+              function displayImageLinks($rows, $fieldName, $label)
+              {
+                if ($rows[$fieldName]) {
+                  $images = explode(',', $rows[$fieldName]);
+                  foreach ($images as $key => $value) {
+                    $newUrl = SITEPATH . ($value ? 'upload/Images/' . $value : NOIMAGE);
+                    $ordinalSuffix = $key + 1;
+                    echo "<a href='$newUrl' target='_blank'>View $ordinalSuffix $label</a><br>";
+                  }
+                }
+              }
+
+
               $i = 1;
               foreach ($customer_list as $rows) {
                 $custState = getState_byID($rows['cust_state']);
@@ -126,18 +140,6 @@ if ($per['customer']['view'] == 0) { ?>
                       if ($rows[$fieldName]) {
                         $imageUrl = SITEPATH . ($rows[$fieldName] ? 'upload/Images/' . $rows[$fieldName] : NOIMAGE);
                         echo "<a href='$imageUrl' target='_blank'>View $label</a><br>";
-                      }
-                    }
-
-                    function displayImageLinks($rows, $fieldName, $label)
-                    {
-                      if ($rows[$fieldName]) {
-                        $images = explode(',', $rows[$fieldName]);
-                        foreach ($images as $key => $value) {
-                          $newUrl = SITEPATH . ($value ? 'upload/Images/' . $value : NOIMAGE);
-                          $ordinalSuffix = $key + 1;
-                          echo "<a href='$newUrl' target='_blank'>View $ordinalSuffix $label</a><br>";
-                        }
                       }
                     }
 
