@@ -1,5 +1,5 @@
 <?php
-include("./system_config.php");
+include("../system_config.php");
 ?>
 <html>
 
