@@ -74,11 +74,11 @@ if ($per['shop_act_license']['view'] == 0) { ?>
               ?>
                 <tr>
                   <td><?php echo $i; ?></td>
-                  <td><a href="javascript:void(0)">
+                  <td>
+                    <a href="javascript:void(0)">
                       <img src="<?php echo SITEPATH; ?><?php echo ($rows['cust_selfie']) ? 'upload/Images/' . $rows['cust_selfie'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
                     </a>
-                  </td><?php echo ($rows['cust_profile']) ? 'upload/Images/' . $rows['cust_profile'] : NOIMAGE; ?>" width="60px" height="50px">
-                  </a>
+                  
                   </td>
                   <td><b><?php echo $rows['cust_first_name']; ?></b></td>
                   <td><?php echo $rows['cust_email']; ?></td>
