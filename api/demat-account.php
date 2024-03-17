@@ -37,37 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     // Check if the customer already exists
     $custDetails = getcustomer_byID($customerId);
 
-    // function handleFileUpload($fileKey, $columnName, $customerId)
-    // {
-    //     global $link, $config;
-
-    //     if (!empty($_FILES[$fileKey]["name"]) && $_FILES[$fileKey]["error"] == 0) {
-    //         $updCustomer = getcustomer_byID($customerId);
-
-    //         $customerNameWithoutSpacesLowercase = strtolower(str_replace(' ', '', $updCustomer['cust_first_name']));
-    //         $phone = empty($updCustomer['cust_phone']) ? 'NoPhone' : $updCustomer['cust_phone'];
-    //         $imageName = $customerNameWithoutSpacesLowercase . '_' . $phone;
-
-    //         $file_name = $_FILES[$fileKey]["name"];
-    //         $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-    //         $customer_img_name = $imageName . '_' . time() . '_' . $fileKey . "." . $file_ext;
-    //         $path = '../' . $config['Images'] . $customer_img_name;
-
-    //         if (move_uploaded_file($_FILES[$fileKey]["tmp_name"], $path)) {
-    //             unlink('../' . $config['Images'] . $updCustomer[$columnName]);
-    //             $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
-    //             $update_stmt = mysqli_prepare($link, $update_sql);
-    //             mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
-    //             mysqli_stmt_execute($update_stmt);
-    //         }
-    //     }
-    // }
-
     function handleMultipleFileUpload($fileKey, $columnName, $customerId)
     {
         global $link, $config;
 
-        $existingFilenames = explode(',', getcustomer_byID($customerId)[$columnName]);
+        $existingFilenames = explode(',', getDematAccountCustId($customerId)[$columnName]);
 
         $imageNames = [];
 
@@ -98,38 +72,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         // Update the database with the comma-separated list of image names
         if (!empty($imageNames)) {
             $newImageNames = implode(',', $imageNames);
-            $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+            $update_sql = "UPDATE demat_account SET $columnName = ? WHERE customer_id = ?";
             $update_stmt = mysqli_prepare($link, $update_sql);
             mysqli_stmt_bind_param($update_stmt, 'si', $newImageNames, $customerId);
             mysqli_stmt_execute($update_stmt);
         }
     }
 
-    if ($custDetails && !$customerId) {
+    if (!$custDetails || !$customerId) {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'Invalid customer details.']);
         exit;
-    } else {
-        $sql = "UPDATE customer SET dmt_acc_name_of_link=?, user_updated_by=?,demate_acc_opening_approvedby=? ,demate_acc_opening=? WHERE cust_id=?";
+    }
+
+    $getDematAccountCustId = getDematAccountCustId($customerId);
+
+    if ($getDematAccountCustId) {
+
+        $sql = "UPDATE demat_account SET dmt_acc_name_of_link=?, user_updated_by=? WHERE customer_id=?";
         $stmt = mysqli_prepare($link, $sql);
-        $demate_acc_opening = 'Y';
-        mysqli_stmt_bind_param($stmt, 'siisi', $dmt_acc_name_of_link, $user_updated_by, $user_updated_by, $demate_acc_opening, $customerId);
-        // pr($sql);exit;
+        mysqli_stmt_bind_param($stmt, 'sii', $dmt_acc_name_of_link, $user_updated_by, $customerId);
         if (mysqli_stmt_execute($stmt)) {
             $last_inserted_id = mysqli_insert_id($link);
             handleMultipleFileUpload("dmt_acc_screenshot", "dmt_acc_screenshot", $customerId);
-            $response = ['status' => true, 'message' => 'Demat Account Opening procedure has been update successfully.'];
+            $response = ['status' => true, 'message' => 'Demat Account Opening procedure has been updated successfully.'];
             http_response_code($customerId ? 200 : 201);
         } else {
-            $response = ['status' => false, 'error' => 'Data not update please try after some time.'];
+            $response = ['status' => false, 'error' => 'Data not updated, please try again later.'];
             http_response_code(500);
         }
-
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit;
+    } else {
+        // Insert new record
+        $sql = "INSERT INTO demat_account (customer_id, user_updated_by, dmt_acc_name_of_link) VALUES (?, ?, ?)";
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, 'iis', $customerId, $user_updated_by, $dmt_acc_name_of_link);
+        if (mysqli_stmt_execute($stmt)) {
+            handleMultipleFileUpload("dmt_acc_screenshot", "dmt_acc_screenshot", $customerId);
+            $response = ['status' => true, 'message' => 'New Bank Account Opening procedure has been added successfully.'];
+            http_response_code(201);
+        } else {
+            $response = ['status' => false, 'error' => 'Data not inserted, please try again later.'];
+            http_response_code(500);
+        }
     }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
 } else {
     http_response_code(400);
     header('Content-Type: application/json');

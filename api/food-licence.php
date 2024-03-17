@@ -8,6 +8,8 @@ function sanitizeInput($data)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key'] === 'qwertyupasdfghjklzxcvbnm') {
 
+    // pr($_POST);exit;
+
     $customerId = isset($_POST['customerId']) ? (int)$_POST['customerId'] : null;
     $user_updated_by = sanitizeInput($_POST['user_updated_by']);
 
@@ -33,22 +35,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     // Check if the customer already exists
     $custDetails = getcustomer_byID($customerId);
 
-    if ($custDetails && !$customerId) {
+    if (!$custDetails || !$customerId) {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'Invalid customer details.']);
         exit;
     } else {
-        $sql = "UPDATE customer SET  user_updated_by=?,food_licence_approvedby=?,food_licence=? WHERE cust_id=?";
-        $stmt = mysqli_prepare($link, $sql);
-        $food_licence = 'Y';
-        mysqli_stmt_bind_param($stmt, 'issi',  $user_updated_by, $user_updated_by, $food_licence, $customerId);
-        if (mysqli_stmt_execute($stmt)) {
-            $response = ['status' => true, 'message' => 'Food License procedure has been update successfully.'];
-            http_response_code($customerId ? 200 : 201);
+
+
+        $getFoodLicenceByCustId = getFoodLicenceByCustId($customerId);
+        if ($getFoodLicenceByCustId) {
+            $sql = "UPDATE food_licence SET user_updated_by=? WHERE customer_id=?";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, 'si', $user_updated_by, $customerId);
+            if (mysqli_stmt_execute($stmt)) {
+                $response = ['status' => true, 'message' => 'Food license has been update successfully.'];
+                http_response_code(200);
+            } else {
+                $response = ['status' => false, 'error' => 'Data not updated, please try again later.'];
+                http_response_code(500);
+            }
         } else {
-            $response = ['status' => false, 'error' => 'Data not update please try after some time.'];
-            http_response_code(500);
+            // Insert new record
+            $sql = "INSERT INTO food_licence (customer_id, user_updated_by) VALUES (?, ?)";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, 'is', $customerId, $user_updated_by);
+            if (mysqli_stmt_execute($stmt)) {
+                $response = ['status' => true, 'message' => 'New food license procedure has been added successfully.'];
+                http_response_code(201);
+            } else {
+                $response = ['status' => false, 'error' => 'Data not inserted, please try again later.'];
+                http_response_code(500);
+            }
         }
 
         // Send the JSON response

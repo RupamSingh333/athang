@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         exit;
     }
 
-    // Check if the customer already exists
     $custDetails = getcustomer_byID($customerId);
 
     function handleFileUpload($fileKey, $columnName, $customerId)
@@ -49,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
 
         if (!empty($_FILES[$fileKey]["name"]) && $_FILES[$fileKey]["error"] == 0) {
             $updCustomer = getcustomer_byID($customerId);
+            $getShopActByCustId = getShopActByCustId($customerId);
 
             $customerNameWithoutSpacesLowercase = strtolower(str_replace(' ', '', $updCustomer['cust_first_name']));
             $phone = empty($updCustomer['cust_phone']) ? 'NoPhone' : $updCustomer['cust_phone'];
@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
             $path = '../' . $config['Images'] . $customer_img_name;
 
             if (move_uploaded_file($_FILES[$fileKey]["tmp_name"], $path)) {
-                unlink('../' . $config['Images'] . $updCustomer[$columnName]);
-                $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+                unlink('../' . $config['Images'] . $getShopActByCustId[$columnName]);
+                $update_sql = "UPDATE shop_act_licence SET $columnName = ? WHERE customer_id = ?";
                 $update_stmt = mysqli_prepare($link, $update_sql);
                 mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
                 mysqli_stmt_execute($update_stmt);
@@ -70,31 +70,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     }
 
 
-    if ($custDetails && !$customerId) {
+    if (!$custDetails || !$customerId) {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'Invalid customer details.']);
         exit;
     } else {
-        $sql = "UPDATE customer SET cust_org_name=?, cust_org_type=? ,user_updated_by=?,shop_act_licence_approvedby=?,shop_act_licence=? WHERE cust_id=?";
-        $stmt = mysqli_prepare($link, $sql);
-        $shop_act_licence = 'Y';
-        mysqli_stmt_bind_param($stmt, 'sssssi', $cust_org_name, $cust_org_type, $user_updated_by, $user_updated_by, $shop_act_licence, $customerId);
-        if (mysqli_stmt_execute($stmt)) {
 
-            handleFileUpload("cust_selfie", "cust_selfie", $customerId);
-            handleFileUpload("cust_agreement_copy", "cust_agreement_copy", $customerId);
-            handleFileUpload("cust_signature", "cust_signature", $customerId);
-            $response = ['status' => true, 'message' => 'Shop Act procedure has been update successfully.'];
-            http_response_code($customerId ? 200 : 201);
+        $getShopActByCustId = getShopActByCustId($customerId);
+
+        if ($getShopActByCustId) {
+            $sql = "UPDATE shop_act_licence SET user_updated_by=?, cust_org_name=?, cust_org_type=? WHERE customer_id=?";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, 'sssi', $user_updated_by, $cust_org_name, $cust_org_type, $customerId);
+            if (mysqli_stmt_execute($stmt)) {
+                handleFileUpload("cust_selfie", "cust_selfie", $customerId);
+                handleFileUpload("cust_agreement_copy", "cust_agreement_copy", $customerId);
+                handleFileUpload("cust_signature", "cust_signature", $customerId);
+                $response = ['status' => true, 'message' => 'Customer Shop act has been update successfully.'];
+                http_response_code(200);
+            } else {
+                $response = ['status' => false, 'error' => 'Data not updated, please try again later.'];
+                http_response_code(500);
+            }
         } else {
-            $response = ['status' => false, 'error' => 'Data not update please try after some time.'];
-            http_response_code(500);
+            // Insert new record
+            $sql = "INSERT INTO shop_act_licence (customer_id, user_updated_by, cust_org_name, cust_org_type) VALUES (?, ?, ?, ?)";
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, 'isss', $customerId, $user_updated_by, $cust_org_name, $cust_org_type);
+            if (mysqli_stmt_execute($stmt)) {
+                handleFileUpload("cust_selfie", "cust_selfie", $customerId);
+                handleFileUpload("cust_agreement_copy", "cust_agreement_copy", $customerId);
+                handleFileUpload("cust_signature", "cust_signature", $customerId);
+                $response = ['status' => true, 'message' => 'New Shop Act license procedure has been added successfully.'];
+                http_response_code(201);
+            } else {
+                $response = ['status' => false, 'error' => 'Data not inserted, please try again later.'];
+                http_response_code(500);
+            }
         }
-
+        
         header('Content-Type: application/json');
         echo json_encode($response);
         exit;
+        
     }
 } else {
     // Invalid request method or key

@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     $cust_address = sanitizeInput($_POST['cust_address']);
     $password = sanitizeInput($_POST['cust_password']);
     $hashed_password = encryptIt($password);
-
     $cust_pan_card = sanitizeInput($_FILES['cust_pan_card']['name']);
     $cust_aadhar_card_front = sanitizeInput($_FILES['cust_aadhar_card_front']['name']);
     $cust_aadhar_card_back = sanitizeInput($_FILES['cust_aadhar_card_back']['name']);

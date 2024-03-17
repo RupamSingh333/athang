@@ -140,7 +140,7 @@ if ($per['user']['add'] == 0) { ?>
                 <div class="form-group">
                   <label>Email</label>
                   <input class="form-control" id="cust_email" name="cust_email" placeholder="" value="<?php echo $res['cust_email']; ?>" type="text" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                  <label class="label-brdr" style="width: 0%;"></label>
+                
                 </div>
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6">
@@ -155,7 +155,7 @@ if ($per['user']['add'] == 0) { ?>
                 <div class="form-group">
                   <label>Mobile Number</label>
                   <input class="form-control" id="cust_phone" name="cust_phone" placeholder="Enter Mobile" value="<?php echo $res['cust_phone']; ?>" type="number" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                  <label class="label-brdr" style="width: 0%;"></label>
+                
                 </div>
               </div>
 
@@ -163,7 +163,7 @@ if ($per['user']['add'] == 0) { ?>
                 <div class="form-group">
                   <label>Alternate Number</label>
                   <input class="form-control" id="cust_alter_phone" name="cust_alter_phone" placeholder="Alter Mobile" value="<?php echo $res['cust_alter_phone']; ?>" type="number" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                  <label class="label-brdr" style="width: 0%;"></label>
+                
                 </div>
               </div>
 
@@ -181,7 +181,7 @@ if ($per['user']['add'] == 0) { ?>
                   <label>Password</label>
                   <input class="form-control" name="cust_password" id="password" placeholder="Enter Password" minlength="6" value="<?= !empty($res['cust_password']) ? decryptIt($res['cust_password']) : '' ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
 
-                  <label class="label-brdr" style="width: 0%;"></label>
+                
                 </div>
               </div>
 
@@ -189,7 +189,7 @@ if ($per['user']['add'] == 0) { ?>
                 <div class="form-group">
                   <label>Confirm Password</label>
                   <input class="form-control" name="confirm_password" id="confirm_password" minlength="6" placeholder="Confirm Password" value="<?= !empty($res['cust_password']) ? decryptIt($res['cust_password']) : '' ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                  <label class="label-brdr" style="width: 0%;"></label>
+                
                 </div>
               </div>
 
@@ -209,7 +209,7 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Name of Person</label>
                     <input class="form-control" required name="cust_first_name" placeholder="Name of Person" type="text" value="<?php echo $res['cust_first_name']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                  
                   </div>
                 </div>
 
@@ -217,7 +217,7 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Name of Business</label>
                     <input class="form-control" id="cust_org_name_val" required name="cust_org_name" placeholder="Name of Business" type="text" value="<?php echo $res['cust_org_name']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                  
                   </div>
                 </div>
 
@@ -225,7 +225,7 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Business Activity Or Type of Business</label>
                     <input class="form-control" id="cust_org_type_val" required name="cust_org_type" placeholder="Business Activity Or Type of Business" type="text" value="<?php echo $res['cust_org_type']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                  
                   </div>
                 </div>
 
@@ -233,7 +233,7 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Aadhar Number</label>
                     <input class="form-control" required id="cust_aadhar_no_val" name="cust_aadhar_no" placeholder="Aadhar Number" type="number" value="<?php echo $res['cust_aadhar_no']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                  
                   </div>
                 </div>
 
@@ -241,31 +241,31 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Aadhar Link Mobile</label>
                     <input class="form-control" required id="aadhar_link_mobile" name="aadhar_link_mobile" placeholder="Aadhar Link Mobile" type="number" value="<?php echo $res['aadhar_link_mobile']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                  
                   </div>
                 </div>
 
                 <div class="col-sm-3 col-md-3 col-lg-3" id="cust_gst_no">
                   <div class="form-group">
                     <label>GST Number</label>
-                    <input class="form-control" required id="cust_gst_no_val" name="cust_gst_no" placeholder="GST Number" type="text" value="<?php echo $res['cust_gst_no']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                    <input class="form-control" id="cust_gst_no_val" name="cust_gst_no" placeholder="GST Number" type="text" value="<?php echo $res['cust_gst_no']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  
                   </div>
                 </div>
 
                 <div class="col-sm-3 col-md-3 col-lg-3" id="b_acc_name_of_link">
                   <div class="form-group">
                     <label>Bank Acc Name of Link</label>
-                    <input class="form-control" required id="b_acc_name_of_link" name="b_acc_name_of_link" placeholder="Bank Acc Name of Link" type="link" value="<?php echo $res['b_acc_name_of_link']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                    <input class="form-control" id="b_acc_name_of_link" name="b_acc_name_of_link" placeholder="Bank Acc Name of Link" type="link" value="<?php echo $res['b_acc_name_of_link']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  
                   </div>
                 </div>
 
                 <div class="col-sm-3 col-md-3 col-lg-3" id="dmt_acc_name_of_link">
                   <div class="form-group">
                     <label>Demat Acc Name of Link</label>
-                    <input class="form-control" required id="dmt_acc_name_of_link" name="dmt_acc_name_of_link" placeholder="Bank Acc Name of Link" type="link" value="<?php echo $res['dmt_acc_name_of_link']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                    <input class="form-control" id="dmt_acc_name_of_link" name="dmt_acc_name_of_link" placeholder="Bank Acc Name of Link" type="link" value="<?php echo $res['dmt_acc_name_of_link']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  
                   </div>
                 </div>
 
@@ -549,7 +549,7 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Pincode</label>
                     <input class="form-control" name="cust_pincode" placeholder="Pincode" value="<?php echo $res['cust_pincode']; ?>" type="number" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                  
                   </div>
                 </div>
 
@@ -559,7 +559,7 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Full Address</label>
                     <input class="form-control" required name="cust_address" placeholder="Full Address" value="<?php echo $res['cust_address']; ?>" type="text" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
-                    <label class="label-brdr" style="width: 0%;"></label>
+                  
                   </div>
                 </div>
 
@@ -591,8 +591,8 @@ if ($per['user']['add'] == 0) { ?>
                   <div class="form-group">
                     <label>Bank Acc Opening</label>
                     <select id="bank_acc_opening" name="bank_acc_opening" class="form-control">
-                      <option value="Y">Y</option>
                       <option value="N">N</option>
+                      <option value="Y" <?= ($res['bank_acc_opening'] == 'Y') ? 'selected' : ''; ?>>Y</option>
                     </select>
                   </div>
                 </div>

@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     $customerId = isset($_POST['customerId']) ? (int)$_POST['customerId'] : null;
     $user_updated_by = sanitizeInput($_POST['user_updated_by']);
     $b_acc_name_of_link = sanitizeInput($_POST['b_acc_name_of_link']);
-
     $b_acc_screenshot = sanitizeInput($_FILES['b_acc_screenshot']);
 
     $requiredFields = [
@@ -54,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
 
     //         if (move_uploaded_file($_FILES[$fileKey]["tmp_name"], $path)) {
     //             unlink('../' . $config['Images'] . $updCustomer[$columnName]);
-    //             $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+    //             $update_sql = "UPDATE customer SET $columnName = ? WHERE customer_id = ?";
     //             $update_stmt = mysqli_prepare($link, $update_sql);
     //             mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
     //             mysqli_stmt_execute($update_stmt);
@@ -66,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     {
         global $link, $config;
 
-        $existingFilenames = explode(',', getcustomer_byID($customerId)[$columnName]);
+        $existingFilenames = explode(',', getBankAccountCustId($customerId)[$columnName]);
 
         $imageNames = [];
 
@@ -97,39 +96,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         // Update the database with the comma-separated list of image names
         if (!empty($imageNames)) {
             $newImageNames = implode(',', $imageNames);
-            $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+            $update_sql = "UPDATE bank_account SET $columnName = ? WHERE customer_id = ?";
             $update_stmt = mysqli_prepare($link, $update_sql);
             mysqli_stmt_bind_param($update_stmt, 'si', $newImageNames, $customerId);
             mysqli_stmt_execute($update_stmt);
         }
     }
 
-
-
-    if ($custDetails && !$customerId) {
+    if (!$custDetails || !$customerId) {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'Invalid customer details.']);
         exit;
-    } else {
-        $sql = "UPDATE customer SET b_acc_name_of_link=?, user_updated_by=?,bank_acc_opening_approvedby=?,bank_acc_opening=? WHERE cust_id=?";
+    }
+
+    $getBankAccountCustId = getBankAccountCustId($customerId);
+
+    if ($getBankAccountCustId) {
+
+        $sql = "UPDATE bank_account SET b_acc_name_of_link=?, user_updated_by=? WHERE customer_id=?";
         $stmt = mysqli_prepare($link, $sql);
-        $bank_acc_opening = 'Y';
-        mysqli_stmt_bind_param($stmt, 'siisi', $b_acc_name_of_link, $user_updated_by, $user_updated_by, $bank_acc_opening, $customerId);
+        mysqli_stmt_bind_param($stmt, 'sii', $b_acc_name_of_link, $user_updated_by, $customerId);
         if (mysqli_stmt_execute($stmt)) {
             $last_inserted_id = mysqli_insert_id($link);
             handleMultipleFileUpload("b_acc_screenshot", "b_acc_screenshot", $customerId);
-            $response = ['status' => true, 'message' => 'Bank Account Opening procedure has been update successfully.'];
+            $response = ['status' => true, 'message' => 'Bank Account Opening procedure has been updated successfully.'];
             http_response_code($customerId ? 200 : 201);
         } else {
-            $response = ['status' => false, 'error' => 'Data not update please try after some time.'];
+            $response = ['status' => false, 'error' => 'Data not updated, please try again later.'];
             http_response_code(500);
         }
-
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit;
+    } else {
+        // Insert new record
+        $sql = "INSERT INTO bank_account (customer_id, user_updated_by, b_acc_name_of_link) VALUES (?, ?, ?)";
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, 'iis', $customerId, $user_updated_by, $b_acc_name_of_link);
+        if (mysqli_stmt_execute($stmt)) {
+            handleMultipleFileUpload("b_acc_screenshot", "b_acc_screenshot", $customerId);
+            $response = ['status' => true, 'message' => 'New Bank Account Opening procedure has been added successfully.'];
+            http_response_code(201);
+        } else {
+            $response = ['status' => false, 'error' => 'Data not inserted, please try again later.'];
+            http_response_code(500);
+        }
     }
+
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
 } else {
     http_response_code(400);
     header('Content-Type: application/json');

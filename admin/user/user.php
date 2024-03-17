@@ -242,6 +242,7 @@ if (isset($_GET['id'])) {
           $('#message').html('Not Matching').css('color', 'red');
       });
     </script>
+
     <script type="text/javascript">
       function validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -262,6 +263,7 @@ if (isset($_GET['id'])) {
 
       $("#validate").on("click", validate);
     </script>
+
     <script type="text/javascript">
       function changetextbox() {
         var id = document.getElementById("user_type").value;
@@ -272,6 +274,7 @@ if (isset($_GET['id'])) {
         }
       }
     </script>
+    
     <footer class="main-footer">
       <?php include_once("../common/copyright.php"); ?>
     </footer>

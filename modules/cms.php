@@ -18,6 +18,161 @@ define("tbl_district", "district");
 define("tbl_taluka", "taluka");
 define("tbl_demat_link", "demat_link");
 define("tbl_bank_link", "bank_link");
+define("tbl_attendance", "attendance");
+define("tbl_food_licence", "food_licence");
+define("tbl_shop_act_licence", "shop_act_licence");
+define("tbl_bank_account", "bank_account");
+define("tbl_demat_account", "demat_account");
+define("tbl_itr", "itr");
+define("tbl_bs", "bs");
+
+function getBsCustId($customer_id)
+{
+    $sql = "select * from " . tbl_bs . " where customer_id='" . $customer_id . "' and status = 0 limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getAllBS()
+{
+    $sql = "select * from " . tbl_bs . " order by bs_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllItr()
+{
+    $sql = "select * from " . tbl_itr . " order by itr_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllDematAccounts()
+{
+    $sql = "select * from " . tbl_demat_account . " order by demat_account_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllBankAccounts()
+{
+    $sql = "select * from " . tbl_bank_account . " order by bank_account_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllFoodLicense()
+{
+    $sql = "select * from " . tbl_food_licence . " order by food_licence_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllShopAct()
+{
+    $sql = "select * from " . tbl_shop_act_licence . " order by shop_act_licence_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllUsersByRole($roleId)
+{
+    $sql = "SELECT user_id,first_name FROM " . tbl_user . " WHERE user_type = " . $roleId . " ORDER BY user_id DESC";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+
+function getCustomerDetails($customer_id)
+{
+    $sql = "SELECT c.*, s.name AS statename, t.taluka_name, d.district_name 
+            FROM " . tbl_customer . " c 
+            LEFT JOIN states s ON c.cust_state = s.id 
+            LEFT JOIN taluka t ON c.cust_taluka_id = t.taluka_id 
+            LEFT JOIN district d ON c.cust_district_id = d.district_id 
+            WHERE c.cust_id = '" . $customer_id . "'";
+    $results = FetchAll($sql);
+    return $results;
+}
+
+
+
+function getItrCustId($customer_id)
+{
+    $sql = "select * from " . tbl_itr . " where customer_id='" . $customer_id . "' and status = 0 limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getDematAccountCustId($customer_id)
+{
+    $sql = "select * from " . tbl_demat_account . " where customer_id='" . $customer_id . "' and status = 0 limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getBankAccountCustId($customer_id)
+{
+    $sql = "select * from " . tbl_bank_account . " where customer_id='" . $customer_id . "' and status = 0 limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getFoodLicenceByCustId($customer_id)
+{
+    $sql = "select * from " . tbl_food_licence . " where customer_id='" . $customer_id . "' and status = 0 limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getFoodLicenseById($id)
+{
+    $sql = "select * from " . tbl_food_licence . " where food_licence_id='" . $id . "' limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getBsById($id)
+{
+    $sql = "select * from " . tbl_bs . " where bs_id='" . $id . "' limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getItrById($id)
+{
+    $sql = "select * from " . tbl_itr . " where itr_id='" . $id . "' limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getShopActById($id)
+{
+    $sql = "select * from " . tbl_shop_act_licence . " where shop_act_licence_id='" . $id . "' limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getBankAccountById($id)
+{
+    $sql = "select * from " . tbl_bank_account . " where bank_account_id='" . $id . "' limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getDematAccountById($id)
+{
+    $sql = "select * from " . tbl_demat_account . " where demat_account_id='" . $id . "' limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getShopActByCustId($customer_id)
+{
+    $sql = "select * from " . tbl_shop_act_licence . " where customer_id='" . $customer_id . "' and status = 0 limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
 
 function gettaluka_byID($id)
 {
@@ -25,6 +180,7 @@ function gettaluka_byID($id)
     $array = FetchRow($sql);
     return $array;
 }
+
 function gettaluka_list()
 {
     $sql = "select * from " . tbl_taluka . " order by taluka_id desc";
@@ -65,9 +221,45 @@ function getuser_byList()
 {
 
     $sql = "select * from " . tbl_user . " order by  user_id desc ";
+    // pr($sql);exit;
     $array = FetchAll($sql);
     return $array;
 }
+
+function getAttendanceByDate($userId, $date)
+{
+
+    $sql = "SELECT status FROM " . tbl_attendance . " WHERE emp_id = $userId AND attendance_date = STR_TO_DATE('$date', '%Y-%m-%d')";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getAllAttendanceData($userId, $year, $month)
+{
+    $firstDayOfMonth = date("$year-$month-01");
+    $lastDayOfMonth = date("Y-m-t", strtotime($firstDayOfMonth));
+
+    $sql = "SELECT attendance_date, status, reason FROM " . tbl_attendance . " 
+            WHERE emp_id = $userId 
+            AND attendance_date BETWEEN STR_TO_DATE('$firstDayOfMonth', '%Y-%m-%d') 
+                                   AND STR_TO_DATE('$lastDayOfMonth', '%Y-%m-%d')";
+
+    $result = FetchAll($sql);
+
+    $attendanceData = [];
+
+    foreach ($result as $row) {
+        $attendanceDate = $row['attendance_date'];
+        $attendanceData[$attendanceDate] = [
+            'status' => $row['status'],
+            'reason' => $row['reason']
+        ];
+    }
+
+    return $attendanceData;
+}
+
+
 
 
 function getCountry_list()

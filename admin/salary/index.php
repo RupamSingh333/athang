@@ -1,13 +1,13 @@
 <?php
 include("../../system_config.php");
 include_once("../common/head.php");
-if ($r['user_type'] == "1") {
+// if ($r['user_type'] == "1") {
   $rows_list = getuser_byList();
-  // pr($rows_list);exit;
-} else {
-  $rows_list = getuser_byID($_SESSION['AdminLogin']);
-}
-if ($per['user']['view'] == 0) { ?>
+// } else {
+//   $rows_list = getuser_byID($_SESSION['AdminLogin']);
+// }
+
+if ($per['salary_management']['view'] == 0) { ?>
   <script>
     window.location.href = "../dashboard.php";
   </script>
@@ -20,15 +20,11 @@ if ($per['user']['view'] == 0) { ?>
     <div class="content-wrapper">
       <!-- Content Header -->
       <section class="content-header">
-        <h1>
-          <?php if ($r['user_type'] == "1") { ?>
-            <a style="text-decoration: underline;" href="<?php echo SITEPATH; ?>admin/user/add-new-user.php">Add New Employee</a>
-          <?php } ?>
-        </h1>
+
         <ol class="breadcrumb">
           <li><a href="<?php echo SITEPATH; ?>admin/dashboard.php"><i class="fa fa-dashboard"></i> Home</a></li>
           <li class="active">
-            <?php if ($per['user']['view'] == 1) { ?>
+            <?php if ($per['salary_management']['view'] == 1) { ?>
               View All Employee
             <?php } ?>
           </li>
@@ -64,7 +60,6 @@ if ($per['user']['view'] == 0) { ?>
                 <td><strong>Email</strong></td>
                 <td><strong>Password</strong></td>
                 <td><strong>Number</strong></td>
-                <td><strong>Role</strong></td>
                 <td><strong>Address</strong></td>
                 <td><strong>State</strong></td>
                 <td><strong>District</strong></td>
@@ -93,7 +88,6 @@ if ($per['user']['view'] == 0) { ?>
                   <td><?php echo $rows['user_email']; ?></td>
                   <td><?php echo decryptIt($rows['user_pass']); ?></td>
                   <td><?php echo $rows['user_phone']; ?></td>
-                  <td><?php echo $config['user_type'][$rows['user_type']]; ?></td>
                   <td><?php echo $rows['user_address'] ?></td>
                   <td><?php echo $userState['name']; ?></td>
                   <td><?php echo $user_district['district_name']; ?></td>
@@ -106,36 +100,7 @@ if ($per['user']['view'] == 0) { ?>
                   </td>
 
 
-                  <td id="font12"><?php if ($per['user']['edit'] == 1) { ?>
-                      <a href="<?php echo SITEPATH; ?>admin/action/user.php?action=status&id=<?php echo  urlencode(encryptIt($rows['user_id'])); ?>" <?php if ($rows['user_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')"><i class="fa fa-angle-double-up" style="color: green;"></i>
-                      <?php } else { ?>
-                        onMouseOver="showbox('inactive<?php echo $i; ?>')" onMouseOut="hidebox('inactive<?php echo $i; ?>')"> <i class="fa fa-angle-double-down" style="color: red;"></i>
-                      <?php } ?>
-                      </a>
-                      <div id="active<?php echo $i; ?>" class="hide1">
-                        <p>Active</p>
-                      </div>
-                      <div id="inactive<?php echo $i; ?>" class="hide1">
-                        <p>Inactive</p>
-                      </div>
-
-                      <?php if ($r['user_id'] == "1") { ?>
-                        <?php ?> &nbsp;&nbsp; <a href="<?php echo SITEPATH; ?>admin/user/setting.php?id=<?php echo  urlencode(encryptIt($rows['user_id'])); ?>" onMouseOver="showbox('Setting<?php echo $i; ?>')" onMouseOut="hidebox('Setting<?php echo $i; ?>')"> <i class="fa fa-cogs"></i></a>
-                        <div id="Setting<?php echo $i; ?>" class="hide1">
-                          <p>Setting</p>
-                        </div><?php } ?>
-                      &nbsp;&nbsp; <a href="<?php echo SITEPATH; ?>admin/user/add-new-user.php?id=<?php echo  urlencode(encryptIt($rows['user_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i></a>
-                      <div id="Edit<?php echo $i; ?>" class="hide1">
-                        <p>Edit</p>
-                      </div>
-                    <?php } ?>
-                    &nbsp;&nbsp;
-                    <?php if ($per['user']['del'] == 1 && $rows['user_id'] != 1) { ?>
-                      <a href="<?php echo SITEPATH; ?>admin/action/user.php?action=del&id=<?php echo urlencode(encryptIt($rows['user_id'])); ?>" onclick="return confirmDelete('<?php echo urlencode(encryptIt($rows['user_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i></a>
-                      <div id="Delete<?php echo $i; ?>" class="hide1">
-                        <p>Delete</p>
-                      </div>
-
+                  <td id="font12"><?php if ($per['salary_management']['edit'] == 1) { ?>
 
                     <?php } ?>
 

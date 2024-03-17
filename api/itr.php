@@ -63,8 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
             $path = '../' . $config['Images'] . $customer_img_name;
 
             if (move_uploaded_file($_FILES[$fileKey]["tmp_name"], $path)) {
-                unlink('../' . $config['Images'] . $updCustomer[$columnName]);
-                $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+                $getPrevious = getItrCustId($customerId)[$columnName];
+                unlink('../' . $config['Images'] . $getPrevious);
+                $update_sql = "UPDATE itr SET $columnName = ? WHERE customer_id = ?";
                 $update_stmt = mysqli_prepare($link, $update_sql);
                 mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
                 mysqli_stmt_execute($update_stmt);
@@ -76,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     {
         global $link, $config;
 
-        $existingFilenames = explode(',', getcustomer_byID($customerId)[$columnName]);
+        $existingFilenames = explode(',', getItrCustId($customerId)[$columnName]);
 
         $imageNames = [];
 
@@ -107,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         // Update the database with the comma-separated list of image names
         if (!empty($imageNames)) {
             $newImageNames = implode(',', $imageNames);
-            $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+            $update_sql = "UPDATE itr SET $columnName = ? WHERE customer_id = ?";
             $update_stmt = mysqli_prepare($link, $update_sql);
             mysqli_stmt_bind_param($update_stmt, 'si', $newImageNames, $customerId);
             mysqli_stmt_execute($update_stmt);
@@ -115,17 +116,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     }
 
 
-    if ($custDetails && !$customerId) {
+    if (!$custDetails || !$customerId) {
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['status' => false, 'error' => 'Invalid customer details.']);
         exit;
-    } else {
-        $sql = "UPDATE customer SET aadhar_link_mobile=?, user_updated_by=?,itr_approvedby=? ,itr=? WHERE cust_id=?";
+    }
+
+    $getItrCustId = getItrCustId($customerId);
+
+    if ($getItrCustId) {
+
+        $sql = "UPDATE itr SET aadhar_link_mobile=?, user_updated_by=? WHERE customer_id=?";
         $stmt = mysqli_prepare($link, $sql);
-        $itr = 'Y';
-        mysqli_stmt_bind_param($stmt, 'siisi', $aadhar_link_mobile, $user_updated_by, $user_updated_by, $itr, $customerId);
-        // pr($sql);exit;
+        mysqli_stmt_bind_param($stmt, 'sii', $aadhar_link_mobile, $user_updated_by, $customerId);
         if (mysqli_stmt_execute($stmt)) {
             $last_inserted_id = mysqli_insert_id($link);
             handleFileUpload("form16", "form16", $customerId);
@@ -134,14 +138,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
             $response = ['status' => true, 'message' => 'ITR procedure has been update successfully.'];
             http_response_code($customerId ? 200 : 201);
         } else {
-            $response = ['status' => false, 'error' => 'Data not update please try after some time.'];
+            $response = ['status' => false, 'error' => 'Data not updated, please try again later.'];
             http_response_code(500);
         }
-
-        header('Content-Type: application/json');
-        echo json_encode($response);
-        exit;
+    } else {
+        // Insert new record
+        $sql = "INSERT INTO itr (customer_id, user_updated_by, aadhar_link_mobile) VALUES (?, ?, ?)";
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, 'iis', $customerId, $user_updated_by, $aadhar_link_mobile);
+        if (mysqli_stmt_execute($stmt)) {
+            handleFileUpload("form16", "form16", $customerId);
+            handleMultipleFileUpload("salary_sheet", "salary_sheet", $customerId);
+            handleMultipleFileUpload("itr_bank_statement", "itr_bank_statement", $customerId);
+            $response = ['status' => true, 'message' => 'ITR Account Opening procedure has been added successfully.'];
+            http_response_code(201);
+        } else {
+            $response = ['status' => false, 'error' => 'Data not inserted, please try again later.'];
+            http_response_code(500);
+        }
     }
+
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
 } else {
     http_response_code(400);
     header('Content-Type: application/json');

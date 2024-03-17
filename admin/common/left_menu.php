@@ -72,7 +72,7 @@
       <?php
       // pr($per);exit;
       if ($per['user']['add'] == 1 or $per['user']['view'] == 1) { ?>
-        <li class="treeview"> <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Employee Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
+        <li class="treeview"> <a> <i class="fa fa-users"></i> <span>Employee Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['user']['add'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/user/add-new-user.php"><i class="fa fa-caret-right"></i>Add New</a></li>
@@ -86,7 +86,7 @@
       <?php } ?>
 
       <?php if ($per['customer']['add'] == 1 or $per['customer']['view'] == 1) { ?>
-        <li class="treeview"> <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Customer Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
+        <li class="treeview"> <a> <i class="fa fa-user"></i> <span>Customer Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['customer']['add'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/customer/add-new-customer.php"><i class="fa fa-caret-right"></i> Add New</a></li>
@@ -142,7 +142,7 @@
 
       <?php if ($per['shop_act_license']['add'] == 1 or $per['shop_act_license']['view'] == 1) { ?>
         <li class="treeview">
-          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Shop Act License</span> <i class="fa fa-angle-left pull-right"></i> </a>
+          <a> <i class="fa fa-shopping-cart"></i> <span>Shop Act License</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['shop_act_license']['add'] == 1) { ?>
               <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
@@ -156,7 +156,7 @@
 
       <?php if ($per['bank_account']['add'] == 1 or $per['bank_account']['view'] == 1) { ?>
         <li class="treeview">
-          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Bank Account</span> <i class="fa fa-angle-left pull-right"></i> </a>
+          <a> <i class="fa fa-university"></i> <span>Bank Account</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['bank_account']['add'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/food_shop_bank_demate/add_view_bank_link.php"><i class="fa fa-caret-right"></i>Add New Link</a></li>
@@ -212,13 +212,14 @@
 
       <?php if ($per['attendance_management']['add'] == 1 or $per['attendance_management']['view'] == 1) { ?>
         <li class="treeview">
-          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Attendance Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
+          <a> <i class="fa fa-clock-o"></i> <span>Attendance Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['attendance_management']['add'] == 1) { ?>
-              <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
+              <!-- <li><a href="<?php //echo SITEPATH; 
+                                ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['attendance_management']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/attendance"><i class="fa fa-caret-right"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>
@@ -226,21 +227,22 @@
 
       <?php if ($per['salary_management']['add'] == 1 or $per['salary_management']['view'] == 1) { ?>
         <li class="treeview">
-          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Salary Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
+          <a> <i class="fa fa-money"> </i> <span> Salary Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['salary_management']['add'] == 1) { ?>
-              <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
+              <li><a href="<?php echo SITEPATH; ?>admin/salary/generate_salary.php"><i class="fas fa-file-invoice-dollar"></i> Generate Salary</a></li>
             <?php }
             if ($per['salary_management']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/salary"><i class="fas fa-list-alt"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>
       <?php } ?>
 
+
       <?php if ($per['report_management']['add'] == 1 or $per['report_management']['view'] == 1) { ?>
         <li class="treeview">
-          <a> <i class="fa  fa-rss-square nav_icon"></i> <span>Report Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
+          <a> <i class="fa fa-file"></i> <span>Report Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['report_management']['add'] == 1) { ?>
               <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->

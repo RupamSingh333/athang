@@ -26,6 +26,11 @@ switch ($action) {
 		$field['demat_acc_point'] = get_safe_post('demat_acc_point');
 		$field['itr_management_point'] = get_safe_post('itr_management_point');
 		$field['bs_point'] = get_safe_post('bs_point');
+		$field['petrol'] = get_safe_post('petrol');
+		$field['mobile_recharge'] = get_safe_post('mobile_recharge');
+		$field['extra_allowance'] = get_safe_post('extra_allowance');
+		$field['working_target'] = get_safe_post('working_target');
+		$field['user_type'] = get_safe_post('user_type');
 		// pr($field);exit;
 
 		$userNameWithoutSpacesLowercase = strtolower( str_replace(' ', '', $field['first_name']));
@@ -45,6 +50,7 @@ switch ($action) {
 		$primary_value = get_safe_post('data_id');
 
 		$output =  save_command(tbl_user, $field, "user_id", $primary_value);
+		// pr($output);exit;
 		$_SESSION['msg'] = $output;
 		break;
 

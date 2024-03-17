@@ -187,7 +187,7 @@ if (isset($_GET['id'])) {
                 <div class="col-sm-4 col-md-4 col-lg-4">
                   <div class="form-group">
                     <label>Email</label>
-                    <input class="form-control" id="user_email" name="user_email" placeholder="" value="<?php echo $res['user_email']; ?>" type="text" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                    <input class="form-control" id="user_email" name="user_email" placeholder="" value="<?php echo $res['user_email']; ?>" type="text">
                     <label class="label-brdr" style="width: 0%;"></label>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ if (isset($_GET['id'])) {
                   <label>Password</label>
                   <input class="form-control" name="password" id="password" placeholder="" minlength=6 value="<?php if (!$res['user_pass'] == "") {
                                                                                                                 echo decryptIt($res['user_pass']);
-                                                                                                              } ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                                                                                                              } ?>" type="password">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
@@ -220,7 +220,7 @@ if (isset($_GET['id'])) {
                   <label>Confirm Password</label>
                   <input class="form-control" name="confirm_password" id="confirm_password" minlength=6 placeholder="" value="<?php if (!$res['user_pass'] == "") {
                                                                                                                                 echo decryptIt($res['user_pass']);
-                                                                                                                              } ?>" type="password" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                                                                                                                              } ?>" type="password">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
@@ -238,7 +238,7 @@ if (isset($_GET['id'])) {
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Name</label>
-                  <input class="form-control" required name="first_name" placeholder="" type="text" value="<?php echo $res['first_name']; ?>" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  <input class="form-control" required name="first_name" placeholder="" type="text" value="<?php echo $res['first_name']; ?>">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
@@ -246,7 +246,7 @@ if (isset($_GET['id'])) {
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Mobile Number </label>
-                  <input class="form-control" required name="user_phone" placeholder="" value="<?php echo $res['user_phone']; ?>" type="number" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  <input class="form-control" required name="user_phone" placeholder="" value="<?php echo $res['user_phone']; ?>" type="number">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
@@ -411,7 +411,7 @@ if (isset($_GET['id'])) {
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Pincode</label>
-                  <input class="form-control" name="user_tel" placeholder="" value="<?php echo $res['user_tel']; ?>" type="number" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  <input class="form-control" name="user_tel" placeholder="" value="<?php echo $res['user_tel']; ?>" type="number">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
@@ -419,12 +419,60 @@ if (isset($_GET['id'])) {
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Full Address</label>
-                  <input class="form-control" required name="user_address" placeholder="" value="<?php echo $res['user_address']; ?>" type="text" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  <input class="form-control" required name="user_address" placeholder="" value="<?php echo $res['user_address']; ?>" type="text">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>
 
               <div class="clearfix"></div>
+
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <h4 class="divd">Salary</h4>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                  <label>Basic Salary</label>
+                  <input class="form-control" name="petrol" min="0" placeholder="Basic Salary" value="<?php echo $res['basic_salary']; ?>" type="number">
+                  <label class="label-brdr" style="width: 0%;"></label>
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                  <label>Petrol</label>
+                  <input class="form-control" name="petrol" min="0" placeholder="Petrol Expense" value="<?php echo $res['petrol']; ?>" type="number">
+                  <label class="label-brdr" style="width: 0%;"></label>
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                  <label>Mobile Recharge</label>
+                  <input class="form-control" name="mobile_recharge" min="0" placeholder="Mobile Recharge Expense" value="<?php echo $res['mobile_recharge']; ?>" type="number">
+                  <label class="label-brdr" style="width: 0%;"></label>
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                  <label>Extra Allowance</label>
+                  <input class="form-control" name="extra_allowance" min="0" placeholder="Extra Allowance" value="<?php echo $res['extra_allowance']; ?>" type="number">
+                  <label class="label-brdr" style="width: 0%;"></label>
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="form-group">
+                  <label>Working Target</label>
+                  <input class="form-control" name="working_target" min="0" placeholder="Working Target Expense" value="<?php echo $res['working_target']; ?>" type="number">
+                  <label class="label-brdr" style="width: 0%;"></label>
+                </div>
+              </div>
+
+
+              <div class="clearfix"></div>
+
               <div class="col-sm-12 col-md-12 col-lg-12">
                 <h4 class="divd">Other Information</h4>
               </div>
@@ -443,17 +491,29 @@ if (isset($_GET['id'])) {
 
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
-                  <label>Logo</label>
-                  <input type="file" name="user_logo" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="user_logo" class="form-control">
+                  <label>User Role</label>
+                  <select id="user_type" name="user_type" class="form-control">
+                    <?php foreach ($config['user_type'] as $key => $value) {
+                      $selected = ($key == $res['user_type']) ? ' selected="selected"' : '';
+                      echo '<option ' . $selected . ' value="' . $key . '">' . $value . '</option>';
+                    }
+                    ?>
+                  </select>
                 </div>
               </div>
 
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Profile</label>
+                  <input type="file" name="user_logo" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="user_logo" class="form-control">
+                </div>
+              </div>
 
               <div class="clearfix"></div>
               <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="form-group">
                   <label>Description</label>
-                  <input class="form-control" maxlength="500" required name="user_desc" placeholder="" value="<?php echo $res['user_desc']; ?>" type="text" onFocus="txtFocus(this);" onfocusout="txtFocusOut(this);">
+                  <input class="form-control" maxlength="500" required name="user_desc" placeholder="" value="<?php echo $res['user_desc']; ?>" type="text">
                 </div>
               </div>
 

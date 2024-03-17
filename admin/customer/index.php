@@ -127,13 +127,7 @@ if ($per['customer']['view'] == 0) { ?>
                       'cust_pan_card' => 'Pan',
                       'cust_aadhar_card_front' => 'Aadhar Front',
                       'cust_aadhar_card_back' => 'Aadhar Back',
-                      'form16' => 'Form16',
-                      // 'b_acc_screenshot' => 'Bank Acc Screenshot',
-                      // 'dmt_acc_screenshot' => 'Demat Acc Screenshot',
-                      // 'itr_bank_statement' => 'ITR Bank Statement',
-                      // 'salary_sheet' => 'Salary Sheet',
-                      // 'bs_bank_statemenet' => 'B/S Bank Statement',
-                      // 'proof_of_buiseness' => 'Business Proof',
+                      'form16' => 'Form16'
                     ];
 
                     foreach ($documentTypes as $fieldName => $label) {
