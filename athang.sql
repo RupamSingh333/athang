@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 03, 2024 at 09:10 PM
+-- Generation Time: Mar 17, 2024 at 07:48 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -20,6 +20,141 @@ SET time_zone = "+00:00";
 --
 -- Database: `athang`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attendance`
+--
+
+CREATE TABLE `attendance` (
+  `id` int(11) NOT NULL,
+  `emp_id` int(11) DEFAULT NULL,
+  `attendance_date` date DEFAULT NULL,
+  `status` enum('P','A','HF') DEFAULT 'A',
+  `reason` tinytext DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`id`, `emp_id`, `attendance_date`, `status`, `reason`, `created_at`) VALUES
+(1, 1, '2024-02-13', 'A', 'this is the testign dat', '2024-02-18 18:11:30'),
+(2, 159, '2024-02-08', 'P', NULL, '2024-02-18 18:13:47'),
+(3, 159, '2024-02-14', 'A', NULL, '2024-02-18 18:15:34'),
+(4, 159, '2024-02-13', 'P', NULL, '2024-02-18 18:15:51'),
+(5, 1, '2024-02-12', 'P', NULL, '2024-02-18 18:16:23'),
+(6, 159, '2024-02-07', 'A', NULL, '2024-02-18 18:17:16'),
+(7, 162, '2024-02-05', 'P', NULL, '2024-02-18 18:17:59'),
+(8, 159, '2024-02-10', 'P', NULL, '2024-02-18 18:18:24'),
+(9, 159, '2024-02-06', 'A', NULL, '2024-02-18 18:19:59'),
+(10, 159, '2024-02-05', 'P', NULL, '2024-02-18 18:20:47'),
+(11, 159, '2024-02-09', 'A', NULL, '2024-02-18 18:54:56'),
+(12, 159, '2024-02-12', 'P', NULL, '2024-02-18 18:55:09'),
+(13, 159, '2024-02-15', 'HF', 'sdsd', '2024-02-18 18:56:54'),
+(14, 159, '2024-02-16', 'A', NULL, '2024-02-18 18:57:49'),
+(15, 159, '2024-02-20', 'P', NULL, '2024-02-19 04:52:52'),
+(16, 162, '2024-02-14', 'P', NULL, '2024-02-21 03:03:24'),
+(17, 162, '2024-02-15', 'A', NULL, '2024-02-21 03:03:32'),
+(18, 162, '2024-02-16', 'P', NULL, '2024-02-21 03:03:38'),
+(19, 162, '2024-02-17', 'P', NULL, '2024-02-21 03:07:29'),
+(20, 1, '2024-02-11', 'P', NULL, '2024-02-21 03:11:09'),
+(21, 1, '2024-02-10', 'A', NULL, '2024-02-21 03:12:22'),
+(22, 1, '2024-02-05', 'A', NULL, '2024-02-21 03:15:23'),
+(23, 162, '2024-02-13', 'A', NULL, '2024-02-21 03:21:20'),
+(24, 1, '2024-02-16', 'HF', 'ssd', '2024-02-21 03:21:29'),
+(25, 159, '2024-02-18', 'A', NULL, '2024-02-21 03:24:27'),
+(26, 1, '2024-02-15', 'P', '', '2024-02-22 16:50:44'),
+(27, 1, '2024-02-09', 'A', '', '2024-02-24 18:13:29'),
+(28, 1, '2024-02-08', 'A', '', '2024-02-24 18:13:42'),
+(29, 1, '2024-02-14', 'A', 'dfds', '2024-02-24 18:13:50'),
+(30, 1, '2024-02-07', 'A', 'cdsd', '2024-02-24 18:15:46'),
+(31, 1, '2024-02-23', 'HF', 'adasd', '2024-02-24 18:33:23'),
+(32, 162, '2024-03-04', 'P', 'sdfsdfsdfs', '2024-03-11 13:23:05'),
+(33, 159, '2024-03-05', 'HF', 'sadsad', '2024-03-11 13:23:15'),
+(34, 162, '2024-03-08', 'HF', 'asdasd', '2024-03-11 13:23:35'),
+(35, 159, '2024-03-08', 'HF', '', '2024-03-11 13:23:44'),
+(36, 162, '2024-03-01', 'P', 'asdas', '2024-03-11 13:23:49'),
+(37, 162, '2024-03-14', 'HF', '', '2024-03-11 13:25:17'),
+(38, 162, '2024-03-15', 'A', '', '2024-03-11 13:25:33'),
+(39, 162, '2024-03-06', 'A', '', '2024-03-11 13:25:41'),
+(40, 162, '2024-03-20', 'P', '', '2024-03-15 18:11:16'),
+(41, 162, '2024-03-07', 'P', '', '2024-03-15 18:13:28'),
+(42, 162, '2024-03-03', 'A', '', '2024-03-15 18:18:44'),
+(43, 1, '2024-03-11', 'P', '', '2024-03-15 18:19:30'),
+(44, 162, '2024-03-05', 'P', '', '2024-03-15 18:24:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_account`
+--
+
+CREATE TABLE `bank_account` (
+  `bank_account_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `form` varchar(300) DEFAULT NULL,
+  `documents` varchar(300) DEFAULT NULL,
+  `user_updated_by` int(11) DEFAULT NULL,
+  `b_acc_name_of_link` varchar(300) DEFAULT NULL,
+  `b_acc_screenshot` text DEFAULT NULL,
+  `status` int(11) DEFAULT 0,
+  `assigned_to_vendor` int(11) DEFAULT NULL,
+  `vendor_desc` text DEFAULT NULL,
+  `head_office_desc` text DEFAULT NULL,
+  `dist_head_desc` text DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `emp_to_cust_desc` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bank_link`
+--
+
+CREATE TABLE `bank_link` (
+  `bank_link_id` int(11) NOT NULL,
+  `link` tinytext DEFAULT NULL,
+  `status` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bank_link`
+--
+
+INSERT INTO `bank_link` (`bank_link_id`, `link`, `status`, `createdAt`) VALUES
+(3, 'http://localhost/athang/arrdmin/food_ddshop_bank_demate/add_view_demat_link.php', 'Y', '2024-01-09 18:48:47'),
+(4, 'http://localhost/athang/admin/food_shop_bank_demate/add_view_demat_link.php', 'Y', '2024-03-11 14:32:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bs`
+--
+
+CREATE TABLE `bs` (
+  `bs_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `user_updated_by` int(11) DEFAULT NULL,
+  `form` varchar(300) DEFAULT NULL,
+  `documents` varchar(300) DEFAULT NULL,
+  `aadhar_link_mobile` varchar(100) DEFAULT NULL,
+  `proof_of_buiseness` text DEFAULT NULL,
+  `bs_bank_statemenet` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `assigned_to_vendor` int(11) DEFAULT NULL,
+  `vendor_desc` text DEFAULT NULL,
+  `head_office_desc` text DEFAULT NULL,
+  `dist_head_desc` text DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `emp_to_cust_desc` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -48728,6 +48863,7 @@ CREATE TABLE `customer` (
   `bs_bank_statemenet` text DEFAULT NULL,
   `proof_of_buiseness` text DEFAULT NULL,
   `user_updated_by` int(11) DEFAULT NULL,
+  `progress_status` int(11) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -48735,12 +48871,54 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`cust_id`, `cust_first_name`, `cust_email`, `cust_password`, `cust_phone`, `contact_no_with_verify`, `cust_aadhar_no`, `cust_country`, `cust_state`, `cust_district_id`, `cust_taluka_id`, `cust_pincode`, `cust_address`, `cust_alter_phone`, `aadhar_link_mobile`, `cust_org_name`, `cust_org_type`, `cust_gst_no`, `confirm_password`, `cust_agreement_copy`, `cust_signature`, `cust_pan_card`, `cust_aadhar_card_back`, `cust_aadhar_card_front`, `cust_selfie`, `b_acc_screenshot`, `b_acc_name_of_link`, `cust_status`, `cust_desc`, `shop_act_licence`, `shop_act_licence_approvedby`, `food_licence`, `food_licence_approvedby`, `bank_acc_opening`, `bank_acc_opening_approvedby`, `demate_acc_opening`, `demate_acc_opening_approvedby`, `dmt_acc_screenshot`, `dmt_acc_name_of_link`, `itr`, `itr_bank_statement`, `salary_sheet`, `form16`, `itr_approvedby`, `bs`, `bs_approvedby`, `bs_bank_statemenet`, `proof_of_buiseness`, `user_updated_by`, `created_at`) VALUES
-(1, 'Rupam Singh', 'vishal@gmail.com', 'heNwrmMm', '08538943677', NULL, '43443455454343', 101, 5, 627, 3, 841438, 'siwana', '08538943677', NULL, 'Doomshell', 'simple', 'ASDFG', '', NULL, NULL, NULL, NULL, NULL, '1386828310_1703698448_selfie', NULL, NULL, 1, 'this is the testing', 'N', NULL, 'N', NULL, 'N', NULL, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, '2023-12-27 17:34:08'),
-(2, 'Rupam Singh', 'vikash@gmail.com', 'heNwrmMm', '08538943677', '8538945025', '43443455454343', 101, 5, 627, 2, 841438, 'siwana', '08538943677', NULL, 'websuntech', 'web', 'ASDFG', '', 'cust_agreement_copy_977229119_1704211202_rupam_singh.jpg', 'cust_signature_728971677_1704211202_rupam_singh.png', 'cust_pan_card_1369771615_1704217083_rupam_singh.png', 'cust_aadhar_card_back_1742862759_1704217083_rupam_singh.jpg', 'cust_aadhar_card_front_1098406091_1704217083_rupam_singh.jpg', 'cust_selfie_368769771_1704211202_rupam_singh.jpg', 'b_acc_screenshot_1616752240_1704224448_rupam_singh.jpg', 'http://localhost/athang/api/bank-account-opening.php', 0, 'this is the testing', 'Y', 1, 'Y', 1, 'Y', 1, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, 1, '2023-12-27 17:34:25'),
-(6, 'Nidhu', 'nidhi@gmail.com', 'heNwrmMm', '8538675948', NULL, '4567897678', NULL, 12, 21, 111, 232223, 'Patna Bihar Gopalganj', '8675647678', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 'N', NULL, 'N', NULL, 'N', NULL, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, '2023-12-29 18:30:59'),
-(7, 'sdfsdf', 'sdfidhi@gmail.com', 'heNwrmM=', '76543345654', NULL, '654345676543', 101, 4, 3, 22, 232223, 'Patna Bihar Gopalganj', '876545676543', NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, 'N', NULL, 'N', NULL, 'N', NULL, 'N', NULL, '', NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, '2023-12-29 21:05:54'),
-(11, 'Sanjay', 'sanjay@gmail.com', 'heNwrmMm', '8767879876', NULL, '860621998833', 101, 5, 627, 3, 841438, 'Patna Bihar Gopalganj', '8789765678', '8538945989', 'websuntech', 'web', NULL, '', 'cust_agreement_copy_626435851_1704223912_sanjay.jpg', 'cust_signature_1073680504_1704223912_sanjay.png', 'cust_pan_card_604183249_1704223283_sanjay.jpg', 'cust_aadhar_card_back_1462919092_1704223283_sanjay.jpg', 'cust_aadhar_card_front_191949013_1704223283_sanjay.jpg', 'cust_selfie_2138498523_1704223912_sanjay.jpg', 'b_acc_screenshot_1312314541_1704224662_sanjay.jpg', 'http://localhost/athang/api/bank-account-opening.php', 1, NULL, 'Y', 1, 'Y', 1, 'Y', 1, 'Y', 1, 'dmt_acc_screenshot_1809936968_1704305418_sanjay.jpg', 'http://localhost/athang/api/bank-account-opening.php', 'Y', 'itr_bank_statement_722694382_1704307120_sanjay.png', 'salary_sheet_1982114109_1704307120_sanjay.jpg', 'form16_1384187111_1704307120_sanjay.jpg', 1, 'Y', 1, 'bs_bank_statemenet_1561727205_1704307451_sanjay.jpg', 'proof_of_buiseness_619126733_1704307451_sanjay.jpg', 1, '2024-01-02 19:21:23');
+INSERT INTO `customer` (`cust_id`, `cust_first_name`, `cust_email`, `cust_password`, `cust_phone`, `contact_no_with_verify`, `cust_aadhar_no`, `cust_country`, `cust_state`, `cust_district_id`, `cust_taluka_id`, `cust_pincode`, `cust_address`, `cust_alter_phone`, `aadhar_link_mobile`, `cust_org_name`, `cust_org_type`, `cust_gst_no`, `confirm_password`, `cust_agreement_copy`, `cust_signature`, `cust_pan_card`, `cust_aadhar_card_back`, `cust_aadhar_card_front`, `cust_selfie`, `b_acc_screenshot`, `b_acc_name_of_link`, `cust_status`, `cust_desc`, `shop_act_licence`, `shop_act_licence_approvedby`, `food_licence`, `food_licence_approvedby`, `bank_acc_opening`, `bank_acc_opening_approvedby`, `demate_acc_opening`, `demate_acc_opening_approvedby`, `dmt_acc_screenshot`, `dmt_acc_name_of_link`, `itr`, `itr_bank_statement`, `salary_sheet`, `form16`, `itr_approvedby`, `bs`, `bs_approvedby`, `bs_bank_statemenet`, `proof_of_buiseness`, `user_updated_by`, `progress_status`, `created_at`) VALUES
+(3, 'sanjay', 'sanjay@gmail.com', 'heNwrmMm', '8538943677', NULL, '43443455454343', 101, 5, 627, 3, 841438, 'admin@gmail.com', '', '08538943677', 'websuntech', 'web', 'GSTJJ56GHH', '', 'sanjay_8538943677_1708801572_cust_agreement_copy.png', 'sanjay_8538943677_1708801572_cust_signature.png', NULL, NULL, NULL, NULL, NULL, NULL, 0, 'thsi is the testnd', 'Y', 159, 'N', NULL, 'N', NULL, 'N', NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, '', 159, NULL, '2024-02-24 18:50:34'),
+(4, 'Rupam', 'Rupam@gmail.com', 'heNwrmMm', '8767879876', NULL, '860621998833', 101, 5, 627, 3, 841438, 'Patna Bihar Gopalganj', '8789765678', NULL, NULL, NULL, NULL, '', NULL, NULL, 'sanjay_8767879876_1710557522_cust_pan_card.png', 'sanjay_8767879876_1710557522_cust_aadhar_card_back.png', 'sanjay_8767879876_1710557522_cust_aadhar_card_front.png', NULL, NULL, NULL, 0, NULL, 'N', NULL, 'N', NULL, 'N', NULL, 'N', NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, 'N', NULL, NULL, NULL, NULL, 0, '2024-03-16 02:52:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `demat_account`
+--
+
+CREATE TABLE `demat_account` (
+  `demat_account_id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `user_updated_by` int(11) DEFAULT NULL,
+  `form` varchar(300) DEFAULT NULL,
+  `documents` varchar(300) DEFAULT NULL,
+  `dmt_acc_name_of_link` varchar(300) DEFAULT NULL,
+  `dmt_acc_screenshot` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `assigned_to_vendor` int(11) DEFAULT NULL,
+  `vendor_desc` text DEFAULT NULL,
+  `head_office_desc` text DEFAULT NULL,
+  `dist_head_desc` text DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `emp_to_cust_desc` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `demat_link`
+--
+
+CREATE TABLE `demat_link` (
+  `demat_link_id` int(11) NOT NULL,
+  `link` tinytext NOT NULL,
+  `status` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `demat_link`
+--
+
+INSERT INTO `demat_link` (`demat_link_id`, `link`, `status`, `created_at`) VALUES
+(2, 'http://localhost/athang/admin/food_shop_bank_demate/add_view_demat_link.php', 'Y', '2024-01-09 18:09:05'),
+(8, 'http://localhost/athang/admin/food_ddshop_bank_demate/add_view_demat_link.php', 'Y', '2024-01-09 18:42:43');
 
 -- --------------------------------------------------------
 
@@ -48777,6 +48955,54 @@ INSERT INTO `district` (`district_id`, `district_name`, `url_link`, `district_st
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `food_licence`
+--
+
+CREATE TABLE `food_licence` (
+  `food_licence_id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `user_updated_by` int(11) DEFAULT NULL,
+  `form` text DEFAULT NULL,
+  `documents` text DEFAULT NULL,
+  `assigned_to_vendor` int(11) DEFAULT NULL,
+  `vendor_desc` text DEFAULT NULL,
+  `head_office_desc` text DEFAULT NULL,
+  `dist_head_desc` text DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `emp_to_cust_desc` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itr`
+--
+
+CREATE TABLE `itr` (
+  `itr_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `form` varchar(300) DEFAULT NULL,
+  `documents` varchar(300) DEFAULT NULL,
+  `user_updated_by` int(11) DEFAULT NULL,
+  `aadhar_link_mobile` varchar(100) DEFAULT NULL,
+  `form16` text DEFAULT NULL,
+  `salary_sheet` text DEFAULT NULL,
+  `itr_bank_statement` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `assigned_to_vendor` int(11) DEFAULT NULL,
+  `vendor_desc` text DEFAULT NULL,
+  `head_office_desc` text DEFAULT NULL,
+  `dist_head_desc` text DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `emp_to_cust_desc` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `reg_user`
 --
 
@@ -48798,17 +49024,56 @@ CREATE TABLE `reg_user` (
   `user_status` enum('0','1') NOT NULL DEFAULT '1',
   `user_startfrom` datetime DEFAULT NULL,
   `isdeleted` tinyint(1) NOT NULL,
-  `user_endat` timestamp NOT NULL DEFAULT current_timestamp()
+  `user_endat` timestamp NOT NULL DEFAULT current_timestamp(),
+  `food_license_point` float DEFAULT NULL,
+  `shop_act_license_point` float DEFAULT NULL,
+  `bank_acc_point` float DEFAULT NULL,
+  `demat_acc_point` float DEFAULT NULL,
+  `itr_management_point` float DEFAULT NULL,
+  `bs_point` float DEFAULT NULL,
+  `petrol` float DEFAULT NULL,
+  `mobile_recharge` float DEFAULT NULL,
+  `extra_allowance` float DEFAULT NULL,
+  `working_target` float DEFAULT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `reg_user`
 --
 
-INSERT INTO `reg_user` (`user_id`, `first_name`, `user_pass`, `user_email`, `user_phone`, `user_country`, `user_state`, `user_district`, `taluka_id`, `user_tel`, `user_logo`, `user_address`, `user_type`, `user_desc`, `user_status`, `user_startfrom`, `isdeleted`, `user_endat`) VALUES
-(1, 'Admin', 'heNwrmMm', 'admin@gmail.com', '08538943677', 101, 33, 622, 2, '841438', '1702571671_logo.jpeg', 'A3 Mall Road Jaipur', 1, 'This is the admin id', '0', '2023-12-28 22:42:46', 0, '2023-06-20 14:53:19'),
-(159, 'Rupam', 'heNwrmMm', 'rupam@gmail.com', '8538945025', 101, 5, 627, 1, '841438', '1704311961_rupamsingh.png', 'Siwan', 2, 'This is testing user', '0', '2024-01-04 01:29:21', 0, '0000-00-00 00:00:00'),
-(162, 'Vishal', 'gOJ3qQ==', 'vishal@gmail.com', '8658697878', 101, 5, 627, 1, '8538945025', 'user_logo_67161280_1704312419_vishal.png', 'Bihar Gopalganj', 0, '', '1', NULL, 0, '2024-01-03 20:05:57');
+INSERT INTO `reg_user` (`user_id`, `first_name`, `user_pass`, `user_email`, `user_phone`, `user_country`, `user_state`, `user_district`, `taluka_id`, `user_tel`, `user_logo`, `user_address`, `user_type`, `user_desc`, `user_status`, `user_startfrom`, `isdeleted`, `user_endat`, `food_license_point`, `shop_act_license_point`, `bank_acc_point`, `demat_acc_point`, `itr_management_point`, `bs_point`, `petrol`, `mobile_recharge`, `extra_allowance`, `working_target`, `createdAt`) VALUES
+(1, 'Admin', 'heNwrmMm', 'admin@gmail.com', '8538943677', 101, 33, 622, 0, '841438', '1702571671_logo.jpeg', 'A3 Mall Road Jaipur', 1, 'This is the admin id', '0', '2024-02-25 00:26:10', 0, '2023-06-20 14:53:19', 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, '2024-02-21 18:53:15'),
+(159, 'Rupam', 'heNwrmMm', 'rupam@gmail.com', '8538945025', 101, 33, 0, 1, '841438', '1704642300_rupamsingh.png', 'Siwan', 2, 'This is testing user', '0', '2024-03-10 22:58:37', 0, '0000-00-00 00:00:00', 0, 0, 0, 0, 0, 0, 5000, 3000, 1000, 1000, '2024-02-21 18:53:15'),
+(162, 'Vishal', 'gOJ3qQ==', 'vishal@gmail.com', '8658697878', 101, 5, 627, 1, '8538945025', 'user_logo_67161280_1704312419_vishal.png', 'Bihar Gopalganj', 2, '', '0', NULL, 0, '2024-01-03 20:05:57', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-02-21 18:53:15'),
+(163, 'vendor', 'heNwrmMm', 'vendor@gmail.com', '8847474747474', 101, 5, 627, 3, '841438', '', 'patna', 4, 'This is testing', '0', '2024-03-17 11:55:27', 0, '2024-03-17 06:25:27', 0, 0, 0, 0, 0, 0, 1000, 1000, 1000, 1000, '2024-03-17 06:25:27');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shop_act_licence`
+--
+
+CREATE TABLE `shop_act_licence` (
+  `shop_act_licence_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `user_updated_by` int(11) NOT NULL,
+  `form` varchar(300) DEFAULT NULL,
+  `documents` varchar(300) DEFAULT NULL,
+  `cust_org_name` varchar(300) DEFAULT NULL,
+  `cust_org_type` varchar(300) DEFAULT NULL,
+  `cust_selfie` text DEFAULT NULL,
+  `cust_agreement_copy` text DEFAULT NULL,
+  `cust_signature` text DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `assigned_to_vendor` int(11) DEFAULT NULL,
+  `vendor_desc` text DEFAULT NULL,
+  `head_office_desc` text DEFAULT NULL,
+  `dist_head_desc` text DEFAULT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `emp_to_cust_desc` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -52974,7 +53239,7 @@ CREATE TABLE `user_permission` (
 INSERT INTO `user_permission` (`id`, `user_id`, `module`, `add`, `view`, `edit`, `del`, `last_updated`) VALUES
 (1, 1, 'user', '1', '1', '1', '1', '2023-12-23 17:51:35'),
 (2, 1, 'customer', '1', '1', '1', '1', '2023-12-23 17:52:22'),
-(14, 159, 'user', '1', '1', '1', '1', '2023-12-24 04:43:38'),
+(14, 159, 'user', '0', '0', '0', '0', '2023-12-24 04:43:38'),
 (4, 1, 'district', '1', '1', '1', '1', '2023-12-23 17:53:23'),
 (5, 1, 'taluka', '1', '1', '1', '1', '2023-12-23 17:53:23'),
 (6, 1, 'food_license', '1', '1', '1', '1', '2023-12-23 17:53:23'),
@@ -52995,11 +53260,37 @@ INSERT INTO `user_permission` (`id`, `user_id`, `module`, `add`, `view`, `edit`,
 (22, 159, 'itr_management', '0', '0', '0', '0', '2023-12-24 04:43:38'),
 (23, 159, 'attendance_management', '1', '1', '1', '1', '2023-12-24 04:43:38'),
 (24, 159, 'salary_management', '0', '0', '0', '0', '2023-12-24 04:43:38'),
-(25, 159, 'report_management', '0', '0', '0', '0', '2023-12-24 04:43:38');
+(25, 159, 'report_management', '0', '0', '0', '0', '2023-12-24 04:43:38'),
+(26, 1, 'bs', '1', '1', '1', '1', '2024-01-06 18:41:14'),
+(27, 159, 'bs', '0', '0', '0', '0', '2024-02-24 18:29:20');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `attendance`
+--
+ALTER TABLE `attendance`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `bank_account`
+--
+ALTER TABLE `bank_account`
+  ADD PRIMARY KEY (`bank_account_id`);
+
+--
+-- Indexes for table `bank_link`
+--
+ALTER TABLE `bank_link`
+  ADD PRIMARY KEY (`bank_link_id`);
+
+--
+-- Indexes for table `bs`
+--
+ALTER TABLE `bs`
+  ADD PRIMARY KEY (`bs_id`);
 
 --
 -- Indexes for table `cities`
@@ -53020,16 +53311,46 @@ ALTER TABLE `customer`
   ADD PRIMARY KEY (`cust_id`);
 
 --
+-- Indexes for table `demat_account`
+--
+ALTER TABLE `demat_account`
+  ADD PRIMARY KEY (`demat_account_id`);
+
+--
+-- Indexes for table `demat_link`
+--
+ALTER TABLE `demat_link`
+  ADD PRIMARY KEY (`demat_link_id`);
+
+--
 -- Indexes for table `district`
 --
 ALTER TABLE `district`
   ADD PRIMARY KEY (`district_id`);
 
 --
+-- Indexes for table `food_licence`
+--
+ALTER TABLE `food_licence`
+  ADD PRIMARY KEY (`food_licence_id`);
+
+--
+-- Indexes for table `itr`
+--
+ALTER TABLE `itr`
+  ADD PRIMARY KEY (`itr_id`);
+
+--
 -- Indexes for table `reg_user`
 --
 ALTER TABLE `reg_user`
   ADD PRIMARY KEY (`user_id`);
+
+--
+-- Indexes for table `shop_act_licence`
+--
+ALTER TABLE `shop_act_licence`
+  ADD PRIMARY KEY (`shop_act_licence_id`);
 
 --
 -- Indexes for table `states`
@@ -53054,6 +53375,30 @@ ALTER TABLE `user_permission`
 --
 
 --
+-- AUTO_INCREMENT for table `attendance`
+--
+ALTER TABLE `attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+
+--
+-- AUTO_INCREMENT for table `bank_account`
+--
+ALTER TABLE `bank_account`
+  MODIFY `bank_account_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `bank_link`
+--
+ALTER TABLE `bank_link`
+  MODIFY `bank_link_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `bs`
+--
+ALTER TABLE `bs`
+  MODIFY `bs_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
@@ -53069,7 +53414,19 @@ ALTER TABLE `country`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `cust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `cust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `demat_account`
+--
+ALTER TABLE `demat_account`
+  MODIFY `demat_account_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `demat_link`
+--
+ALTER TABLE `demat_link`
+  MODIFY `demat_link_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `district`
@@ -53078,10 +53435,28 @@ ALTER TABLE `district`
   MODIFY `district_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=629;
 
 --
+-- AUTO_INCREMENT for table `food_licence`
+--
+ALTER TABLE `food_licence`
+  MODIFY `food_licence_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `itr`
+--
+ALTER TABLE `itr`
+  MODIFY `itr_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `reg_user`
 --
 ALTER TABLE `reg_user`
-  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
+  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
+
+--
+-- AUTO_INCREMENT for table `shop_act_licence`
+--
+ALTER TABLE `shop_act_licence`
+  MODIFY `shop_act_licence_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -53099,7 +53474,7 @@ ALTER TABLE `taluka`
 -- AUTO_INCREMENT for table `user_permission`
 --
 ALTER TABLE `user_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
