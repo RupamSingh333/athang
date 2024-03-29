@@ -464,8 +464,8 @@ if (isset($_GET['id'])) {
 
               <div class="col-sm-3 col-md-3 col-lg-3">
                 <div class="form-group">
-                  <label>Working Target</label>
-                  <input class="form-control" name="working_target" min="0" placeholder="Working Target Expense" value="<?php echo $res['working_target']; ?>" type="number">
+                  <label>Working Target(Point)</label>
+                  <input class="form-control" name="working_target" min="0" placeholder="Working Target (Point)" value="<?php echo $res['working_target']; ?>" type="number">
                   <label class="label-brdr" style="width: 0%;"></label>
                 </div>
               </div>

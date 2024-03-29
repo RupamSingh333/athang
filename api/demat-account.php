@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
         mysqli_stmt_bind_param($stmt, 'iis', $customerId, $user_updated_by, $dmt_acc_name_of_link);
         if (mysqli_stmt_execute($stmt)) {
             handleMultipleFileUpload("dmt_acc_screenshot", "dmt_acc_screenshot", $customerId);
-            $response = ['status' => true, 'message' => 'New Bank Account Opening procedure has been added successfully.'];
+            $response = ['status' => true, 'message' => 'New Demat Account Opening procedure has been added successfully.'];
             http_response_code(201);
         } else {
             $response = ['status' => false, 'error' => 'Data not inserted, please try again later.'];

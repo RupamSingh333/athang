@@ -184,19 +184,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $paymentMethod = $_POST['paymentMethod'];
+        $payAmount = $_POST['payAmount'];
         $dataId = $_POST['dataId'];
         // $module = $_POST['module'];
+
+        // pr($_POST);exit;
 
         // if ($module == 'food_license') {
 
         $getFoodLicenseById = getFoodLicenseById($dataId);
         if ($getFoodLicenseById) {
             $newStatus = $getFoodLicenseById['status'] == 4 ? 5 : $getFoodLicenseById['status'];
-            $sql = "UPDATE food_licence SET emp_to_cust_desc=?, payment_method=?, status=? WHERE food_licence_id=?";
+            $sql = "UPDATE food_licence SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=? WHERE food_licence_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssii', $statusText, $paymentMethod, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiii', $statusText, $paymentMethod, $payAmount, $newStatus, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'Food license has been updated successfully.'];
                     http_response_code(200);

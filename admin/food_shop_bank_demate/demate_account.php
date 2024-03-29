@@ -1,7 +1,13 @@
 <?php
 include("../../system_config.php");
 include_once("../common/head.php");
-$getAllDematAccounts = getAllDematAccounts();
+
+$empRole = $_SESSION['type'];
+if ($empRole != Vendor) {
+    $getAllDematAccounts = getAllDematAccounts();
+} else {
+    $getAllDematAccounts = getAllDematAccountsById($_SESSION['AdminLogin']);
+}
 
 if ($per['demat_account']['view'] == 0) { ?>
     <script>
@@ -57,7 +63,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                 <td><strong>Link</strong></td>
                                 <td><strong>Screenshot</strong></td>
                                 <td><strong>Approved By</strong></td>
-                                <td>Created</td>
+                                <td><strong>Created</strong></td>
                                 <td><strong>Status</strong></td>
                                 <td><strong>Action</strong></td>
                             </tr>
@@ -131,15 +137,16 @@ if ($per['demat_account']['view'] == 0) { ?>
 
                                     <td id="font12" style="width:15%">
 
-                                        <?php if ($per['customer']['edit'] == 1) { ?>
-
+                                        <?php if ($per['demat_account']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative)) : ?>
                                             <?php if ($rows['status'] >= 0) : ?>
                                                 <a href="javascript:void(0)" onclick="uploadFiles(<?= $rows['demat_account_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>')" onMouseOver="showbox('Upload<?= $i; ?>')" onMouseOut="hidebox('Upload<?= $i; ?>')"> <i class="fa fa-upload"></i> </a>
                                                 <div id="Upload<?= $i; ?>" class="hide1">
                                                     <p>Upload File</p>
                                                 </div>
                                             <?php endif; ?>
+                                        <?php endif; ?>
 
+                                        <?php if ($per['demat_account']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Vendor)) : ?>
                                             <?php if ($rows['status'] >= 1) : ?>
                                                 <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['demat_account_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
                                                     <i class="fa fa-print"></i>
@@ -148,7 +155,9 @@ if ($per['demat_account']['view'] == 0) { ?>
                                                     <p>Is Print</p>
                                                 </div>
                                             <?php endif; ?>
+                                        <?php endif; ?>
 
+                                        <?php if ($per['demat_account']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == HeadOffice)) : ?>
                                             <?php if ($rows['status'] >= 2) : ?>
                                                 <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['demat_account_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
                                                     <i class="fa fa-building" style="color: purple;"></i>
@@ -157,7 +166,9 @@ if ($per['demat_account']['view'] == 0) { ?>
                                                     <p>Head Office</p>
                                                 </div>
                                             <?php endif; ?>
+                                        <?php endif; ?>
 
+                                        <?php if ($per['demat_account']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == DistricHeadOffice)) : ?>
                                             <?php if ($rows['status'] >= 3) : ?>
                                                 <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['demat_account_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
                                                     <i class="fa fa-building" style="color: orange;"></i>
@@ -166,7 +177,9 @@ if ($per['demat_account']['view'] == 0) { ?>
                                                     <p>District Head</p>
                                                 </div>
                                             <?php endif; ?>
+                                        <?php endif; ?>
 
+                                        <?php if ($per['demat_account']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Employee)) : ?>
                                             <?php if ($rows['status'] >= 4) : ?>
                                                 <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['demat_account_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
                                                     <i class="fa fa-truck" style="color: orange;"></i>
@@ -175,9 +188,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                                     <p>Ready to Customer</p>
                                                 </div>
                                             <?php endif; ?>
-
-                                        <?php } ?>
-
+                                        <?php endif; ?>
 
                                     </td>
 
@@ -189,7 +200,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                         </tbody>
                     </table>
 
-                    
+
                     <!-- For vendor update -->
                     <script>
                         function showUploadDialog(dataId, customerName, userType) {
@@ -233,7 +244,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                         success: function(response) {
                                             var jsonResponse = JSON.parse(response);
                                             Swal.fire({
-                                                position: "top-end",
+                                                position: "top-bottom",
                                                 icon: "success",
                                                 title: "Success!",
                                                 text: jsonResponse.message,
@@ -248,7 +259,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                             const response = JSON.parse(error.responseText);
                                             const errorMessage = response.message;
                                             Swal.fire({
-                                                position: "top-end",
+                                                position: "top-bottom",
                                                 icon: "error",
                                                 title: "Error Occurred",
                                                 text: errorMessage,
@@ -350,7 +361,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                             // return false;
                                             var jsonResponse = JSON.parse(response);
                                             Swal.fire({
-                                                position: "top-end",
+                                                position: "top-bottom",
                                                 icon: "success",
                                                 title: "Success!",
                                                 text: jsonResponse.message,
@@ -365,7 +376,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                             const response = JSON.parse(error.responseText);
                                             const errorMessage = response.message;
                                             Swal.fire({
-                                                position: "top-end",
+                                                position: "top-bottom",
                                                 icon: "error",
                                                 title: "Error Occurred",
                                                 text: errorMessage,
@@ -564,7 +575,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                         success: function(response) {
                                             var jsonResponse = JSON.parse(response);
                                             Swal.fire({
-                                                position: "top-end",
+                                                position: "top-bottom",
                                                 icon: "success",
                                                 title: "Success!",
                                                 text: jsonResponse.message,
@@ -579,7 +590,7 @@ if ($per['demat_account']['view'] == 0) { ?>
                                             const response = JSON.parse(error.responseText);
                                             const errorMessage = response.message;
                                             Swal.fire({
-                                                position: "top-end",
+                                                position: "top-bottom",
                                                 icon: "error",
                                                 title: "Error Occurred",
                                                 text: errorMessage,

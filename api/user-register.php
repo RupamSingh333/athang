@@ -58,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     $user_address = sanitizeInput($_POST['user_address']);
     $password = sanitizeInput($_POST['user_pass']);
     $hashed_password = encryptIt($password);
-
     $user_logo = sanitizeInput($_FILES['user_logo']['name']);
 
     // Validate required fields

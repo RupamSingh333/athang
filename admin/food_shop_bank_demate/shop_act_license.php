@@ -1,7 +1,13 @@
 <?php
 include("../../system_config.php");
 include_once("../common/head.php");
-$getAllShopAct = getAllShopAct();
+$empRole = $_SESSION['type'];
+if ($empRole != Vendor) {
+  $getAllShopAct = getAllShopAct();
+} else {
+  $getAllShopAct = getAllShopActById($_SESSION['AdminLogin']);
+}
+
 
 if ($per['shop_act_license']['view'] == 0) { ?>
   <script>
@@ -133,15 +139,16 @@ if ($per['shop_act_license']['view'] == 0) { ?>
 
                   <td id="font12" style="width:15%">
 
-                    <?php if ($per['customer']['edit'] == 1) { ?>
-
+                    <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative)) : ?>
                       <?php if ($rows['status'] >= 0) : ?>
                         <a href="javascript:void(0)" onclick="uploadFiles(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>')" onMouseOver="showbox('Upload<?= $i; ?>')" onMouseOut="hidebox('Upload<?= $i; ?>')"> <i class="fa fa-upload"></i> </a>
                         <div id="Upload<?= $i; ?>" class="hide1">
                           <p>Upload File</p>
                         </div>
                       <?php endif; ?>
+                    <?php endif; ?>
 
+                    <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Vendor)) : ?>
                       <?php if ($rows['status'] >= 1) : ?>
                         <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
                           <i class="fa fa-print"></i>
@@ -150,7 +157,9 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                           <p>Is Print</p>
                         </div>
                       <?php endif; ?>
+                    <?php endif; ?>
 
+                    <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == HeadOffice)) : ?>
                       <?php if ($rows['status'] >= 2) : ?>
                         <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
                           <i class="fa fa-building" style="color: purple;"></i>
@@ -159,7 +168,10 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                           <p>Head Office</p>
                         </div>
                       <?php endif; ?>
+                    <?php endif; ?>
 
+
+                    <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == DistricHeadOffice)) : ?>
                       <?php if ($rows['status'] >= 3) : ?>
                         <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
                           <i class="fa fa-building" style="color: orange;"></i>
@@ -168,7 +180,9 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                           <p>District Head</p>
                         </div>
                       <?php endif; ?>
+                    <?php endif; ?>
 
+                    <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Employee)) : ?>
                       <?php if ($rows['status'] >= 4) : ?>
                         <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
                           <i class="fa fa-truck" style="color: orange;"></i>
@@ -177,9 +191,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                           <p>Ready to Customer</p>
                         </div>
                       <?php endif; ?>
-
-                    <?php } ?>
-
+                    <?php endif; ?>
 
                   </td>
 
@@ -230,12 +242,12 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       dataId: dataId,
                       statusText: statusText,
                       key: userType,
-                      // module: 'food_license'
+                      // module: 'shop_act_license'
                     },
                     success: function(response) {
                       var jsonResponse = JSON.parse(response);
                       Swal.fire({
-                        position: "top-end",
+                        position: "top-bottom",
                         icon: "success",
                         title: "Success!",
                         text: jsonResponse.message,
@@ -250,7 +262,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       const response = JSON.parse(error.responseText);
                       const errorMessage = response.message;
                       Swal.fire({
-                        position: "top-end",
+                        position: "top-bottom",
                         icon: "error",
                         title: "Error Occurred",
                         text: errorMessage,
@@ -271,9 +283,11 @@ if ($per['shop_act_license']['view'] == 0) { ?>
               width: 400px;
             }
           </style>
+
           <?php
           $vendorsList = getAllUsersByRole(4);
           ?>
+
           <script>
             function uploadFiles(dataId, customerName) {
               Swal.fire({
@@ -340,7 +354,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                   formData.append('dataId', dataId);
                   formData.append('vendorId', vendorId);
                   formData.append('key', 'admin');
-                  // formData.append('module', 'food_license');
+                  // formData.append('module', 'shop_act_license');
 
                   $.ajax({
                     url: 'shopActLicenseAjex.php',
@@ -352,7 +366,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       // return false;
                       var jsonResponse = JSON.parse(response);
                       Swal.fire({
-                        position: "top-end",
+                        position: "top-bottom",
                         icon: "success",
                         title: "Success!",
                         text: jsonResponse.message,
@@ -367,7 +381,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       const response = JSON.parse(error.responseText);
                       const errorMessage = response.message;
                       Swal.fire({
-                        position: "top-end",
+                        position: "top-bottom",
                         icon: "error",
                         title: "Error Occurred",
                         text: errorMessage,
@@ -463,6 +477,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
               content: none;
             }
           </style>
+
           <script>
             function trackOrder(status, customerName) {
               let stepsHTML = '';
@@ -512,7 +527,6 @@ if ($per['shop_act_license']['view'] == 0) { ?>
           </script>
           <!-- Track Order -->
 
-
           <!-- readyToCustomer -->
           <script>
             function readyToCustomer(dataId, customerName, userType) {
@@ -529,6 +543,11 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                                         <input type="radio" id="onlinePayment" name="paymentMethod" value="online">
                                         <label for="onlinePayment">Online</label>
                                     </div>
+
+                                    <div style="margin-bottom: 5px;">
+                                        <input type="number" id="payAmount" name="pay_amount" placeholder="Enter Amount">
+                                    </div>
+
                                     <textarea rows="3" style="width: 361px" id="statusText" placeholder="Please enter something."></textarea>
                                 `,
                 icon: "warning",
@@ -537,14 +556,16 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                 cancelButtonText: "Cancel",
                 preConfirm: () => {
                   const statusText = document.getElementById('statusText').value;
+                  const payAmount = document.getElementById('payAmount').value;
                   const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
-                  if (!statusText || !paymentMethod) {
-                    Swal.showValidationMessage('Please enter something and select a payment method.');
+                  if (!statusText || !paymentMethod || !payAmount) {
+                    Swal.showValidationMessage('Please enter something , select a payment method and amount.');
                     return false;
                   } else {
                     return {
                       statusText: statusText,
-                      paymentMethod: paymentMethod
+                      paymentMethod: paymentMethod,
+                      payAmount: payAmount
                     };
                   }
                 }
@@ -552,6 +573,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                 if (result.isConfirmed) {
                   const statusText = result.value.statusText;
                   const paymentMethod = result.value.paymentMethod;
+                  const payAmount = result.value.payAmount;
 
                   $.ajax({
                     url: 'shopActLicenseAjex.php',
@@ -560,13 +582,13 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       dataId: dataId,
                       statusText: statusText,
                       paymentMethod: paymentMethod,
-                      key: userType,
-                      // module: 'food_license'
+                      payAmount: payAmount,
+                      key: userType
                     },
                     success: function(response) {
                       var jsonResponse = JSON.parse(response);
                       Swal.fire({
-                        position: "top-end",
+                        position: "top-bottom",
                         icon: "success",
                         title: "Success!",
                         text: jsonResponse.message,
@@ -581,7 +603,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       const response = JSON.parse(error.responseText);
                       const errorMessage = response.message;
                       Swal.fire({
-                        position: "top-end",
+                        position: "top-bottom",
                         icon: "error",
                         title: "Error Occurred",
                         text: errorMessage,
@@ -595,9 +617,6 @@ if ($per['shop_act_license']['view'] == 0) { ?>
             }
           </script>
           <!-- readyToCustomer -->
-
-
-
 
         </div>
       </section>

@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt) {
                 mysqli_stmt_bind_param($stmt, 'ssiii', $formFilesNames, $documentNames, $newStatus, $vendorId, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
-                    $response = ['status' => true, 'message' => 'Food license has been updated successfully.'];
+                    $response = ['status' => true, 'message' => 'Demat Account has been updated successfully.'];
                     http_response_code(200);
                 } else {
                     $response = ['status' => false, 'message' => 'Failed to execute SQL statement.'];
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 http_response_code(500);
             }
         } else {
-            $response = ['status' => false, 'message' => 'Food license not found.'];
+            $response = ['status' => false, 'message' => 'Demat Account not found.'];
             http_response_code(404);
         }
 
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt) {
                 mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
-                    $response = ['status' => true, 'message' => 'Food license has been updated successfully.'];
+                    $response = ['status' => true, 'message' => 'Demat Account has been updated successfully.'];
                     http_response_code(200);
                 } else {
                     $response = ['status' => false, 'message' => 'Failed to execute SQL statement.'];
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 http_response_code(500);
             }
         } else {
-            $response = ['status' => false, 'message' => 'Food license not found.'];
+            $response = ['status' => false, 'message' => 'Demat Account not found.'];
             http_response_code(404);
         }
         echo json_encode($response);
@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt) {
                 mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
-                    $response = ['status' => true, 'message' => 'Food license has been updated successfully.'];
+                    $response = ['status' => true, 'message' => 'Demat Account has been updated successfully.'];
                     http_response_code(200);
                 } else {
                     $response = ['status' => false, 'message' => 'Failed to execute SQL statement.'];
@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 http_response_code(500);
             }
         } else {
-            $response = ['status' => false, 'message' => 'Food license not found.'];
+            $response = ['status' => false, 'message' => 'Demat Account not found.'];
             http_response_code(404);
         }
         echo json_encode($response);
@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt) {
                 mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
-                    $response = ['status' => true, 'message' => 'Food license has been updated successfully.'];
+                    $response = ['status' => true, 'message' => 'Demat Account has been updated successfully.'];
                     http_response_code(200);
                 } else {
                     $response = ['status' => false, 'message' => 'Failed to execute SQL statement.'];
@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 http_response_code(500);
             }
         } else {
-            $response = ['status' => false, 'message' => 'Food license not found.'];
+            $response = ['status' => false, 'message' => 'Demat Account not found.'];
             http_response_code(404);
         }
         echo json_encode($response);
@@ -198,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt) {
                 mysqli_stmt_bind_param($stmt, 'ssii', $statusText, $paymentMethod, $newStatus, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
-                    $response = ['status' => true, 'message' => 'Food license has been updated successfully.'];
+                    $response = ['status' => true, 'message' => 'Demat Account has been updated successfully.'];
                     http_response_code(200);
                 } else {
                     $response = ['status' => false, 'message' => 'Failed to execute SQL statement.'];
@@ -209,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 http_response_code(500);
             }
         } else {
-            $response = ['status' => false, 'message' => 'Food license not found.'];
+            $response = ['status' => false, 'message' => 'Demat Account not found.'];
             http_response_code(404);
         }
         echo json_encode($response);

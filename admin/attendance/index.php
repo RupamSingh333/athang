@@ -148,7 +148,6 @@ $getuser_byList = getuser_byList();
                                         <?php
                                         $totalLeaves = 0;
                                         $attendanceData = getAllAttendanceData($employee['user_id'], $currentYear, $currentMonth);
-                                        // pr($attendanceData);
                                         for ($day = 1; $day <= $totalDays; $day++) {
                                             // $attendanceDate = $currentYear . '-' . $currentMonth . '-' . $day;
                                             $attendanceDate = sprintf('%04d-%02d-%02d', $currentYear, $currentMonth, $day);
@@ -214,7 +213,21 @@ $getuser_byList = getuser_byList();
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
                         confirmButtonText: "Submit",
-                        cancelButtonText: "Cancel"
+                        cancelButtonText: "Cancel",
+                        preConfirm: () => {
+                            const reasonInput = document.getElementById('reasonInput').value;
+                            const attendanceStatus = document.querySelector('input[name="attendanceStatus"]:checked');
+
+                            if (!attendanceStatus) {
+                                Swal.showValidationMessage('Please select an attendance status.');
+                                return false;
+                            }
+                            // else {
+                            //     return {
+                            //         statusText: statusText,
+                            //     };
+                            // }
+                        }
                     }).then((result) => {
                         if (result.isConfirmed) {
                             const attendanceStatus = $("input[name='attendanceStatus']:checked").val();
@@ -226,10 +239,6 @@ $getuser_byList = getuser_byList();
                                     text: 'Please select an option before submitting.',
                                 });
                             } else {
-                                // console.log("Employee ID:", employeeId);
-                                // console.log("Employee Name:", employeeName);
-                                // console.log("Date:", attendanceDate);
-                                // console.log("Attendance Status:", attendanceStatus);
                                 $.ajax({
                                     url: 'process_attendance.php',
                                     type: 'POST',
@@ -242,7 +251,7 @@ $getuser_byList = getuser_byList();
                                     success: function(response) {
                                         console.log(response);
                                         Swal.fire({
-                                            position: "top-end",
+                                            position: "top-bottom",
                                             icon: "success",
                                             title: 'Attendance has been update successfully',
                                             showConfirmButton: false,

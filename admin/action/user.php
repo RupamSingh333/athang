@@ -25,6 +25,7 @@ switch ($action) {
 		$field['bank_acc_point'] = get_safe_post('bank_acc_point');
 		$field['demat_acc_point'] = get_safe_post('demat_acc_point');
 		$field['itr_management_point'] = get_safe_post('itr_management_point');
+		$field['basic_salary'] = get_safe_post('basic_salary');
 		$field['bs_point'] = get_safe_post('bs_point');
 		$field['petrol'] = get_safe_post('petrol');
 		$field['mobile_recharge'] = get_safe_post('mobile_recharge');

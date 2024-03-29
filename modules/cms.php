@@ -40,9 +40,23 @@ function getAllBS()
     return $array;
 }
 
+function getAllBSById($empId)
+{
+    $sql = "select * from " . tbl_bs . " where assigned_to_vendor = '" . $empId . "' order by bs_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
 function getAllItr()
 {
     $sql = "select * from " . tbl_itr . " order by itr_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllItrById($empId)
+{
+    $sql = "select * from " . tbl_itr . " where assigned_to_vendor = '" . $empId . "' order by itr_id desc";
     $array = FetchAll($sql);
     return $array;
 }
@@ -54,9 +68,23 @@ function getAllDematAccounts()
     return $array;
 }
 
+function getAllDematAccountsById($empId)
+{
+    $sql = "select * from " . tbl_demat_account . " where assigned_to_vendor = '" . $empId . "' order by demat_account_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
 function getAllBankAccounts()
 {
     $sql = "select * from " . tbl_bank_account . " order by bank_account_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllBankAccountsById($empId)
+{
+    $sql = "select * from " . tbl_bank_account . " where assigned_to_vendor = '" . $empId . "' order by bank_account_id desc";
     $array = FetchAll($sql);
     return $array;
 }
@@ -68,9 +96,23 @@ function getAllFoodLicense()
     return $array;
 }
 
+function getAllFoodLicenseById($empId)
+{
+    $sql = "select * from " . tbl_food_licence . " where assigned_to_vendor = '" . $empId . "' order by food_licence_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
 function getAllShopAct()
 {
     $sql = "select * from " . tbl_shop_act_licence . " order by shop_act_licence_id desc";
+    $array = FetchAll($sql);
+    return $array;
+}
+
+function getAllShopActById($empId)
+{
+    $sql = "select * from " . tbl_shop_act_licence . " where assigned_to_vendor = '" . $empId . "' order by shop_act_licence_id desc";
     $array = FetchAll($sql);
     return $array;
 }
@@ -187,6 +229,70 @@ function gettaluka_list()
     $array = FetchAll($sql);
     return $array;
 }
+
+
+function getAllDataReport()
+{
+    $data = array();
+
+    // Fetch data from tbl_food_licence
+    $sql = "SELECT * FROM " . tbl_food_licence;
+    $foodLicenceData = FetchAll($sql);
+    foreach ($foodLicenceData as &$item) {
+        $item['service'] = 'Food License';
+    }
+    $data = array_merge($data, $foodLicenceData);
+
+    // Fetch data from tbl_shop_act_licence
+    $sql = "SELECT * FROM " . tbl_shop_act_licence;
+    $shopActLicenceData = FetchAll($sql);
+    foreach ($shopActLicenceData as &$item) {
+        $item['service'] = 'Shop Act';
+    }
+    $data = array_merge($data, $shopActLicenceData);
+
+    // Fetch data from tbl_bank_account
+    $sql = "SELECT * FROM " . tbl_bank_account;
+    $bankAccountData = FetchAll($sql);
+    foreach ($bankAccountData as &$item) {
+        $item['service'] = 'Bank Account';
+    }
+    $data = array_merge($data, $bankAccountData);
+
+    // Fetch data from tbl_demat_account
+    $sql = "SELECT * FROM " . tbl_demat_account;
+    $dematAccountData = FetchAll($sql);
+    foreach ($dematAccountData as &$item) {
+        $item['service'] = 'Demat Account';
+    }
+    $data = array_merge($data, $dematAccountData);
+
+    // Fetch data from tbl_itr
+    $sql = "SELECT * FROM " . tbl_itr;
+    $itrData = FetchAll($sql);
+    foreach ($itrData as &$item) {
+        $item['service'] = 'ITR';
+    }
+    $data = array_merge($data, $itrData);
+
+    // Fetch data from tbl_bs
+    $sql = "SELECT * FROM " . tbl_bs;
+    $bsData = FetchAll($sql);
+    foreach ($bsData as &$item) {
+        $item['service'] = 'B/S';
+    }
+    $data = array_merge($data, $bsData);
+
+    // Sort the data based on 'created_at'
+    usort($data, function ($a, $b) {
+        return strtotime($b['created_at']) - strtotime($a['created_at']);
+    });
+
+    return $data;
+}
+
+
+
 function getdistrict_byID($id)
 {
     $sql = "select * from " . tbl_district . " where district_id='" . $id . "' limit 0,1 ";

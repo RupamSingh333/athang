@@ -248,7 +248,7 @@
               <!-- <li><a href="<?php echo SITEPATH; ?>admin/taluka/add_new_taluka_page.php"><i class="fa fa-caret-right"></i>Add New</a></li> -->
             <?php }
             if ($per['report_management']['view'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/taluka"><i class="fa fa-caret-right"></i> View All</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/report"><i class="fa fa-caret-right"></i> View All</a></li>
             <?php } ?>
           </ul>
         </li>
