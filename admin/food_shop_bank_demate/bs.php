@@ -77,6 +77,8 @@ if ($per['bs']['view'] == 0) { ?>
                             foreach ($getAllBS as $rows) {
                                 $getCustomerDetails = getCustomerDetails($rows['customer_id']);
                                 $userTakeThis = getuser_byID($rows['user_updated_by']);
+                                $assignedToVendor = getuser_byID($rows['assigned_to_vendor']);
+
                             ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
@@ -144,10 +146,23 @@ if ($per['bs']['view'] == 0) { ?>
 
                                     <td><?php echo $userTakeThis['first_name']; ?></td>
                                     <td><?php echo date('d-m-Y', strtotime($rows['created_at'])); ?></td>
-                                    <td>
-                                        <a href="javascript:void(0)" onclick="trackOrder(<?php echo $rows['status']; ?>,'<?= $getCustomerDetails[0]['cust_first_name']; ?>')">Track</a>
 
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="trackOrder(<?php echo $rows['status']; ?>,'<?= $getCustomerDetails[0]['cust_first_name']; ?>')" style="display: inline-block; padding: 5px 10px; margin: 5px; border: 1px solid #ccc; border-radius: 5px; text-decoration: none; color: #333; background-color: #fff; transition: background-color 0.3s;" class="track-button">Track</a>
+                                        <a href="javascript:void(0)" onclick="orderReport({
+                                            customer_name: '<?= $getCustomerDetails[0]['cust_first_name']; ?>',
+                                            addedBy: '<?= $userTakeThis['first_name']; ?>',
+                                            assignedToVendor: '<?= $assignedToVendor['first_name']; ?>',
+                                            vendor_desc: '<?= $rows['vendor_desc']; ?>',
+                                            head_office_desc: '<?= $rows['head_office_desc']; ?>',
+                                            dist_head_desc: '<?= $rows['dist_head_desc']; ?>',
+                                            payment_method: '<?= $rows['payment_method']; ?>',
+                                            pay_amount: '<?= $rows['pay_amount']; ?>',
+                                            emp_to_cust_desc: '<?= $rows['emp_to_cust_desc']; ?>',
+                                            created_at: '<?= date('d-m-Y h:i:s A', strtotime($rows['created_at'])); ?>'
+                                        })" style="display: inline-block; padding: 5px 10px; margin: 5px; border: 1px solid #ccc; border-radius: 5px; text-decoration: none; color: #333; background-color: #fff; transition: background-color 0.3s;" class="report-button">Report</a>
                                     </td>
+
 
                                     <td id="font12" style="width:15%">
 
@@ -539,31 +554,38 @@ if ($per['bs']['view'] == 0) { ?>
                             Swal.fire({
                                 title: "Delivered to Customer",
                                 html: `
-                                    <div style="align-items: center;margin-bottom: 16px; margin-top: -24px;">
-                                        <h3 id="customerName" style="font-weight: bold;">${customerName}</h3>
-                                    </div>
-                                    <div style="margin-bottom: 16px;">
-                                        <input type="radio" id="cashPayment" name="paymentMethod" value="cash">
-                                        <label for="cashPayment">Cash</label>
-                                        <input type="radio" id="onlinePayment" name="paymentMethod" value="online">
-                                        <label for="onlinePayment">Online</label>
-                                    </div>
-                                    <textarea rows="3" style="width: 361px" id="statusText" placeholder="Please enter something."></textarea>
-                                `,
+        <div style="align-items: center;margin-bottom: 16px; margin-top: -24px;">
+            <h3 id="customerName" style="font-weight: bold;">${customerName}</h3>
+        </div>
+        <div style="margin-bottom: 16px;">
+            <input type="radio" id="cashPayment" name="paymentMethod" value="cash">
+            <label for="cashPayment">Cash</label>
+            <input type="radio" id="onlinePayment" name="paymentMethod" value="online">
+            <label for="onlinePayment">Online</label>
+        </div>
+
+        <div style="margin-bottom: 5px;">
+            <input type="number" id="payAmount" name="pay_amount" placeholder="Enter Amount">
+        </div>
+
+        <textarea rows="3" style="width: 361px" id="statusText" placeholder="Please enter something."></textarea>
+    `,
                                 icon: "warning",
                                 showCancelButton: true,
                                 confirmButtonText: "Submit",
                                 cancelButtonText: "Cancel",
                                 preConfirm: () => {
                                     const statusText = document.getElementById('statusText').value;
+                                    const payAmount = document.getElementById('payAmount').value;
                                     const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value;
-                                    if (!statusText || !paymentMethod) {
-                                        Swal.showValidationMessage('Please enter something and select a payment method.');
+                                    if (!statusText || !paymentMethod || !payAmount) {
+                                        Swal.showValidationMessage('Please enter something , select a payment method and amount.');
                                         return false;
                                     } else {
                                         return {
                                             statusText: statusText,
-                                            paymentMethod: paymentMethod
+                                            paymentMethod: paymentMethod,
+                                            payAmount: payAmount
                                         };
                                     }
                                 }
@@ -571,6 +593,7 @@ if ($per['bs']['view'] == 0) { ?>
                                 if (result.isConfirmed) {
                                     const statusText = result.value.statusText;
                                     const paymentMethod = result.value.paymentMethod;
+                                    const payAmount = result.value.payAmount;
 
                                     $.ajax({
                                         url: 'bsAjex.php',
@@ -579,8 +602,8 @@ if ($per['bs']['view'] == 0) { ?>
                                             dataId: dataId,
                                             statusText: statusText,
                                             paymentMethod: paymentMethod,
-                                            key: userType,
-                                            // module: 'food_license'
+                                            payAmount: payAmount,
+                                            key: userType
                                         },
                                         success: function(response) {
                                             var jsonResponse = JSON.parse(response);
@@ -614,6 +637,151 @@ if ($per['bs']['view'] == 0) { ?>
                         }
                     </script>
                     <!-- readyToCustomer -->
+
+
+                    <!-- orderReport start  -->
+                    <script>
+                        function orderReport(params) {
+                            const paymentMethod = params.payment_method.charAt(0).toUpperCase() + params.payment_method.slice(1);
+                            const formattedPayAmount = params.pay_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            const reportHTML = `
+                                                    <div>
+                                                        <div class="report-header">
+                                                            Order Report
+                                                        </div>
+                                                        <table class="report-table">
+                                                            <tr>
+                                                                <td><strong>Customer Name:</strong></td>
+                                                                <td>${params.customer_name}</td>
+                                                            </tr>
+                                                            <tr class="alt">
+                                                                <td><strong>Added By:</strong></td>
+                                                                <td>${params.addedBy}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Assigned to Vendor:</strong></td>
+                                                                <td>${params.assignedToVendor}</td>
+                                                            </tr>
+                                                            <tr class="alt">
+                                                                <td><strong>Vendor Description:</strong></td>
+                                                                <td>${params.vendor_desc}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Head Office Description:</strong></td>
+                                                                <td>${params.head_office_desc}</td>
+                                                            </tr>
+                                                            <tr class="alt">
+                                                                <td><strong>Distribution Head Description:</strong></td>
+                                                                <td>${params.dist_head_desc}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Payment Method:</strong></td>
+                                                                <td>${paymentMethod}</td>
+                                                            </tr>
+                                                            <tr class="alt">
+                                                                <td><strong>Pay Amount:</strong></td>
+                                                                <td>${formattedPayAmount}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><strong>Employee to Customer Description:</strong></td>
+                                                                <td>${params.emp_to_cust_desc}</td>
+                                                            </tr>
+                                                            <tr class="alt">
+                                                                <td><strong>Created At:</strong></td>
+                                                                <td>${params.created_at}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                `;
+
+                            Swal.fire({
+                                html: reportHTML,
+                                showCloseButton: true,
+                                showConfirmButton: false,
+                                customClass: 'custom-swal-modal'
+                            });
+                        }
+                    </script>
+                    <style>
+                        /* CSS for styling the report */
+                        .swal2-container {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        }
+
+                        .swal2-popup {
+                            max-width: 600px;
+                            border-radius: 10px;
+                            background-color: #f9f9f9;
+                        }
+
+                        .swal2-title {
+                            font-size: 28px;
+                            color: #333;
+                            margin-bottom: 10px;
+                            text-align: center;
+                        }
+
+                        .swal2-content {
+                            font-size: 16px;
+                            color: #333;
+                            text-align: left;
+                        }
+
+                        .swal2-content>div {
+                            margin-bottom: 10px;
+                            overflow-wrap: break-word;
+                        }
+
+                        .swal2-content strong {
+                            font-weight: bold;
+                            color: #000;
+                            width: 200px;
+                            display: inline-block;
+                        }
+
+                        .swal2-close {
+                            color: #999;
+                            font-size: 20px;
+                            top: auto;
+                            right: auto;
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        .report-header {
+                            background-color: #4CAF50;
+                            color: white;
+                            padding: 10px;
+                            border-radius: 10px 10px 0 0;
+                            margin-bottom: 10px;
+                            text-align: center;
+                        }
+
+                        .report-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            /* Ensure borders collapse properly */
+                        }
+
+                        .report-table th,
+                        .report-table td {
+                            border: 1px solid #ddd;
+                            /* Add border to each cell */
+                            padding: 8px;
+                            /* Add padding to each cell */
+                        }
+
+                        .report-table th {
+                            background-color: #f2f2f2;
+                            /* Gray background color for header row */
+                        }
+
+                        .report-table tr:nth-child(even) {
+                            background-color: #f9f9f9;
+                            /* Light gray background color for even rows */
+                        }
+                    </style>
+                    <!-- orderReport end  -->
 
 
 

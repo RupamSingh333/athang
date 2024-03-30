@@ -184,6 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $paymentMethod = $_POST['paymentMethod'];
+        $payAmount = $_POST['payAmount'];
         $dataId = $_POST['dataId'];
         // $module = $_POST['module'];
 
@@ -192,11 +193,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getItrById = getItrById($dataId);
         if ($getItrById) {
             $newStatus = $getItrById['status'] == 4 ? 5 : $getItrById['status'];
-            $sql = "UPDATE itr SET emp_to_cust_desc=?, payment_method=?, status=? WHERE itr_id=?";
+            $sql = "UPDATE itr SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=? WHERE itr_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssii', $statusText, $paymentMethod, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiii', $statusText, $paymentMethod, $payAmount, $newStatus, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'ITR has been updated successfully.'];
                     http_response_code(200);

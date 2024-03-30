@@ -184,6 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $paymentMethod = $_POST['paymentMethod'];
+        $payAmount = $_POST['payAmount'];
         $dataId = $_POST['dataId'];
         // $module = $_POST['module'];
 
@@ -192,11 +193,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getDematAccountById = getDematAccountById($dataId);
         if ($getDematAccountById) {
             $newStatus = $getDematAccountById['status'] == 4 ? 5 : $getDematAccountById['status'];
-            $sql = "UPDATE demat_account SET emp_to_cust_desc=?, payment_method=?, status=? WHERE demat_account_id=?";
+            $sql = "UPDATE demat_account SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=? WHERE demat_account_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssii', $statusText, $paymentMethod, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiii', $statusText, $paymentMethod, $payAmount, $newStatus, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'Demat Account has been updated successfully.'];
                     http_response_code(200);
