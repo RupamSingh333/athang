@@ -74,8 +74,9 @@ $allReportData = getAllDataReport();
                                     <td><?php echo $customerDetails[0]['cust_first_name']; ?></td>
                                     <td><?php echo $customerDetails[0]['cust_phone']; ?></td>
                                     <td><?php echo $rows['service']; ?></td>
-                                    <td><?php echo $rows['pay_amount']; ?></td>
-                                    <td><?php echo $rows['payment_method']; ?></td>
+                                    <td><?php echo number_format($rows['pay_amount']); ?></td>
+                                    <td><?php echo ucfirst($rows['payment_method']); ?></td>
+
                                     <td><?php echo $customerDetails[0]['taluka_name']; ?></td>
                                     <td><?php echo $customerDetails[0]['district_name']; ?></td>
                                     <td><?php echo $customerDetails[0]['statename']; ?></td>
@@ -88,7 +89,8 @@ $allReportData = getAllDataReport();
                                                 <p>Upload File</p>
                                             </div>
 
-                                        <?php } if ($rows['status'] >= 1) { ?>
+                                        <?php }
+                                        if ($rows['status'] >= 1) { ?>
                                             <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['food_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
                                                 <i class="fa fa-print"></i>
                                             </a>
@@ -96,7 +98,8 @@ $allReportData = getAllDataReport();
                                                 <p>Is Print</p>
                                             </div>
 
-                                        <?php } if ($rows['status'] >= 2) { ?>
+                                        <?php }
+                                        if ($rows['status'] >= 2) { ?>
                                             <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['food_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
                                                 <i class="fa fa-building" style="color: purple;"></i>
                                             </a>
@@ -104,7 +107,8 @@ $allReportData = getAllDataReport();
                                                 <p>Head Office</p>
                                             </div>
 
-                                        <?php } if ($rows['status'] >= 3) { ?>
+                                        <?php }
+                                        if ($rows['status'] >= 3) { ?>
                                             <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['food_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
                                                 <i class="fa fa-building" style="color: orange;"></i>
                                             </a>
@@ -112,7 +116,8 @@ $allReportData = getAllDataReport();
                                                 <p>District Head</p>
                                             </div>
 
-                                        <?php } if ($rows['status'] >= 4) { ?>
+                                        <?php }
+                                        if ($rows['status'] >= 4) { ?>
                                             <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['food_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
                                                 <i class="fa fa-truck" style="color: orange;"></i>
                                             </a>
