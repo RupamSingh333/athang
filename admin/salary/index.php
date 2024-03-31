@@ -2,7 +2,7 @@
 include("../../system_config.php");
 include_once("../common/head.php");
 // if ($r['user_type'] == "1") {
-  $rows_list = getuser_byList();
+$rows_list = getuser_byList();
 // } else {
 //   $rows_list = getuser_byID($_SESSION['AdminLogin']);
 // }
@@ -21,7 +21,7 @@ if ($per['salary_management']['view'] == 0) { ?>
       <!-- Content Header -->
       <section class="content-header">
 
-        <ol class="breadcrumb">
+       <ol class="breadcrumb">
           <li><a href="<?php echo SITEPATH; ?>admin/dashboard.php"><i class="fa fa-dashboard"></i> Home</a></li>
           <li class="active">
             <?php if ($per['salary_management']['view'] == 1) { ?>
@@ -64,7 +64,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                 <td><strong>State</strong></td>
                 <td><strong>District</strong></td>
                 <td><strong>Status</strong></td>
-                <td><strong>Action</strong></td>
+                <!-- <td><strong>Action</strong></td> -->
 
               </tr>
             </thead>
@@ -100,11 +100,11 @@ if ($per['salary_management']['view'] == 0) { ?>
                   </td>
 
 
-                  <td id="font12"><?php if ($per['salary_management']['edit'] == 1) { ?>
+                  <!-- <td id="font12">
+                    <?php if ($per['salary_management']['edit'] == 1) { ?>
 
                     <?php } ?>
-
-                  </td>
+                  </td> -->
 
                 </tr>
               <?php
