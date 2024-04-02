@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $documentFiles = $_FILES['documentFiles'];
         $dataId = $_POST['dataId'];
         $vendorId = $_POST['vendorId'];
+        $vendor_assigned_by = $_POST['vendor_assigned_by'];
 
         // Update the database
         $getShopActById = getShopActById($dataId);
@@ -48,10 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $documentNames = implode(',', $documentFilesNameArr);
 
             $newStatus = $getShopActById['status'] == 0 ? 1 : $getShopActById['status'];
-            $sql = "UPDATE shop_act_licence SET form=?, documents=?,status=?,assigned_to_vendor=? WHERE shop_act_licence_id=?";
+            $sql = "UPDATE shop_act_licence SET form=?, documents=?,status=?,assigned_to_vendor=?,vendor_assigned_by=? WHERE shop_act_licence_id=?";
             $stmt = mysqli_prepare($link, $sql);
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssiii', $formFilesNames, $documentNames, $newStatus, $vendorId, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiiii', $formFilesNames, $documentNames, $newStatus, $vendorId, $vendor_assigned_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'Shop Act License has been updated successfully.'];
                     http_response_code(200);
@@ -73,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $printed_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -80,11 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getShopActById = getShopActById($dataId);
         if ($getShopActById) {
             $newStatus = $getShopActById['status'] == 1 ? 2 : $getShopActById['status'];
-            $sql = "UPDATE shop_act_licence SET vendor_desc=?,status=? WHERE shop_act_licence_id=?";
+            $sql = "UPDATE shop_act_licence SET vendor_desc=?,status=?,printed_by=? WHERE shop_act_licence_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $printed_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'Shop Act License has been updated successfully.'];
                     http_response_code(200);
@@ -110,6 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $ho_by = $_POST['data_updated_by'];
+
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -117,11 +121,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getShopActById = getShopActById($dataId);
         if ($getShopActById) {
             $newStatus = $getShopActById['status'] == 2 ? 3 : $getShopActById['status'];
-            $sql = "UPDATE shop_act_licence SET head_office_desc=?,status=? WHERE shop_act_licence_id=?";
+            $sql = "UPDATE shop_act_licence SET head_office_desc=?,status=?,ho_by=? WHERE shop_act_licence_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $ho_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'Shop Act License has been updated successfully.'];
                     http_response_code(200);
@@ -147,6 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $dh_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -154,11 +159,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getShopActById = getShopActById($dataId);
         if ($getShopActById) {
             $newStatus = $getShopActById['status'] == 3 ? 4 : $getShopActById['status'];
-            $sql = "UPDATE shop_act_licence SET dist_head_desc=?,status=? WHERE shop_act_licence_id=?";
+            $sql = "UPDATE shop_act_licence SET dist_head_desc=?,status=?,dh_by=? WHERE shop_act_licence_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $dh_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'Shop Act License has been updated successfully.'];
                     http_response_code(200);
@@ -186,18 +191,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $paymentMethod = $_POST['paymentMethod'];
         $payAmount = $_POST['payAmount'];
         $dataId = $_POST['dataId'];
-        // $module = $_POST['module'];
-
+        $delivered_by = $_POST['data_updated_by'];
         // if ($module == 'food_license') {
 
         $getShopActById = getShopActById($dataId);
         if ($getShopActById) {
             $newStatus = $getShopActById['status'] == 4 ? 5 : $getShopActById['status'];
-            $sql = "UPDATE shop_act_licence SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=? WHERE shop_act_licence_id=?";
+            $sql = "UPDATE shop_act_licence SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=?,delivered_by=? WHERE shop_act_licence_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssiii', $statusText, $paymentMethod, $payAmount, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiiii', $statusText, $paymentMethod, $payAmount, $newStatus, $delivered_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'Shop Act License has been updated successfully.'];
                     http_response_code(200);

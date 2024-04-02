@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $documentFiles = $_FILES['documentFiles'];
         $dataId = $_POST['dataId'];
         $vendorId = $_POST['vendorId'];
+        $vendor_assigned_by = $_POST['vendor_assigned_by'];
 
         // Update the database
         $getBsById = getBsById($dataId);
@@ -48,10 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $documentNames = implode(',', $documentFilesNameArr);
 
             $newStatus = $getBsById['status'] == 0 ? 1 : $getBsById['status'];
-            $sql = "UPDATE bs SET form=?, documents=?,status=?,assigned_to_vendor=? WHERE bs_id=?";
+            $sql = "UPDATE bs SET form=?, documents=?,status=?,assigned_to_vendor=?,vendor_assigned_by=? WHERE bs_id=?";
             $stmt = mysqli_prepare($link, $sql);
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssiii', $formFilesNames, $documentNames, $newStatus, $vendorId, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiiii', $formFilesNames, $documentNames, $newStatus, $vendorId, $vendor_assigned_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'B/S has been updated successfully.'];
                     http_response_code(200);
@@ -73,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $printed_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -80,11 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getBsById = getBsById($dataId);
         if ($getBsById) {
             $newStatus = $getBsById['status'] == 1 ? 2 : $getBsById['status'];
-            $sql = "UPDATE bs SET vendor_desc=?,status=? WHERE bs_id=?";
+            $sql = "UPDATE bs SET vendor_desc=?,status=?,printed_by=? WHERE bs_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $printed_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'B/S has been updated successfully.'];
                     http_response_code(200);
@@ -102,26 +104,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         echo json_encode($response);
         die;
-        // } else {
-        //     $response = ['status' => false, 'message' => 'Invalid module.'];
-        //     http_response_code(404);
-        // }
     } else if ($_POST['key'] == 'head_office' && isset($_POST['dataId']) && isset($_POST['statusText'])) {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $ho_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
-
         // if ($module == 'food_license') {
 
         $getBsById = getBsById($dataId);
         if ($getBsById) {
             $newStatus = $getBsById['status'] == 2 ? 3 : $getBsById['status'];
-            $sql = "UPDATE bs SET head_office_desc=?,status=? WHERE bs_id=?";
+            $sql = "UPDATE bs SET head_office_desc=?,status=?,ho_by=? WHERE bs_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $ho_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'B/S has been updated successfully.'];
                     http_response_code(200);
@@ -147,18 +145,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $dh_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
-
         // if ($module == 'food_license') {
 
         $getBsById = getBsById($dataId);
         if ($getBsById) {
             $newStatus = $getBsById['status'] == 3 ? 4 : $getBsById['status'];
-            $sql = "UPDATE bs SET dist_head_desc=?,status=? WHERE bs_id=?";
+            $sql = "UPDATE bs SET dist_head_desc=?,status=?,dh_by=? WHERE bs_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $dh_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'B/S has been updated successfully.'];
                     http_response_code(200);
@@ -186,6 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $paymentMethod = $_POST['paymentMethod'];
         $payAmount = $_POST['payAmount'];
         $dataId = $_POST['dataId'];
+        $delivered_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -193,11 +192,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getBsById = getBsById($dataId);
         if ($getBsById) {
             $newStatus = $getBsById['status'] == 4 ? 5 : $getBsById['status'];
-            $sql = "UPDATE bs SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=? WHERE bs_id=?";
+            $sql = "UPDATE bs SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=?,delivered_by=? WHERE bs_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssiii', $statusText, $paymentMethod, $payAmount, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiiii', $statusText, $paymentMethod, $payAmount, $newStatus, $delivered_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'B/S has been updated successfully.'];
                     http_response_code(200);

@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $documentFiles = $_FILES['documentFiles'];
         $dataId = $_POST['dataId'];
         $vendorId = $_POST['vendorId'];
+        $vendor_assigned_by = $_POST['vendor_assigned_by'];
 
         // Update the database
         $getItrById = getItrById($dataId);
@@ -48,10 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $documentNames = implode(',', $documentFilesNameArr);
 
             $newStatus = $getItrById['status'] == 0 ? 1 : $getItrById['status'];
-            $sql = "UPDATE itr SET form=?, documents=?,status=?,assigned_to_vendor=? WHERE itr_id=?";
+            $sql = "UPDATE itr SET form=?, documents=?,status=?,assigned_to_vendor=?,vendor_assigned_by=? WHERE itr_id=?";
             $stmt = mysqli_prepare($link, $sql);
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssiii', $formFilesNames, $documentNames, $newStatus, $vendorId, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiiii', $formFilesNames, $documentNames, $newStatus, $vendorId, $vendor_assigned_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'ITR has been updated successfully.'];
                     http_response_code(200);
@@ -73,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $printed_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -80,11 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getItrById = getItrById($dataId);
         if ($getItrById) {
             $newStatus = $getItrById['status'] == 1 ? 2 : $getItrById['status'];
-            $sql = "UPDATE itr SET vendor_desc=?,status=? WHERE itr_id=?";
+            $sql = "UPDATE itr SET vendor_desc=?,status=?,printed_by=? WHERE itr_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $printed_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'ITR has been updated successfully.'];
                     http_response_code(200);
@@ -102,14 +104,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         echo json_encode($response);
         die;
-        // } else {
-        //     $response = ['status' => false, 'message' => 'Invalid module.'];
-        //     http_response_code(404);
-        // }
     } else if ($_POST['key'] == 'head_office' && isset($_POST['dataId']) && isset($_POST['statusText'])) {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $ho_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -117,11 +116,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getItrById = getItrById($dataId);
         if ($getItrById) {
             $newStatus = $getItrById['status'] == 2 ? 3 : $getItrById['status'];
-            $sql = "UPDATE itr SET head_office_desc=?,status=? WHERE itr_id=?";
+            $sql = "UPDATE itr SET head_office_desc=?,status=?,ho_by=? WHERE itr_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $ho_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'ITR has been updated successfully.'];
                     http_response_code(200);
@@ -147,6 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $statusText = $_POST['statusText'];
         $dataId = $_POST['dataId'];
+        $dh_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -154,11 +154,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getItrById = getItrById($dataId);
         if ($getItrById) {
             $newStatus = $getItrById['status'] == 3 ? 4 : $getItrById['status'];
-            $sql = "UPDATE itr SET dist_head_desc=?,status=? WHERE itr_id=?";
+            $sql = "UPDATE itr SET dist_head_desc=?,status=?,dh_by=? WHERE itr_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'sii', $statusText, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'siii', $statusText, $newStatus, $dh_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'ITR has been updated successfully.'];
                     http_response_code(200);
@@ -176,16 +176,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         echo json_encode($response);
         die;
-        // } else {
-        //     $response = ['status' => false, 'message' => 'Invalid module.'];
-        //     http_response_code(404);
-        // }
     } else if ($_POST['key'] == 'ready_to_customer' && isset($_POST['dataId']) && isset($_POST['statusText'])) {
 
         $statusText = $_POST['statusText'];
         $paymentMethod = $_POST['paymentMethod'];
         $payAmount = $_POST['payAmount'];
         $dataId = $_POST['dataId'];
+        $delivered_by = $_POST['data_updated_by'];
         // $module = $_POST['module'];
 
         // if ($module == 'food_license') {
@@ -193,11 +190,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $getItrById = getItrById($dataId);
         if ($getItrById) {
             $newStatus = $getItrById['status'] == 4 ? 5 : $getItrById['status'];
-            $sql = "UPDATE itr SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=? WHERE itr_id=?";
+            $sql = "UPDATE itr SET emp_to_cust_desc=?, payment_method=?, pay_amount=?, status=?,delivered_by=? WHERE itr_id=?";
             $stmt = mysqli_prepare($link, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param($stmt, 'ssiii', $statusText, $paymentMethod, $payAmount, $newStatus, $dataId);
+                mysqli_stmt_bind_param($stmt, 'ssiiii', $statusText, $paymentMethod, $payAmount, $newStatus, $delivered_by, $dataId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = ['status' => true, 'message' => 'ITR has been updated successfully.'];
                     http_response_code(200);
@@ -215,10 +212,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         echo json_encode($response);
         die;
-        // } else {
-        //     $response = ['status' => false, 'message' => 'Invalid module.'];
-        //     http_response_code(404);
-        // }
     } else {
         echo json_encode(['status' => false, 'message' => 'Invalid request, Try after sometime !!']);
         http_response_code(400);

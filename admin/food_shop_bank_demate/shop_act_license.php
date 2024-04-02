@@ -162,7 +162,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
 
                     <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Vendor)) : ?>
                       <?php if ($rows['status'] >= 1) : ?>
-                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
                           <i class="fa fa-print"></i>
                         </a>
                         <div id="IsPrint<?= $i; ?>" class="hide1">
@@ -173,7 +173,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
 
                     <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == HeadOffice)) : ?>
                       <?php if ($rows['status'] >= 2) : ?>
-                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
                           <i class="fa fa-building" style="color: purple;"></i>
                         </a>
                         <div id="HeadOffice<?= $i; ?>" class="hide1">
@@ -185,7 +185,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
 
                     <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == DistricHeadOffice)) : ?>
                       <?php if ($rows['status'] >= 3) : ?>
-                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
                           <i class="fa fa-building" style="color: orange;"></i>
                         </a>
                         <div id="DistHead<?= $i; ?>" class="hide1">
@@ -196,7 +196,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
 
                     <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Employee)) : ?>
                       <?php if ($rows['status'] >= 4) : ?>
-                        <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['shop_act_licence_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
                           <i class="fa fa-truck" style="color: orange;"></i>
                         </a>
                         <div id="ready_to_customer<?= $i; ?>" class="hide1">
@@ -218,7 +218,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
 
           <!-- For vendor update -->
           <script>
-            function showUploadDialog(dataId, customerName, userType) {
+            function showUploadDialog(dataId, customerName, userType, data_updated_by) {
 
               Swal.fire({
                 title: "Update Status",
@@ -254,6 +254,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       dataId: dataId,
                       statusText: statusText,
                       key: userType,
+                      data_updated_by
                       // module: 'shop_act_license'
                     },
                     success: function(response) {
@@ -366,6 +367,7 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                   formData.append('dataId', dataId);
                   formData.append('vendorId', vendorId);
                   formData.append('key', 'admin');
+                  formData.append('vendor_assigned_by', '<?= $_SESSION['AdminLogin']; ?>');
                   // formData.append('module', 'shop_act_license');
 
                   $.ajax({
@@ -410,9 +412,9 @@ if ($per['shop_act_license']['view'] == 0) { ?>
           <!-- For admin upload document and files end -->
 
 
-                    <!-- readyToCustomer -->
-                    <script>
-            function readyToCustomer(dataId, customerName, userType) {
+          <!-- readyToCustomer -->
+          <script>
+            function readyToCustomer(dataId, customerName, userType, data_updated_by) {
 
               Swal.fire({
                 title: "Delivered to Customer",
@@ -466,7 +468,8 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                       statusText: statusText,
                       paymentMethod: paymentMethod,
                       payAmount: payAmount,
-                      key: userType
+                      key: userType,
+                      data_updated_by
                     },
                     success: function(response) {
                       var jsonResponse = JSON.parse(response);
@@ -595,10 +598,10 @@ if ($per['shop_act_license']['view'] == 0) { ?>
                 }
 
                 stepsHTML += `
-                                <div class="stepper-item ${stepClass} ${activeClass}">
-                                    <div class="step-counter">${i}</div>
-                                    <div class="step-name">${getStepName(i)}</div>
-                                </div>`;
+                                  <div class="stepper-item ${stepClass} ${activeClass}">
+                                      <div class="step-counter">${i}</div>
+                                      <div class="step-name">${getStepName(i)}</div>
+                                  </div>`;
               }
 
               // Display the steps using SweetAlert
@@ -637,54 +640,54 @@ if ($per['shop_act_license']['view'] == 0) { ?>
               const paymentMethod = params.payment_method.charAt(0).toUpperCase() + params.payment_method.slice(1);
               const formattedPayAmount = params.pay_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
               const reportHTML = `
-                                                    <div>
-                                                        <div class="report-header">
-                                                            Order Report
-                                                        </div>
-                                                        <table class="report-table">
-                                                            <tr>
-                                                                <td><strong>Customer Name:</strong></td>
-                                                                <td>${params.customer_name}</td>
-                                                            </tr>
-                                                            <tr class="alt">
-                                                                <td><strong>Added By:</strong></td>
-                                                                <td>${params.addedBy}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Assigned to Vendor:</strong></td>
-                                                                <td>${params.assignedToVendor}</td>
-                                                            </tr>
-                                                            <tr class="alt">
-                                                                <td><strong>Vendor Description:</strong></td>
-                                                                <td>${params.vendor_desc}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Head Office Description:</strong></td>
-                                                                <td>${params.head_office_desc}</td>
-                                                            </tr>
-                                                            <tr class="alt">
-                                                                <td><strong>Distribution Head Description:</strong></td>
-                                                                <td>${params.dist_head_desc}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Payment Method:</strong></td>
-                                                                <td>${paymentMethod}</td>
-                                                            </tr>
-                                                            <tr class="alt">
-                                                                <td><strong>Pay Amount:</strong></td>
-                                                                <td>${formattedPayAmount}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><strong>Employee to Customer Description:</strong></td>
-                                                                <td>${params.emp_to_cust_desc}</td>
-                                                            </tr>
-                                                            <tr class="alt">
-                                                                <td><strong>Created At:</strong></td>
-                                                                <td>${params.created_at}</td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
-                                                `;
+                                                      <div>
+                                                          <div class="report-header">
+                                                              Order Report
+                                                          </div>
+                                                          <table class="report-table">
+                                                              <tr>
+                                                                  <td><strong>Customer Name:</strong></td>
+                                                                  <td>${params.customer_name}</td>
+                                                              </tr>
+                                                              <tr class="alt">
+                                                                  <td><strong>Added By:</strong></td>
+                                                                  <td>${params.addedBy}</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td><strong>Assigned to Vendor:</strong></td>
+                                                                  <td>${params.assignedToVendor}</td>
+                                                              </tr>
+                                                              <tr class="alt">
+                                                                  <td><strong>Vendor Description:</strong></td>
+                                                                  <td>${params.vendor_desc}</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td><strong>Head Office Description:</strong></td>
+                                                                  <td>${params.head_office_desc}</td>
+                                                              </tr>
+                                                              <tr class="alt">
+                                                                  <td><strong>Distribution Head Description:</strong></td>
+                                                                  <td>${params.dist_head_desc}</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td><strong>Payment Method:</strong></td>
+                                                                  <td>${paymentMethod}</td>
+                                                              </tr>
+                                                              <tr class="alt">
+                                                                  <td><strong>Pay Amount:</strong></td>
+                                                                  <td>${formattedPayAmount}</td>
+                                                              </tr>
+                                                              <tr>
+                                                                  <td><strong>Employee to Customer Description:</strong></td>
+                                                                  <td>${params.emp_to_cust_desc}</td>
+                                                              </tr>
+                                                              <tr class="alt">
+                                                                  <td><strong>Created At:</strong></td>
+                                                                  <td>${params.created_at}</td>
+                                                              </tr>
+                                                          </table>
+                                                      </div>
+                                                  `;
 
               Swal.fire({
                 html: reportHTML,

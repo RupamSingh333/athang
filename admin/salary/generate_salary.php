@@ -32,15 +32,16 @@ if ($per['salary_management']['view'] == 0) { ?>
             <?php
             if (isset($_SESSION['msg'])) {
                 $message = $_SESSION['msg'];
+                $errorType = $_SESSION['errorType'];
                 unset($_SESSION['msg']);
 
                 echo "<script>
                 Swal.fire({
-                icon: 'success',
-                title: 'Success!',
+                icon: '" . $errorType . "',
+                title: '" . ucfirst($errorType) . "',
                 text: '" . $message . "',
-                timer: 3000, // Display for 3 seconds
-                showConfirmButton: false
+                // timer: 3000, // Display for 3 seconds
+                showConfirmButton: true
                 });
                 </script>";
             }
@@ -117,12 +118,13 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                     <th>ID</th>
                                                     <th>Employee Name</th>
                                                     <th>Selected Month</th>
-                                                    <th>Working Target(Point)</th> 
-                                                    <th>Achieved Total Point</th> 
-                                                    <th>Total Working Days</th> 
+                                                    <th>Working Target(Point)</th>
+                                                    <th>Achieved Total Point</th>
+                                                    <th>Total Working Days</th>
                                                     <th>Total Salary</th>
                                                     <th>Calculated Salary</th>
                                                     <th>Other Pay Amount</th>
+                                                    <th>Action</th>
                                                     <!-- Add more table headers for other columns as needed -->
                                                 </tr>
                                             </thead>
@@ -140,7 +142,17 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                         <td><?php echo $data['total_salary']; ?></td>
                                                         <td><?php echo $data['total_calculated_salary']; ?></td>
                                                         <td><?php echo $data['other_pay_amount']; ?></td>
-                                                        <!-- Add more table data cells for other columns as needed -->
+                                                        <td>
+                                                            <?php
+                                                            if ($per['salary_management']['del'] == 1) { ?>
+                                                                <a href="javascript:void(0);" onclick="return confirmDelete('<?php echo urlencode($data['id']); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')">
+                                                                    <i class="fa fa-times"></i>
+                                                                </a>
+                                                                <div id="Delete<?php echo $i; ?>" class="hide1">
+                                                                    <p>Delete</p>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
@@ -154,6 +166,68 @@ if ($per['salary_management']['view'] == 0) { ?>
                     </div>
                 </div>
             </section>
+
+            <script>
+                function confirmDelete(id) {
+                    Swal.fire({
+                        title: 'Confirmation',
+                        text: 'Are you sure you want to delete this salary?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Delete',
+                        cancelButtonText: 'Cancel',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'POST',
+                                url: 'calculate_salary.php',
+                                data: {
+                                    id: id,
+                                    action: "delete"
+                                },
+                                success: function(response) {
+                                    if (response.status) {
+                                        Swal.fire({
+                                            title: "Success",
+                                            text: response.msg,
+                                            icon: "success",
+                                            showCancelButton: false,
+                                            confirmButtonColor: "#3085d6",
+                                            confirmButtonText: "OK",
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                location.reload(); // Reload the page
+                                            }
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: "Error",
+                                            text: "Failed to delete data",
+                                            icon: "error",
+                                            confirmButtonColor: "#3085d6",
+                                            confirmButtonText: "OK",
+                                        });
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        title: "Error",
+                                        text: "Failed to delete data",
+                                        icon: "error",
+                                        confirmButtonColor: "#3085d6",
+                                        confirmButtonText: "OK",
+                                    });
+                                }
+
+                            });
+
+                        }
+                    });
+
+                    return false;
+                }
+            </script>
+
 
             <script>
                 function calculateTotalPoint() {

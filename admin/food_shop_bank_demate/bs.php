@@ -177,7 +177,7 @@ if ($per['bs']['view'] == 0) { ?>
 
                                         <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Vendor)) : ?>
                                             <?php if ($rows['status'] >= 1) : ?>
-                                                <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
+                                                <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                                 <div id="IsPrint<?= $i; ?>" class="hide1">
@@ -187,7 +187,7 @@ if ($per['bs']['view'] == 0) { ?>
                                         <?php endif; ?>
 
                                         <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == HeadOffice)) : ?>
-                                            <?php if ($rows['status'] >= 2) : ?> <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
+                                            <?php if ($rows['status'] >= 2) : ?> <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
                                                     <i class="fa fa-building" style="color: purple;"></i>
                                                 </a>
                                                 <div id="HeadOffice<?= $i; ?>" class="hide1">
@@ -197,7 +197,7 @@ if ($per['bs']['view'] == 0) { ?>
                                         <?php endif; ?>
 
                                         <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == DistricHeadOffice)) : ?>
-                                            <?php if ($rows['status'] >= 3) : ?> <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
+                                            <?php if ($rows['status'] >= 3) : ?> <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
                                                     <i class="fa fa-building" style="color: orange;"></i>
                                                 </a>
                                                 <div id="DistHead<?= $i; ?>" class="hide1">
@@ -207,7 +207,7 @@ if ($per['bs']['view'] == 0) { ?>
                                         <?php endif; ?>
 
                                         <?php if ($per['shop_act_license']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Employee)) : ?>
-                                            <?php if ($rows['status'] >= 4) : ?> <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
+                                            <?php if ($rows['status'] >= 4) : ?> <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['bs_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
                                                     <i class="fa fa-truck" style="color: orange;"></i>
                                                 </a>
                                                 <div id="ready_to_customer<?= $i; ?>" class="hide1">
@@ -228,7 +228,7 @@ if ($per['bs']['view'] == 0) { ?>
 
                     <!-- For vendor update -->
                     <script>
-                        function showUploadDialog(dataId, customerName, userType) {
+                        function showUploadDialog(dataId, customerName, userType, data_updated_by) {
 
                             Swal.fire({
                                 title: "Update Status",
@@ -264,6 +264,7 @@ if ($per['bs']['view'] == 0) { ?>
                                             dataId: dataId,
                                             statusText: statusText,
                                             key: userType,
+                                            data_updated_by
                                             // module: 'food_license'
                                         },
                                         success: function(response) {
@@ -374,6 +375,7 @@ if ($per['bs']['view'] == 0) { ?>
                                     formData.append('dataId', dataId);
                                     formData.append('vendorId', vendorId);
                                     formData.append('key', 'admin');
+                                    formData.append('vendor_assigned_by', '<?= $_SESSION['AdminLogin']; ?>');
                                     // formData.append('module', 'food_license');
 
                                     $.ajax({
@@ -549,27 +551,27 @@ if ($per['bs']['view'] == 0) { ?>
 
                     <!-- readyToCustomer -->
                     <script>
-                        function readyToCustomer(dataId, customerName, userType) {
+                        function readyToCustomer(dataId, customerName, userType, data_updated_by) {
 
                             Swal.fire({
                                 title: "Delivered to Customer",
                                 html: `
-        <div style="align-items: center;margin-bottom: 16px; margin-top: -24px;">
-            <h3 id="customerName" style="font-weight: bold;">${customerName}</h3>
-        </div>
-        <div style="margin-bottom: 16px;">
-            <input type="radio" id="cashPayment" name="paymentMethod" value="cash">
-            <label for="cashPayment">Cash</label>
-            <input type="radio" id="onlinePayment" name="paymentMethod" value="online">
-            <label for="onlinePayment">Online</label>
-        </div>
+                                    <div style="align-items: center;margin-bottom: 16px; margin-top: -24px;">
+                                        <h3 id="customerName" style="font-weight: bold;">${customerName}</h3>
+                                    </div>
+                                    <div style="margin-bottom: 16px;">
+                                        <input type="radio" id="cashPayment" name="paymentMethod" value="cash">
+                                        <label for="cashPayment">Cash</label>
+                                        <input type="radio" id="onlinePayment" name="paymentMethod" value="online">
+                                        <label for="onlinePayment">Online</label>
+                                    </div>
 
-        <div style="margin-bottom: 5px;">
-            <input type="number" id="payAmount" name="pay_amount" placeholder="Enter Amount">
-        </div>
+                                    <div style="margin-bottom: 5px;">
+                                        <input type="number" id="payAmount" name="pay_amount" placeholder="Enter Amount">
+                                    </div>
 
-        <textarea rows="3" style="width: 361px" id="statusText" placeholder="Please enter something."></textarea>
-    `,
+                                    <textarea rows="3" style="width: 361px" id="statusText" placeholder="Please enter something."></textarea>
+                                `,
                                 icon: "warning",
                                 showCancelButton: true,
                                 confirmButtonText: "Submit",
@@ -603,7 +605,8 @@ if ($per['bs']['view'] == 0) { ?>
                                             statusText: statusText,
                                             paymentMethod: paymentMethod,
                                             payAmount: payAmount,
-                                            key: userType
+                                            key: userType,
+                                            data_updated_by
                                         },
                                         success: function(response) {
                                             var jsonResponse = JSON.parse(response);

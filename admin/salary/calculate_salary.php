@@ -1,11 +1,27 @@
 <?php
 include("../../system_config.php");
 
+if ($_POST['action'] == 'delete') {
+    $sql = "DELETE FROM employee_salary_data WHERE `employee_salary_data`.`id` = " . $_POST['id'];
+    $result = FetchRow($sql);
+
+    $response = array(
+        'status' => true,
+        'msg' => 'Data has been delete successfully'
+    );
+
+    header('Content-Type: application/json');
+    http_response_code(200);
+    echo json_encode($response);
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
     // Extract data from POST request
     $employee_id = $_POST['data_id'];
     $selected_month = $_POST['selected_month'];
-    $selected_month = $selected_month . '-' . date('d');
+    $selected_month = $selected_month . '-01';
     $first_name = $_POST['first_name'];
     $user_email = $_POST['user_email'];
     $user_phone = $_POST['user_phone'];
@@ -26,17 +42,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $total_calculated_salary = $_POST['total_calculated_salary'];
     $other_pay_amount = $_POST['other_pay_amount'];
 
-    $selected_month_year = date('Y-m', strtotime($selected_month));
-    $check_sql = "SELECT COUNT(*) AS count FROM employee_salary_data WHERE employee_id = ? AND selected_month = ?";
-    $check_stmt = mysqli_prepare($link, $check_sql);
-    mysqli_stmt_bind_param($check_stmt, 'is', $employee_id, $selected_month_year);
-    mysqli_stmt_execute($check_stmt);
-    mysqli_stmt_bind_result($check_stmt, $count);
-    mysqli_stmt_fetch($check_stmt);
-    mysqli_stmt_close($check_stmt);
 
-    if ($count > 0) {
+    $selected_month_year = date('Y-m-d', strtotime($selected_month));
+    $lastDayOfMonth = date("Y-m-t", strtotime($selected_month_year));
+    $sql = "SELECT COUNT(*) AS count 
+            FROM employee_salary_data 
+            WHERE employee_id = $employee_id 
+            AND selected_month >= STR_TO_DATE('$selected_month_year', '%Y-%m-%d') 
+            AND selected_month < STR_TO_DATE('$lastDayOfMonth', '%Y-%m-%d')";
+
+    $result = FetchRow($sql);
+
+    // pr($result);exit;
+
+    if ($result['count'] > 0) {
         $_SESSION['msg'] = "Data already exists for this employee and month";
+        $_SESSION['errorType'] = "error";
     } else {
 
         // Prepare the SQL query
@@ -76,10 +97,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Execute the statement
         if (mysqli_stmt_execute($stmt)) {
             $_SESSION['msg'] = "Data inserted successfully";
+            $_SESSION['errorType'] = "success";
             // echo "Data inserted successfully";
         } else {
             // echo "Error: " . mysqli_error($link);
             $_SESSION['msg'] = "Error: " . mysqli_error($link);
+            $_SESSION['errorType'] = "error";
         }
     }
 

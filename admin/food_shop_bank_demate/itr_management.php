@@ -175,7 +175,7 @@ if ($per['itr_management']['view'] == 0) { ?>
 
                     <?php if ($per['itr_management']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Vendor)) : ?>
                       <?php if ($rows['status'] >= 1) : ?>
-                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','vendor','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('IsPrint<?= $i; ?>')" onMouseOut="hidebox('IsPrint<?= $i; ?>')">
                           <i class="fa fa-print"></i>
                         </a>
                         <div id="IsPrint<?= $i; ?>" class="hide1">
@@ -186,7 +186,7 @@ if ($per['itr_management']['view'] == 0) { ?>
 
                     <?php if ($per['itr_management']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == HeadOffice)) : ?>
                       <?php if ($rows['status'] >= 2) : ?>
-                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','head_office','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('HeadOffice<?= $i; ?>')" onMouseOut="hidebox('HeadOffice<?= $i; ?>')">
                           <i class="fa fa-building" style="color: purple;"></i>
                         </a>
                         <div id="HeadOffice<?= $i; ?>" class="hide1">
@@ -197,7 +197,7 @@ if ($per['itr_management']['view'] == 0) { ?>
 
                     <?php if ($per['itr_management']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == DistricHeadOffice)) : ?>
                       <?php if ($rows['status'] >= 3) : ?>
-                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="showUploadDialog(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','dist_head','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('DistHead<?= $i; ?>')" onMouseOut="hidebox('DistHead<?= $i; ?>')">
                           <i class="fa fa-building" style="color: orange;"></i>
                         </a>
                         <div id="DistHead<?= $i; ?>" class="hide1">
@@ -208,7 +208,7 @@ if ($per['itr_management']['view'] == 0) { ?>
 
                     <?php if ($per['itr_management']['edit'] == 1 && ($empRole == Admin || $empRole == Administrative || $empRole == Employee)) : ?>
                       <?php if ($rows['status'] >= 4) : ?>
-                        <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
+                        <a href="javascript:void(0)" onclick="readyToCustomer(<?= $rows['itr_id'] ?>, '<?= $getCustomerDetails[0]['cust_first_name']; ?>','ready_to_customer','<?= $_SESSION['AdminLogin']; ?>')" onMouseOver="showbox('ready_to_customer<?= $i; ?>')" onMouseOut="hidebox('ready_to_customer<?= $i; ?>')">
                           <i class="fa fa-truck" style="color: orange;"></i>
                         </a>
                         <div id="ready_to_customer<?= $i; ?>" class="hide1">
@@ -229,7 +229,7 @@ if ($per['itr_management']['view'] == 0) { ?>
 
           <!-- For vendor update -->
           <script>
-            function showUploadDialog(dataId, customerName, userType) {
+            function showUploadDialog(dataId, customerName, userType, data_updated_by) {
 
               Swal.fire({
                 title: "Update Status",
@@ -265,6 +265,7 @@ if ($per['itr_management']['view'] == 0) { ?>
                       dataId: dataId,
                       statusText: statusText,
                       key: userType,
+                      data_updated_by
                       // module: 'food_license'
                     },
                     success: function(response) {
@@ -375,6 +376,7 @@ if ($per['itr_management']['view'] == 0) { ?>
                   formData.append('dataId', dataId);
                   formData.append('vendorId', vendorId);
                   formData.append('key', 'admin');
+                  formData.append('vendor_assigned_by', '<?= $_SESSION['AdminLogin']; ?>');
                   // formData.append('module', 'food_license');
 
                   $.ajax({
@@ -550,7 +552,7 @@ if ($per['itr_management']['view'] == 0) { ?>
 
           <!-- readyToCustomer -->
           <script>
-            function readyToCustomer(dataId, customerName, userType) {
+            function readyToCustomer(dataId, customerName, userType, data_updated_by) {
 
               Swal.fire({
                 title: "Delivered to Customer",
@@ -604,7 +606,8 @@ if ($per['itr_management']['view'] == 0) { ?>
                       statusText: statusText,
                       paymentMethod: paymentMethod,
                       payAmount: payAmount,
-                      key: userType
+                      key: userType,
+                      data_updated_by
                     },
                     success: function(response) {
                       var jsonResponse = JSON.parse(response);
@@ -640,12 +643,12 @@ if ($per['itr_management']['view'] == 0) { ?>
           <!-- readyToCustomer -->
 
 
-                              <!-- orderReport start  -->
-                              <script>
-                        function orderReport(params) {
-                            const paymentMethod = params.payment_method.charAt(0).toUpperCase() + params.payment_method.slice(1);
-                            const formattedPayAmount = params.pay_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                            const reportHTML = `
+          <!-- orderReport start  -->
+          <script>
+            function orderReport(params) {
+              const paymentMethod = params.payment_method.charAt(0).toUpperCase() + params.payment_method.slice(1);
+              const formattedPayAmount = params.pay_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              const reportHTML = `
                                                     <div>
                                                         <div class="report-header">
                                                             Order Report
@@ -695,94 +698,94 @@ if ($per['itr_management']['view'] == 0) { ?>
                                                     </div>
                                                 `;
 
-                            Swal.fire({
-                                html: reportHTML,
-                                showCloseButton: true,
-                                showConfirmButton: false,
-                                customClass: 'custom-swal-modal'
-                            });
-                        }
-                    </script>
-                    <style>
-                        /* CSS for styling the report */
-                        .swal2-container {
-                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        }
+              Swal.fire({
+                html: reportHTML,
+                showCloseButton: true,
+                showConfirmButton: false,
+                customClass: 'custom-swal-modal'
+              });
+            }
+          </script>
+          <style>
+            /* CSS for styling the report */
+            .swal2-container {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
 
-                        .swal2-popup {
-                            max-width: 600px;
-                            border-radius: 10px;
-                            background-color: #f9f9f9;
-                        }
+            .swal2-popup {
+              max-width: 600px;
+              border-radius: 10px;
+              background-color: #f9f9f9;
+            }
 
-                        .swal2-title {
-                            font-size: 28px;
-                            color: #333;
-                            margin-bottom: 10px;
-                            text-align: center;
-                        }
+            .swal2-title {
+              font-size: 28px;
+              color: #333;
+              margin-bottom: 10px;
+              text-align: center;
+            }
 
-                        .swal2-content {
-                            font-size: 16px;
-                            color: #333;
-                            text-align: left;
-                        }
+            .swal2-content {
+              font-size: 16px;
+              color: #333;
+              text-align: left;
+            }
 
-                        .swal2-content>div {
-                            margin-bottom: 10px;
-                            overflow-wrap: break-word;
-                        }
+            .swal2-content>div {
+              margin-bottom: 10px;
+              overflow-wrap: break-word;
+            }
 
-                        .swal2-content strong {
-                            font-weight: bold;
-                            color: #000;
-                            width: 200px;
-                            display: inline-block;
-                        }
+            .swal2-content strong {
+              font-weight: bold;
+              color: #000;
+              width: 200px;
+              display: inline-block;
+            }
 
-                        .swal2-close {
-                            color: #999;
-                            font-size: 20px;
-                            top: auto;
-                            right: auto;
-                            margin: 0;
-                            padding: 0;
-                        }
+            .swal2-close {
+              color: #999;
+              font-size: 20px;
+              top: auto;
+              right: auto;
+              margin: 0;
+              padding: 0;
+            }
 
-                        .report-header {
-                            background-color: #4CAF50;
-                            color: white;
-                            padding: 10px;
-                            border-radius: 10px 10px 0 0;
-                            margin-bottom: 10px;
-                            text-align: center;
-                        }
+            .report-header {
+              background-color: #4CAF50;
+              color: white;
+              padding: 10px;
+              border-radius: 10px 10px 0 0;
+              margin-bottom: 10px;
+              text-align: center;
+            }
 
-                        .report-table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            /* Ensure borders collapse properly */
-                        }
+            .report-table {
+              width: 100%;
+              border-collapse: collapse;
+              /* Ensure borders collapse properly */
+            }
 
-                        .report-table th,
-                        .report-table td {
-                            border: 1px solid #ddd;
-                            /* Add border to each cell */
-                            padding: 8px;
-                            /* Add padding to each cell */
-                        }
+            .report-table th,
+            .report-table td {
+              border: 1px solid #ddd;
+              /* Add border to each cell */
+              padding: 8px;
+              /* Add padding to each cell */
+            }
 
-                        .report-table th {
-                            background-color: #f2f2f2;
-                            /* Gray background color for header row */
-                        }
+            .report-table th {
+              background-color: #f2f2f2;
+              /* Gray background color for header row */
+            }
 
-                        .report-table tr:nth-child(even) {
-                            background-color: #f9f9f9;
-                            /* Light gray background color for even rows */
-                        }
-                    </style>
-                    <!-- orderReport end  -->
+            .report-table tr:nth-child(even) {
+              background-color: #f9f9f9;
+              /* Light gray background color for even rows */
+            }
+          </style>
+          <!-- orderReport end  -->
 
 
 
