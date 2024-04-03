@@ -2,15 +2,15 @@
 include("../../system_config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    $employee_id = $_POST['employee'];
-    $selected_month = $_POST['month'];
-    $employee_details = getuser_byID($employee_id);
-    $month = date('m', strtotime($selected_month));
-    $year = date('Y', strtotime($selected_month));
-    $total_working_days = getTotalWorkingDaysByEmpId($employee_id, $year, $month);
-    $getAllPointsByEmpId = getAllPointsByEmpId($employee_id, $year, $month, 'employee');
-    // pr($getAllPointsByEmpId);exit;
-    $html = '<section class="content">
+  $employee_id = $_POST['employee'];
+  $selected_month = $_POST['month'];
+  $employee_details = getuser_byID($employee_id);
+  $month = date('m', strtotime($selected_month));
+  $year = date('Y', strtotime($selected_month));
+  $total_working_days = getTotalWorkingDaysByEmpId($employee_id, $year, $month);
+  $getAllPointsByEmpId = getAllPointsByEmpId($employee_id, $year, $month, 'employee');
+  // pr($getAllPointsByEmpId);exit;
+  $html = '<section class="content">
     <div class="box box-info">
     <form id="form" name="form" action="' . SITEPATH . 'admin/salary/calculate_salary.php" method="post" enctype="multipart/form-data">
                 <div class="box-body">
@@ -47,14 +47,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
                     <div class="form-group">
                         <label>User Role</label>
                     <select id="user_type" disabled name="user_type" class="form-control">';
-    foreach ($config['user_type'] as $key => $value) {
-        if ($key == 1) {
-            continue;
-        }
-        $selected = ($key == $employee_details['user_type']) ? ' selected="selected"' : '';
-        $html .= '<option ' . $selected . ' value="' . $key . '">' . $value . '</option>';
+  foreach ($config['user_type'] as $key => $value) {
+    if ($key == 1) {
+      continue;
     }
-    $html .= '</select>
+    $selected = ($key == $employee_details['user_type']) ? ' selected="selected"' : '';
+    $html .= '<option ' . $selected . ' value="' . $key . '">' . $value . '</option>';
+  }
+  $html .= '</select>
                     </div>
                 </div>
 
@@ -117,34 +117,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
                 </div>
             </div>';
 
-    $totalPoint = 0;
+  $totalPoint = 0;
 
-    foreach ($getAllPointsByEmpId as $key => $totalCount) {
-        $totalPoint += $totalCount;
-        $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
+  foreach ($getAllPointsByEmpId as $key => $totalCount) {
+    $totalPoint += $totalCount;
+    $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
                                                                 <div class="form-group">
                                                                     <label>' . $key . '</label>
                                                                     <input class="form-control" onchange="calculateTotalPoint();" name="' . $key . '" min="0" placeholder="' . $key . '" value="' . $totalCount . '" type="number">
                                                                 </div>
                                                                 </div>';
-    }
+  }
 
-    $salary = $employee_details['basic_salary'] + $employee_details['petrol'] + $employee_details['mobile_recharge'] + $employee_details['extra_allowance'];
-    $percentageAchieved = ($totalPoint / $employee_details['working_target']) * 100;
-    $percentageAchieved = min($percentageAchieved, 100);
-    // $totalCalculateSalary = $salary * ($percentageAchieved / 100);
+  $salary = $employee_details['basic_salary'] + $employee_details['petrol'] + $employee_details['mobile_recharge'] + $employee_details['extra_allowance'];
+  $percentageAchieved = ($totalPoint / $employee_details['working_target']) * 100;
+  $percentageAchieved = min($percentageAchieved, 100);
+  // $totalCalculateSalary = $salary * ($percentageAchieved / 100);
 
-    // Calculate total calculated salary
-    if ($totalPoint > $employee_details['working_target']) {
-        $excessPoints = $totalPoint - $employee_details['working_target'];
-        $excessSalary = $excessPoints * ($salary / $employee_details['working_target']);
-        $totalCalculateSalary = $salary + $excessSalary;
-    } else {
-        $totalCalculateSalary = $salary * ($percentageAchieved / 100);
-    }
+  // Calculate total calculated salary
+  if ($totalPoint > $employee_details['working_target']) {
+    $excessPoints = $totalPoint - $employee_details['working_target'];
+    $excessSalary = $excessPoints * ($salary / $employee_details['working_target']);
+    $totalCalculateSalary = $salary + $excessSalary;
+  } else {
+    $totalCalculateSalary = $salary * ($percentageAchieved / 100);
+  }
 
 
-    $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
+  $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
                 <label>Achieved Total Point</label>
                 <input class="form-control" name="total_point"  min="0" placeholder="Total Point" value="' . $totalPoint . '" type="number">
@@ -179,10 +179,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
             </div>
             </div>';
 
-    $html .= '</form> </div></section>';
+  $html .= '</form> </div></section>';
 
-    echo $html;
+  echo $html;
 } else {
-    echo "Invalid request";
-    die;
+  echo "Invalid request";
+  die;
 }

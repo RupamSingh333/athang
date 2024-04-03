@@ -70,7 +70,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                         if ($row['user_id'] == 1) {
                                                             continue;
                                                         }
-                                                        echo '<option value="' . $row['user_id'] . '">' . $row['first_name'] . '</option>';
+                                                        echo '<option value="' . $row['user_id'] . '">' . $row['first_name'] . '-(' . $config['user_type'][$row['user_type']] . ')</option>';
                                                     }
                                                     ?>
                                                 </select>

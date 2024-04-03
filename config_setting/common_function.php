@@ -12,7 +12,7 @@ function get_safe_post($name)
     return $output;
 }
 
-function save_command($tblName, $field, $primary_key = "", $primary_value = 0, $return_id = false)
+function save_command($tblName, $field, $primary_key = null, $primary_value = null, $return_id = false)
 {
 
     $link = connectme();
@@ -20,7 +20,7 @@ function save_command($tblName, $field, $primary_key = "", $primary_value = 0, $
     $output = $query = "";
     $output = "Some technical error !. please try again";
 
-    if ($primary_value == "") {
+    if ($primary_value == null) {
         foreach ($field as $key => $value) {
 
             $columnfield[] = $key;
@@ -30,7 +30,7 @@ function save_command($tblName, $field, $primary_key = "", $primary_value = 0, $
         $query = "INSERT into " . $tblName . " (" . implode(',', $columnfield) . ") values (" . implode(',', $fieldValue) . ")";
         // echo $query;die;
         if (mysqli_query($link, $query)) {
-            $output = "Data has been saved sucessfully";
+            $output = "Data has been saved successfully";
         }
     } else {
         foreach ($field as $key => $value) {
@@ -39,7 +39,7 @@ function save_command($tblName, $field, $primary_key = "", $primary_value = 0, $
         $query = "UPDATE " . $tblName . " set " . implode(',', $field_Value) . "   where " . $primary_key . " = " . $primary_value;
         //echo $query;
         if (mysqli_query($link, $query)) {
-            $output = "Data has been saved sucessfully";
+            $output = "Data has been saved successfully";
         }
     }
     return $output;
@@ -53,7 +53,7 @@ function del_command($tblName, $primary_key = "", $primary_value = 0, $return_id
     $query = "DELETE FROM  " . $tblName . " where " . $primary_key . " = " . $primary_value;
     // echo $query;die;
     if (mysqli_query($link, $query)) {
-        $output = "Request delete sucessfully";
+        $output = "Request delete successfully";
     }
     return $output;
 }

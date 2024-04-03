@@ -311,7 +311,6 @@ function getAllPointsByEmpId($empId, $year, $month, $userType)
     $data['Demat_Account'] = getServiceData(tbl_demat_account, $empId, $firstDayOfMonth, $lastDayOfMonth);
     $data['ITR'] = getServiceData(tbl_itr, $empId, $firstDayOfMonth, $lastDayOfMonth);
     $data['BS'] = getServiceData(tbl_bs, $empId, $firstDayOfMonth, $lastDayOfMonth);
-
     return $data;
 }
 
