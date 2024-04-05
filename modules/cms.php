@@ -291,9 +291,24 @@ function getAllDataReport()
     return $data;
 }
 
-function getServiceData($tableName, $empId, $firstDayOfMonth, $lastDayOfMonth)
+function getServiceData($tableName, $empId, $firstDayOfMonth, $lastDayOfMonth, $userType)
 {
-    $sql = "SELECT COUNT(*) AS count FROM $tableName WHERE user_updated_by = '$empId' AND created_at BETWEEN STR_TO_DATE('$firstDayOfMonth', '%Y-%m-%d') AND STR_TO_DATE('$lastDayOfMonth', '%Y-%m-%d') AND status = 5";
+    $condition = null;
+    $data = null;
+    if ($userType == 2) {
+        $condition = 'user_updated_by'; // For Employee
+    } else if ($userType == 4) {
+        $condition = 'assigned_to_vendor'; // For Vendor
+    } else if ($userType == 5) {
+        $condition = 'ho_by'; // For Head Office
+    } else if ($userType == 6) {
+        $condition = 'dh_by'; // // For Distric Head
+    } else {
+        return $data['count'] = 0;
+    }
+
+    $sql = "SELECT COUNT(*) AS count FROM $tableName WHERE $condition = $empId AND created_at BETWEEN STR_TO_DATE('$firstDayOfMonth', '%Y-%m-%d') AND STR_TO_DATE('$lastDayOfMonth', '%Y-%m-%d') AND status = 5";
+    // pr($sql);exit;
     $data = FetchRow($sql);
 
     return ($data['count'] > 0) ? $data['count'] : 0;
@@ -305,12 +320,12 @@ function getAllPointsByEmpId($empId, $year, $month, $userType)
     $lastDayOfMonth = date("Y-m-t", strtotime($firstDayOfMonth));
     $data = array();
 
-    $data['Food_License'] = getServiceData(tbl_food_licence, $empId, $firstDayOfMonth, $lastDayOfMonth);
-    $data['Shop_Act'] = getServiceData(tbl_shop_act_licence, $empId, $firstDayOfMonth, $lastDayOfMonth);
-    $data['Bank_Account'] = getServiceData(tbl_bank_account, $empId, $firstDayOfMonth, $lastDayOfMonth);
-    $data['Demat_Account'] = getServiceData(tbl_demat_account, $empId, $firstDayOfMonth, $lastDayOfMonth);
-    $data['ITR'] = getServiceData(tbl_itr, $empId, $firstDayOfMonth, $lastDayOfMonth);
-    $data['BS'] = getServiceData(tbl_bs, $empId, $firstDayOfMonth, $lastDayOfMonth);
+    $data['Food_License'] = getServiceData(tbl_food_licence, $empId, $firstDayOfMonth, $lastDayOfMonth, $userType);
+    $data['Shop_Act'] = getServiceData(tbl_shop_act_licence, $empId, $firstDayOfMonth, $lastDayOfMonth, $userType);
+    $data['Bank_Account'] = getServiceData(tbl_bank_account, $empId, $firstDayOfMonth, $lastDayOfMonth, $userType);
+    $data['Demat_Account'] = getServiceData(tbl_demat_account, $empId, $firstDayOfMonth, $lastDayOfMonth, $userType);
+    $data['ITR'] = getServiceData(tbl_itr, $empId, $firstDayOfMonth, $lastDayOfMonth, $userType);
+    $data['BS'] = getServiceData(tbl_bs, $empId, $firstDayOfMonth, $lastDayOfMonth, $userType);
     return $data;
 }
 

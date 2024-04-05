@@ -57,6 +57,12 @@ if ($per['salary_management']['view'] == 0) { ?>
                             </div>
                             <!-- /.box-header -->
                             <!-- form start -->
+
+                            <?php
+                            $currentMonth = isset($_GET['month-year']) ? date('m', strtotime($_GET['month-year'])) : date('m');
+                            $currentYear = isset($_GET['month-year']) ? date('Y', strtotime($_GET['month-year'])) : date('Y');
+                            ?>
+
                             <form role="form" id="salaryForm">
                                 <div class="box-body">
                                     <div class="row">
@@ -79,7 +85,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label for="month">Select Month:</label>
-                                                <input type="month" id="month" name="month" required>
+                                                <input type="month" id="month" value="<?= date('Y-m'); ?>" max="<?= date('Y-m'); ?>" name="month" maximum required>
                                             </div>
                                         </div>
 

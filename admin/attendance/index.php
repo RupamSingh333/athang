@@ -89,14 +89,50 @@ $getuser_byList = getuser_byList();
             </script> -->
 
 
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Search Month Wise Attendance</h3>
+                            </div>
+                            <?php
+                            $currentMonth = isset($_GET['month-year']) ? date('m', strtotime($_GET['month-year'])) : date('m');
+                            $currentYear = isset($_GET['month-year']) ? date('Y', strtotime($_GET['month-year'])) : date('Y');
+                            ?>
+                            <form id="monthSelectionForm" method="GET" action="">
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="month">Select Month:</label>
+                                                <input id="month-year" type="month" name="month-year" value="<?= date('Y-m', strtotime("$currentYear-$currentMonth-01")); ?>" max="<?= date('Y-m'); ?>" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">Search</button>
+                                                <button type="button" class="btn btn-danger" style="margin: 0px 7px 0px 0px;" onclick="window.location.href='<?= SITEPATH . 'admin/attendance/' ?>'">Reset</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </section>
+
+
 
             <!-- Main content -->
             <section class="content">
                 <div class="row">
                     <div class="col-md-12">
                         <?php
-                        $currentMonth = date('m');
-                        $currentYear = date('Y');
                         $totalDays = cal_days_in_month(CAL_GREGORIAN, $currentMonth, $currentYear);
                         $monthName = date('F', strtotime($currentYear . '-' . $currentMonth . '-01'));
                         ?>
