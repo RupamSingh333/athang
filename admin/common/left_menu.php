@@ -103,7 +103,7 @@
         <li class="treeview"> <a> <i class="fa  fa-rss-square nav_icon"></i> <span>District Management</span> <i class="fa fa-angle-left pull-right"></i> </a>
           <ul class="treeview-menu">
             <?php if ($per['district']['add'] == 1) { ?>
-              <li><a href="<?php echo SITEPATH; ?>admin/district/add_new_District_page.php"><i class="fa fa-caret-right"></i>Add New</a></li>
+              <li><a href="<?php echo SITEPATH; ?>admin/district/add_new_district_page.php"><i class="fa fa-caret-right"></i>Add New</a></li>
             <?php }
             if ($per['district']['view'] == 1) { ?>
               <li><a href="<?php echo SITEPATH; ?>admin/district"><i class="fa fa-caret-right"></i> View All</a></li>
