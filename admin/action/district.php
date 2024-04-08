@@ -1,7 +1,7 @@
 <?php
 include("../../system_config.php");
 $action = get_safe_get('action');
-$url_return = "../District/index.php";
+$url_return = "../district/index.php";
 switch ($action) {
 	case "save":
 		$field = array();
