@@ -85,7 +85,7 @@ if (isset($_GET['id'])) {
                   <input type="submit" value="Submit" />
                   <span></span>
                 </div>
-                <a href="<?php echo SITEPATH; ?>/admin/District" class="btn btn-cancel">Cancel</a>
+                <a href="<?php echo SITEPATH; ?>/admin/district" class="btn btn-cancel">Cancel</a>
               </div>
             </div>
           </form>
