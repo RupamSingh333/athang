@@ -39,7 +39,7 @@ if ($per['user']['view'] == 0) { ?>
       }
       ?>
 
-      
+
       <section class="content">
         <h1 align="center" style="color: #337ab7;"><?php echo $_SESSION['message'];
                                                     unset($_SESSION['message']); ?></h1>
@@ -47,7 +47,7 @@ if ($per['user']['view'] == 0) { ?>
           <table id="exportable" align="center" class="table table-bordered table-condensed table-hover">
             <thead>
               <tr>
-                <td><strong>Sr no</strong></td>
+                <td><strong>Sr No</strong></td>
                 <!-- <td><strong>Image</strong></td> -->
                 <td><strong>District Name</strong></td>
                 <td><strong>State Name</strong></td>
@@ -65,7 +65,9 @@ if ($per['user']['view'] == 0) { ?>
                 <tr>
                   <td><?php echo $i; ?></td>
                   <!-- <td>
-                    <a class="iframe" href="#"><img src="<?php //echo SITEPATH; ?>upload/thumb/<?php //echo $rows['district_img']; ?>" width="50px" height="50px"></a>
+                    <a class="iframe" href="#"><img src="<?php //echo SITEPATH; 
+                                                          ?>upload/thumb/<?php //echo $rows['district_img']; 
+                                                                                                ?>" width="50px" height="50px"></a>
                   </td> -->
                   <td><?php echo $rows['district_name']; ?></td>
                   <td><?php echo $res['name']; ?></td>
@@ -82,8 +84,11 @@ if ($per['user']['view'] == 0) { ?>
                     <div id="inactive<?php echo $i; ?>" class="hide1">
                       <p>Inactive</p>
                     </div>
+
                     &nbsp;&nbsp;
-                    <a href="<?php echo SITEPATH; ?>admin/district/add_new_district_page.php?id=<?php echo  urlencode(encryptIt($rows['district_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i></a>
+                    <a href="<?php echo SITEPATH; ?>admin/district/add-new-district-page.php?id=<?= urlencode(encryptIt($rows['district_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i>
+                    </a>
+
                     <div id="Edit<?php echo $i; ?>" class="hide1">
                       <p>Edit</p>
                     </div>
