@@ -41,7 +41,7 @@ $rows_list = gettaluka_list();
       }
       ?>
 
-      
+
       <section class="content">
         <h1 align="center" style="color: #337ab7;"><?php echo $_SESSION['message'];
                                                     unset($_SESSION['message']); ?></h1>
@@ -52,10 +52,10 @@ $rows_list = gettaluka_list();
                 <td><strong>Sr No.</strong></td>
                 <!-- <td><strong>Image</strong></td> -->
                 <td><strong>Taluka Name</strong></td>
-                <td><strong>State Name</strong></td>
                 <td><strong>District Name</strong></td>
-                <td><strong>District Start Date</strong></td>
+                <td><strong>State Name</strong></td>
                 <td><strong>Description</strong></td>
+                <td><strong>Status</strong></td>
                 <td><strong>Action</strong></td>
               </tr>
             </thead>
@@ -73,13 +73,21 @@ $rows_list = gettaluka_list();
                                                                 ?>upload/thumb/<?php //echo $rows['district_img']; 
                                                                                 ?>" width="50px" height="50px"></a></td> -->
                   <td><?php echo $rows['taluka_name']; ?></td>
-                  <td><?php echo $stateName['name']; ?></td>
                   <td><?php echo $taluka_district['district_name']; ?></td>
-                  <td><?php echo $rows['taluka_createdAt']; ?></td>
+                  <td><?php echo $stateName['name']; ?></td>
                   <td><?php echo $rows['taluka_desc']; ?></td>
 
+                  <td>
+
+                    <?php if ($rows['taluka_status'] == 0) { ?>
+                      <i class="fa fa-check-circle" title="Active" style="color: green;"></i>
+                    <?php } else { ?>
+                      <i class="fa fa-times-circle" title="Pending" style="color: red;"></i>
+                    <?php  } ?>
+                  </td>
+
                   <td id="font12" width="15%">
-                    <a href="<?php echo SITEPATH; ?>admin/action/taluka.php?action=status&id=<?php echo  urlencode(encryptIt($rows['taluka_id'])); ?>" <?php if ($rows['taluka_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')"><i class="fa fa-angle-double-up"></i>
+                    <a href="javascript:void(0)" onclick="return confirmStatus('<?= urlencode(encryptIt($rows['taluka_id'])); ?>');" <?php if ($rows['taluka_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')"><i class="fa fa-angle-double-up"></i>
                     <?php } else { ?>
                       onMouseOver="showbox('inactive<?php echo $i; ?>')" onMouseOut="hidebox('inactive<?php echo $i; ?>')">
                       <i class="fa fa-angle-double-down"></i>
@@ -98,11 +106,11 @@ $rows_list = gettaluka_list();
                       <p>Edit</p>
                     </div>
                     &nbsp;&nbsp;
-                    <a href="#" onClick="return confirmDelete('<?php echo urlencode(encryptIt($rows['taluka_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i>
+                    <!-- <a href="#" onClick="return confirmDelete('<?php echo urlencode(encryptIt($rows['taluka_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i>
                     </a>
                     <div id="Delete<?php echo $i; ?>" class="hide1">
                       <p>Delete</p>
-                    </div>
+                    </div> -->
                   </td>
                 </tr>
               <?php
@@ -130,6 +138,24 @@ $rows_list = gettaluka_list();
               });
 
               return false;
+            }
+
+            function confirmStatus(id) {
+              Swal.fire({
+                title: 'Confirmation',
+                text: 'Are you sure you want to change the status of this taluka?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  var statusChange = `<?= SITEPATH; ?>admin/action/taluka.php?action=status&id=${id}`;
+
+                  window.location.href = statusChange;
+                }
+              });
+
             }
           </script>
 

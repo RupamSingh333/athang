@@ -386,7 +386,6 @@ function getuser_byList()
 {
 
     $sql = "select * from " . tbl_user . " order by  user_id desc ";
-    // pr($sql);exit;
     $array = FetchAll($sql);
     return $array;
 }

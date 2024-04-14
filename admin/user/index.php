@@ -3,9 +3,8 @@ include("../../system_config.php");
 include_once("../common/head.php");
 if ($r['user_type'] == "1") {
   $rows_list = getuser_byList();
-  // pr($rows_list);exit;
 } else {
-  $rows_list = getuser_byID($_SESSION['AdminLogin']);
+  $rows_list = getuser_byList($_SESSION['AdminLogin']);
 }
 if ($per['user']['view'] == 0) { ?>
   <script>
@@ -80,23 +79,25 @@ if ($per['user']['view'] == 0) { ?>
                 $userState = getState_byID($rows['user_state']);
                 $user_district = getdistrict_byID($rows['user_district']);
 
-
+                // admin edit only self 
+                if ($rows['user_id'] == 1 && $_SESSION['AdminLogin'] != 1) {
+                  continue;
+                }
               ?>
                 <tr>
-                  <td><?php echo $i; ?></td>
+                  <td><?= $i; ?></td>
                   <td><a href="javascript:void(0)">
-                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['user_logo']) ? '/upload/thumb/' . $rows['user_logo'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
-
+                      <img src="<?= SITEPATH; ?><?= ($rows['user_logo']) ? $config['Images'] . $rows['user_logo'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
                     </a>
                   </td>
-                  <td><b><?php echo $rows['first_name']; ?></b></td>
-                  <td><?php echo $rows['user_email']; ?></td>
-                  <td><?php echo decryptIt($rows['user_pass']); ?></td>
-                  <td><?php echo $rows['user_phone']; ?></td>
-                  <td><?php echo $config['user_type'][$rows['user_type']]; ?></td>
-                  <td><?php echo $rows['user_address'] ?></td>
-                  <td><?php echo $userState['name']; ?></td>
-                  <td><?php echo $user_district['district_name']; ?></td>
+                  <td><b><?= $rows['first_name']; ?></b></td>
+                  <td><?= $rows['user_email']; ?></td>
+                  <td><?= decryptIt($rows['user_pass']); ?></td>
+                  <td><?= $rows['user_phone']; ?></td>
+                  <td><?= $config['user_type'][$rows['user_type']]; ?></td>
+                  <td><?= $rows['user_address'] ?></td>
+                  <td><?= $userState['name']; ?></td>
+                  <td><?= $user_district['district_name']; ?></td>
                   <td>
                     <?php if ($rows['user_status'] == 0) { ?>
                       <i class="fa fa-check-circle" title="Active" style="color: green;"></i>
@@ -106,38 +107,43 @@ if ($per['user']['view'] == 0) { ?>
                   </td>
 
 
-                  <td id="font12"><?php if ($per['user']['edit'] == 1) { ?>
-                      <a href="<?php echo SITEPATH; ?>admin/action/user.php?action=status&id=<?php echo  urlencode(encryptIt($rows['user_id'])); ?>" <?php if ($rows['user_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')"><i class="fa fa-angle-double-up" style="color: green;"></i>
-                      <?php } else { ?>
-                        onMouseOver="showbox('inactive<?php echo $i; ?>')" onMouseOut="hidebox('inactive<?php echo $i; ?>')"> <i class="fa fa-angle-double-down" style="color: red;"></i>
+                  <td id="font12">
+                    <?php if ($per['user']['edit'] == 1) { ?>
+
+                      <?php if ($rows['user_id'] != 1) { ?>
+                        <a href="javascript:void(0)" onmouseover="showbox('status<?= $i ?>')" onmouseout="hidebox('status<?= $i ?>')" onclick="return confirmStatus('<?= urlencode(encryptIt($rows['user_id'])); ?>');">
+                          <?php if ($rows['user_status'] == "0") : ?>
+                            <i class="fa fa-angle-double-up" style="color: green;"></i>
+                          <?php else : ?>
+                            <i class="fa fa-angle-double-down" style="color: red;"></i>
+                          <?php endif; ?>
+                        </a>
+                        <div id="status<?= $i ?>" class="hide1">
+                          <p><?= $rows['user_status'] == "0" ? 'Active' : 'Inactive' ?></p>
+                        </div>
+
                       <?php } ?>
-                      </a>
-                      <div id="active<?php echo $i; ?>" class="hide1">
-                        <p>Active</p>
-                      </div>
-                      <div id="inactive<?php echo $i; ?>" class="hide1">
-                        <p>Inactive</p>
-                      </div>
 
                       <?php if ($r['user_id'] == "1") { ?>
-                        <?php ?> &nbsp;&nbsp; <a href="<?php echo SITEPATH; ?>admin/user/setting.php?id=<?php echo  urlencode(encryptIt($rows['user_id'])); ?>" onMouseOver="showbox('Setting<?php echo $i; ?>')" onMouseOut="hidebox('Setting<?php echo $i; ?>')"> <i class="fa fa-cogs"></i></a>
-                        <div id="Setting<?php echo $i; ?>" class="hide1">
+                        &nbsp;&nbsp; <a href="<?= SITEPATH; ?>admin/user/setting.php?id=<?= urlencode(encryptIt($rows['user_id'])); ?>" onMouseOver="showbox('Setting<?= $i; ?>')" onMouseOut="hidebox('Setting<?= $i; ?>')"> <i class="fa fa-cogs"></i></a>
+                        <div id="Setting<?= $i; ?>" class="hide1">
                           <p>Setting</p>
                         </div><?php } ?>
-                      &nbsp;&nbsp; <a href="<?php echo SITEPATH; ?>admin/user/add-new-user.php?id=<?php echo  urlencode(encryptIt($rows['user_id'])); ?>" onMouseOver="showbox('Edit<?php echo $i; ?>')" onMouseOut="hidebox('Edit<?php echo $i; ?>')"> <i class="fa fa-pencil"></i></a>
-                      <div id="Edit<?php echo $i; ?>" class="hide1">
+
+                      &nbsp;&nbsp; <a href="<?= SITEPATH; ?>admin/user/add-new-user.php?id=<?= urlencode(encryptIt($rows['user_id'])); ?>" onMouseOver="showbox('Edit<?= $i; ?>')" onMouseOut="hidebox('Edit<?= $i; ?>')"> <i class="fa fa-pencil"></i></a>
+                      <div id="Edit<?= $i; ?>" class="hide1">
                         <p>Edit</p>
                       </div>
+
                     <?php } ?>
+
                     &nbsp;&nbsp;
-                    <?php if ($per['user']['del'] == 1 && $rows['user_id'] != 1) { ?>
-                      <a href="<?php echo SITEPATH; ?>admin/action/user.php?action=del&id=<?php echo urlencode(encryptIt($rows['user_id'])); ?>" onclick="return confirmDelete('<?php echo urlencode(encryptIt($rows['user_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i></a>
-                      <div id="Delete<?php echo $i; ?>" class="hide1">
+                    <?php /* if ($per['user']['del'] == 1 && $rows['user_id'] != 1) { ?>
+                      <a href="javascript:void(0)" onclick="return confirmDelete('<?= urlencode(encryptIt($rows['user_id'])); ?>');" onMouseOver="showbox('Delete<?= $i; ?>')" onMouseOut="hidebox('Delete<?= $i; ?>')"><i class="fa fa-times"></i></a>
+                      <div id="Delete<?= $i; ?>" class="hide1">
                         <p>Delete</p>
                       </div>
-
-
-                    <?php } ?>
+                    <?php } */ ?>
 
                   </td>
 
@@ -150,7 +156,6 @@ if ($per['user']['view'] == 0) { ?>
 
           <script>
             function confirmDelete(id) {
-              // console.log(id);
               Swal.fire({
                 title: 'Confirmation',
                 text: 'Are you sure you want to delete?',
@@ -160,15 +165,31 @@ if ($per['user']['view'] == 0) { ?>
                 cancelButtonText: 'Cancel',
               }).then((result) => {
                 if (result.isConfirmed) {
-                  var deleteUrl = "<?php echo SITEPATH; ?>admin/action/user.php?action=del&id=" + id;
+                  var deleteUrl = "<?= SITEPATH; ?>admin/action/user.php?action=del&id=" + id;
                   window.location.href = deleteUrl;
                 }
               });
 
               return false;
             }
-          </script>
 
+            function confirmStatus(id) {
+              Swal.fire({
+                title: 'Confirmation',
+                text: 'Are you sure you want to change the status of this user?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  var statusChange = `<?= SITEPATH; ?>admin/action/user.php?action=status&id=${id}`;
+                  window.location.href = statusChange;
+                }
+              });
+
+            }
+          </script>
 
         </div>
       </section>

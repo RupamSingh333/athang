@@ -80,8 +80,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                 <tr>
                   <td><?php echo $i; ?></td>
                   <td><a href="javascript:void(0)">
-                      <img src="<?php echo SITEPATH; ?><?php echo ($rows['user_logo']) ? '/upload/thumb/' . $rows['user_logo'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
-
+                      <img src="<?= SITEPATH; ?><?= ($rows['user_logo']) ? $config['Images'] . $rows['user_logo'] : NOIMAGE; ?>" style="width: 80px;height: 80px;border-radius: 20px;">
                     </a>
                   </td>
                   <td><b><?php echo $rows['first_name']; ?></b></td>

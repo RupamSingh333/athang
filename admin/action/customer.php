@@ -68,16 +68,16 @@ switch ($action) {
 
 
 		if ($_FILES["cust_selfie"]["error"] == 0) {
+			if ($primary_value) {
+				$custDetails = getcustomer_byID($primary_value);
+				unlink("../../" . $config['Images'] . $custDetails['cust_selfie']);
+			}
 			$file_name = $_FILES["cust_selfie"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 			$img_name = $imageName . '_' . time() . "_selfie." . $file_ext;
 			move_uploaded_file($_FILES["cust_selfie"]["tmp_name"], "../../" . $config['Images'] . $img_name);
 			$field['cust_selfie'] = $img_name;
 
-			if ($primary_value) {
-				$custDetails = getcustomer_byID($primary_value);
-				unlink("../../" . $config['Images'] . $custDetails['cust_selfie']);
-			}
 		} else if ($_FILES["cust_agreement_copy"]["error"] == 0) {
 			$file_name = $_FILES["cust_agreement_copy"]["name"];
 			$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));

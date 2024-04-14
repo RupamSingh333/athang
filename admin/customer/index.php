@@ -161,7 +161,7 @@ if ($per['customer']['view'] == 0) { ?>
                   <td id="font12" style="width:10%">
 
                     <?php if ($per['customer']['edit'] == 1) { ?>
-                      <a href="<?php echo SITEPATH; ?>admin/action/customer.php?action=status&id=<?php echo urlencode(encryptIt($rows['cust_id'])); ?>" <?php if ($rows['cust_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')">
+                      <a href="javascript:void(0)" onclick="return confirmStatus('<?= urlencode(encryptIt($rows['cust_id'])); ?>');" <?php if ($rows['cust_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')">
                         <i class="fa fa-angle-double-up" style="color: green;"></i>
                       <?php } else { ?>
                         onMouseOver="showbox('inactive<?php echo $i; ?>')" onMouseOut="hidebox('inactive<?php echo $i; ?>')">
@@ -183,7 +183,7 @@ if ($per['customer']['view'] == 0) { ?>
 
                     <?php } ?>
                     &nbsp;&nbsp;
-                    <?php
+                    <?php /*
                     if ($per['customer']['del'] == 1) { ?>
                       <a href="#" onclick="return confirmDelete('<?php echo urlencode(encryptIt($rows['cust_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')">
                         <i class="fa fa-times"></i>
@@ -191,7 +191,7 @@ if ($per['customer']['view'] == 0) { ?>
                       <div id="Delete<?php echo $i; ?>" class="hide1">
                         <p>Delete</p>
                       </div>
-                    <?php } ?>
+                    <?php } */ ?>
                   </td>
                 </tr>
 
@@ -220,6 +220,26 @@ if ($per['customer']['view'] == 0) { ?>
 
               return false;
             }
+
+            function confirmStatus(id) {
+              Swal.fire({
+                title: 'Confirmation',
+                text: 'Are you sure you want to change the status of this customer?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  var statusChange = `<?= SITEPATH; ?>admin/action/customer.php?action=status&id=${id}`;
+                  
+                  window.location.href = statusChange;
+                }
+              });
+
+            }
+
+
           </script>
         </div>
       </section>

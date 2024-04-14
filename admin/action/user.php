@@ -3,15 +3,82 @@ include("../../system_config.php");
 $action = get_safe_get('action');
 $url_return = "../user/";
 
+// pr($_FILES);exit;
+
+// File uploads
+function handleFileUpload($fileKey, $imageName, $primaryValue, &$config, &$field)
+{
+	if ($_FILES[$fileKey]["error"] == 0) {
+		if ($primaryValue) {
+			$getUserById = getuser_byID($primaryValue);
+			$oldFileName = $getUserById[$fileKey];
+			if ($oldFileName) {
+				unlink("../../" . $config['Images'] . $oldFileName);
+			}
+		}
+
+		$fileInfo = pathinfo($_FILES[$fileKey]["name"]);
+		$fileExt = strtolower($fileInfo['extension']);
+		$imgName = $imageName . '_' . time() . "_" . $fileKey . "." . $fileExt;
+
+		move_uploaded_file($_FILES[$fileKey]["tmp_name"], "../../" . $config['Images'] . $imgName);
+		$field[$fileKey] = $imgName;
+	}
+}
+
+// Multiple File Upload 
+function handleMultipleFileUpload($fileKey, $columnName, $userId)
+{
+	global $link, $config;
+
+	$existingFilenames = explode(',', getuser_byID($userId)[$columnName]);
+
+	$imageNames = [];
+	foreach ($_FILES[$fileKey]['name'] as $index => $filename) {
+		if ($_FILES[$fileKey]['error'][$index] == 0) {
+			$getUserById = getuser_byID($userId);
+			$customerNameWithoutSpacesLowercase = strtolower(str_replace(' ', '', $getUserById['first_name']));
+			$imageName = $customerNameWithoutSpacesLowercase;
+
+			$file_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+			$user_img_name = $imageName . '_' . time() . '_' . $fileKey . $index . "." . $file_ext;
+			$path = "../../" . $config['Images'] . $user_img_name;
+
+			if (move_uploaded_file($_FILES[$fileKey]["tmp_name"][$index], $path)) {
+				$imageNames[] = $user_img_name;
+			}
+		}
+	}
+
+	// Unlink existing files that are not present in the new list
+	foreach ($existingFilenames as $existingFilename) {
+		if (!in_array($existingFilename, $imageNames)) {
+			unlink("../../" . $config['Images'] . $existingFilename);
+		}
+	}
+
+	// Update the database with the comma-separated list of image names
+	if (!empty($imageNames)) {
+		$newImageNames = implode(',', $imageNames);
+		$update_sql = "UPDATE reg_user SET $columnName = ? WHERE user_id = ?";
+		$update_stmt = mysqli_prepare($link, $update_sql);
+		mysqli_stmt_bind_param($update_stmt, 'si', $newImageNames, $userId);
+		mysqli_stmt_execute($update_stmt);
+	}
+	// pr($imageNames);exit;
+}
+
 switch ($action) {
 	case "save":
 		$field = array();
+		$primary_value = get_safe_post('data_id');
 
-		if ($_SESSION['AdminLogin'] == "1") {
+		if (empty($primary_value)) {
+			$field['user_startfrom'] = date('Y-m-d H:i:s');
 			$field['user_email'] = get_safe_post('user_email');
 		}
+
 		$field['first_name'] = get_safe_post('first_name');
-		$field['user_startfrom'] = date('Y-m-d H:i:s');
 		$field['user_phone'] = get_safe_post('user_phone');
 		$field['user_pass'] = encryptIt(get_safe_post('confirm_password'));
 		$field['taluka_id'] = get_safe_post('taluka_id');
@@ -32,26 +99,33 @@ switch ($action) {
 		$field['extra_allowance'] = get_safe_post('extra_allowance');
 		$field['working_target'] = get_safe_post('working_target');
 		$field['user_type'] = get_safe_post('user_type');
+
+		$field['alter_mobile_number'] = get_safe_post('alter_mobile_number');
+		$field['reference1_name'] = get_safe_post('reference1_name');
+		$field['reference1_mobile_number'] = get_safe_post('reference1_mobile_number');
+		$field['reference1_relation'] = get_safe_post('reference1_relation');
+		$field['reference2_name'] = get_safe_post('reference2_name');
+		$field['reference2_mobile_number'] = get_safe_post('reference2_mobile_number');
+		$field['reference2_relation'] = get_safe_post('reference2_relation');
 		// pr($field);exit;
 
-		$userNameWithoutSpacesLowercase = strtolower( str_replace(' ', '', $field['first_name']));
+		$userNameWithoutSpacesLowercase = strtolower(str_replace(' ', '', $field['first_name']));
 		$phone = empty($field['user_phone']) ? 'NoPhone' : $field['user_phone'];
 		$imageName = $userNameWithoutSpacesLowercase . '_' . $phone;
 
-		$img_name = "";
-		if ($_FILES["user_logo"]["error"] == 0) {
-			$img_name = $imageName.time() . "_" . strtolower(str_replace(" ", "_", $_FILES["user_logo"]["name"]));
-			move_uploaded_file($_FILES["user_logo"]["tmp_name"], "../../" . $config['category_thumb'] . $img_name);
-		}
-		if ((isset($_FILES["user_logo"])) && !empty($img_name)) {
-			$field['user_logo'] = $img_name;
-		}
+		// Usage:
+		handleFileUpload("user_logo", $imageName, $primary_value, $config, $field);
+		handleFileUpload("aadhar_front_image", $imageName, $primary_value, $config, $field);
+		handleFileUpload("aadhar_back_image", $imageName, $primary_value, $config, $field);
+		handleFileUpload("dl_front_image", $imageName, $primary_value, $config, $field);
+		handleFileUpload("dl_back_image", $imageName, $primary_value, $config, $field);
+		handleFileUpload("pan_card_image", $imageName, $primary_value, $config, $field);
+
+		// multiple files upload 
+		handleMultipleFileUpload("other_documents", "other_documents", $primary_value);
 
 		$field['user_status'] = get_safe_post('user_status');
-		$primary_value = get_safe_post('data_id');
-
 		$output =  save_command(tbl_user, $field, "user_id", $primary_value);
-		// pr($output);exit;
 		$_SESSION['msg'] = $output;
 		break;
 

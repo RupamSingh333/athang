@@ -6,17 +6,17 @@ function sanitizeInput($data)
     return htmlspecialchars(strip_tags(trim($data)));
 }
 
-// fileupload funtion 
-function handleFileUpload($fileKey, $columnName, $customerId)
+// fileUpload Function 
+function handleFileUpload($fileKey, $columnName, $userId)
 {
     global $link, $config;
 
     if (!empty($_FILES[$fileKey]["name"]) && $_FILES[$fileKey]["error"] == 0) {
-        $updCustomer = getcustomer_byID($customerId);
+        $getUserById = getuser_byID($userId);
 
-        $customerNameWithoutSpacesLowercase = strtolower(str_replace(' ', '', $updCustomer['cust_first_name']));
-        $phone = empty($updCustomer['cust_phone']) ? 'NoPhone' : $updCustomer['cust_phone'];
-        $imageName = $customerNameWithoutSpacesLowercase . '_' . $phone;
+        $userNameWithoutSpacesLowercase = strtolower(str_replace(' ', '', $getUserById['first_name']));
+        $phone = empty($getUserById['user_phone']) ? 'NoPhone' : $getUserById['user_phone'];
+        $imageName = $userNameWithoutSpacesLowercase . '_' . $phone;
 
         $file_name = $_FILES[$fileKey]["name"];
         $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
@@ -24,12 +24,52 @@ function handleFileUpload($fileKey, $columnName, $customerId)
         $path = '../' . $config['Images'] . $customer_img_name;
 
         if (move_uploaded_file($_FILES[$fileKey]["tmp_name"], $path)) {
-            unlink('../' . $config['Images'] . $updCustomer[$columnName]);
-            $update_sql = "UPDATE customer SET $columnName = ? WHERE cust_id = ?";
+            unlink('../' . $config['Images'] . $getUserById[$columnName]);
+            $update_sql = "UPDATE reg_user SET $columnName = ? WHERE user_id = ?";
             $update_stmt = mysqli_prepare($link, $update_sql);
-            mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $customerId);
+            mysqli_stmt_bind_param($update_stmt, 'si', $customer_img_name, $userId);
             mysqli_stmt_execute($update_stmt);
         }
+    }
+}
+
+// Multiple File Upload 
+function handleMultipleFileUpload($fileKey, $columnName, $userId)
+{
+    global $link, $config;
+
+    $existingFilenames = explode(',', getuser_byID($userId)[$columnName]);
+    $imageNames = [];
+    foreach ($_FILES[$fileKey]['name'] as $index => $filename) {
+        if ($_FILES[$fileKey]['error'][$index] == 0) {
+            $getUserById = getuser_byID($userId);
+            $customerNameWithoutSpacesLowercase = strtolower(str_replace(' ', '', $getUserById['first_name']));
+            $imageName = $customerNameWithoutSpacesLowercase;
+            
+            $file_ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+            $user_img_name = $imageName . '_' . time() . '_' . $fileKey . $index . "." . $file_ext;
+            $path = "../" . $config['Images'] . $user_img_name;
+            
+            if (move_uploaded_file($_FILES[$fileKey]["tmp_name"][$index], $path)) {
+                $imageNames[] = $user_img_name;
+            }
+        }
+    }
+    
+    // Unlink existing files that are not present in the new list
+    foreach ($existingFilenames as $existingFilename) {
+        if (!in_array($existingFilename, $imageNames)) {
+            unlink("../" . $config['Images'] . $existingFilename);
+        }
+    }
+
+    // Update the database with the comma-separated list of image names
+    if (!empty($imageNames)) {
+        $newImageNames = implode(',', $imageNames);
+        $update_sql = "UPDATE reg_user SET $columnName = ? WHERE user_id = ?";
+        $update_stmt = mysqli_prepare($link, $update_sql);
+        mysqli_stmt_bind_param($update_stmt, 'si', $newImageNames, $userId);
+        mysqli_stmt_execute($update_stmt);
     }
 }
 
@@ -57,8 +97,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     $user_tel = sanitizeInput($_POST['user_tel']);
     $user_address = sanitizeInput($_POST['user_address']);
     $password = sanitizeInput($_POST['user_pass']);
+    $user_type = sanitizeInput($_POST['user_type']);
     $hashed_password = encryptIt($password);
     $user_logo = sanitizeInput($_FILES['user_logo']['name']);
+
+    $alter_mobile_number = sanitizeInput($_POST['alter_mobile_number']);
+    $reference1_name = sanitizeInput($_POST['reference1_name']);
+    $reference1_mobile_number = sanitizeInput($_POST['reference1_mobile_number']);
+    $reference1_relation = sanitizeInput($_POST['reference1_relation']);
+    $reference2_name = sanitizeInput($_POST['reference2_name']);
+    $reference2_mobile_number = sanitizeInput($_POST['reference2_mobile_number']);
+    $reference2_relation = sanitizeInput($_POST['reference2_relation']);
 
     // Validate required fields
     $requiredFields = [
@@ -100,13 +149,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
 
     // Prepare and execute SQL query
     if ($userId) {
-        $sql = "UPDATE reg_user SET first_name=?, user_pass=?, user_phone=?, user_state=?, user_district=?, taluka_id=?, user_tel=?, user_address=? WHERE user_id=?";
+        $sql = "UPDATE reg_user SET first_name=?, user_pass=?, user_phone=?, user_state=?, user_district=?, taluka_id=?, user_tel=?, user_address=?, user_type=?, alter_mobile_number=?, reference1_name=?, reference1_mobile_number=?, reference1_relation=?, reference2_name=?, reference2_mobile_number=?, reference2_relation=? WHERE user_id=?";
         $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, 'ssssssssi', $first_name, $hashed_password, $phone, $user_state, $user_district, $taluka_id, $user_tel, $user_address, $userId);
+        mysqli_stmt_bind_param(
+            $stmt,
+            'ssssssssssssssssi',
+            $first_name,
+            $hashed_password,
+            $phone,
+            $user_state,
+            $user_district,
+            $taluka_id,
+            $user_tel,
+            $user_address,
+            $user_type,
+            $alter_mobile_number,
+            $reference1_name,
+            $reference1_mobile_number,
+            $reference1_relation,
+            $reference2_name,
+            $reference2_mobile_number,
+            $reference2_relation,
+            $userId
+        );
     } else {
-        $sql = "INSERT INTO reg_user (first_name,user_email, user_pass,user_phone, user_state,user_district, taluka_id, user_tel, user_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO reg_user (first_name, user_email, user_pass, user_phone, user_state, user_district, taluka_id, user_tel, user_address,user_type, alter_mobile_number, reference1_name, reference1_mobile_number, reference1_relation, reference2_name, reference2_mobile_number, reference2_relation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, 'ssssiiiss', $first_name, $email, $hashed_password, $phone, $user_state, $user_district, $taluka_id, $user_tel, $user_address);
+        // Bind parameters to the prepared statement
+        mysqli_stmt_bind_param(
+            $stmt,
+            'ssssiiississsssss',
+            $first_name,
+            $email,
+            $hashed_password,
+            $phone,
+            $user_state,
+            $user_district,
+            $taluka_id,
+            $user_tel,
+            $user_address,
+            $user_type,
+            $alter_mobile_number,
+            $reference1_name,
+            $reference1_mobile_number,
+            $reference1_relation,
+            $reference2_name,
+            $reference2_mobile_number,
+            $reference2_relation
+        );
     }
 
     if (!mysqli_stmt_execute($stmt)) {
@@ -119,6 +209,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['key']) && $_POST['key
     // Handle file upload
     $last_inserted_id = $userId ? $userId : mysqli_insert_id($link);
     handleFileUpload("user_logo", "user_logo", $last_inserted_id);
+    handleFileUpload("aadhar_front_image", "aadhar_front_image", $last_inserted_id);
+    handleFileUpload("aadhar_back_image", "aadhar_back_image", $last_inserted_id);
+    handleFileUpload("dl_front_image", "dl_front_image", $last_inserted_id);
+    handleFileUpload("dl_back_image", "dl_back_image", $last_inserted_id);
+    handleFileUpload("pan_card_image", "pan_card_image", $last_inserted_id);
+    // multiple files upload 
+    handleMultipleFileUpload("other_documents", "other_documents", $last_inserted_id);
 
     // Respond with success message
     $response = ['status' => true, 'message' => $userId ? 'Your Profile has been updated successfully.' : 'Your registration procedure has been completed. Our team will connect with you shortly.'];

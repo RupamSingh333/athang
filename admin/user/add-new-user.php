@@ -235,14 +235,67 @@ if (isset($_GET['id'])) {
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Name</label>
-                  <input class="form-control" required name="first_name" placeholder="" type="text" value="<?php echo $res['first_name']; ?>">
+                  <input class="form-control" required name="first_name" placeholder="Name" type="text" value="<?php echo $res['first_name']; ?>">
                 </div>
               </div>
 
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
-                  <label>Mobile Number </label>
-                  <input class="form-control" required name="user_phone" placeholder="" value="<?php echo $res['user_phone']; ?>" type="number">
+                  <label>Mobile Number</label>
+                  <input class="form-control" required name="user_phone" placeholder="Mobile Number" value="<?php echo $res['user_phone']; ?>" type="number">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Alternate Mobile Number</label>
+                  <input class="form-control" name="alter_mobile_number" placeholder="Alternate Mobile Number" value="<?php echo $res['alter_mobile_number']; ?>" type="number">
+                </div>
+              </div>
+
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <h4 class="divd">Reference</h4>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Reference-1 Name</label>
+                  <input class="form-control" name="reference1_name" placeholder="Reference Name" value="<?php echo $res['reference1_name']; ?>" type="text">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Reference-1 Mobile Number</label>
+                  <input class="form-control" name="reference1_mobile_number" placeholder="Reference Mobile Number" value="<?php echo $res['reference1_mobile_number']; ?>" type="number">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Reference-1 Relation</label>
+                  <input class="form-control" name="reference1_relation" placeholder="Reference Relation" value="<?php echo $res['reference1_relation']; ?>" type="text">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Reference-2 Name</label>
+                  <input class="form-control" name="reference2_name" placeholder="Reference Name" value="<?php echo $res['reference2_name']; ?>" type="text">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Reference-2 Mobile Number</label>
+                  <input class="form-control" name="reference2_mobile_number" placeholder="Reference Mobile Number" value="<?php echo $res['reference2_mobile_number']; ?>" type="number">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label>Reference-2 Relation</label>
+                  <input class="form-control" name="reference2_relation" placeholder="Reference Relation" value="<?php echo $res['reference2_relation']; ?>" type="text">
                 </div>
               </div>
 
@@ -389,15 +442,15 @@ if (isset($_GET['id'])) {
 
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
-                  <label>Pincode</label>
-                  <input class="form-control" name="user_tel" placeholder="" value="<?php echo $res['user_tel']; ?>" type="number">
+                  <label>PinCode</label>
+                  <input class="form-control" name="user_tel" placeholder="PinCode" value="<?php echo $res['user_tel']; ?>" type="number">
                 </div>
               </div>
 
               <div class="col-sm-6 col-md-4 col-lg-4">
                 <div class="form-group">
                   <label>Full Address</label>
-                  <input class="form-control" required name="user_address" placeholder="" value="<?php echo $res['user_address']; ?>" type="text">
+                  <input class="form-control" required name="user_address" placeholder="Full Address" value="<?php echo $res['user_address']; ?>" type="text">
                 </div>
               </div>
 
@@ -448,7 +501,97 @@ if (isset($_GET['id'])) {
               <div class="col-sm-12 col-md-12 col-lg-12">
                 <h4 class="divd">Other Information</h4>
               </div>
-              <div class="col-sm-6 col-md-4 col-lg-4" style=" <?php if ($per['user']['add'] == 1) { ?> display:block;<?php } else { ?> display:none;<?php } ?>">
+
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                  <label for="profile">Profile</label>
+                  <?php
+                  if ($res['user_logo']) {
+                    $filePath = SITEPATH . $config['Images'] . $res['user_logo']; ?>
+                    <a href="<?php echo $filePath; ?>" target="_blank">View Profile</a>
+                  <?php } ?>
+                  <input type="file" name="user_logo" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="profile" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                  <label for="aadhar_front">Aadhar Card (Front)</label>
+                  <?php
+                  if ($res['aadhar_front_image']) {
+                    $filePath = SITEPATH . $config['Images'] . $res['aadhar_front_image']; ?>
+                    <a href="<?php echo $filePath; ?>" target="_blank">View Aadhar Card (Front)</a>
+                  <?php } ?>
+                  <input type="file" name="aadhar_front_image" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="aadhar_front" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                  <label for="aadhar_back">Aadhar Card (Back)</label>
+                  <?php
+                  if ($res['aadhar_back_image']) {
+                    $filePath = SITEPATH . $config['Images'] . $res['aadhar_back_image']; ?>
+                    <a href="<?php echo $filePath; ?>" target="_blank">View Aadhar Card (Back)</a>
+                  <?php } ?>
+                  <input type="file" name="aadhar_back_image" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="aadhar_back" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                  <label for="dl_front">Driver's License (Front)</label>
+                  <?php
+                  if ($res['dl_front_image']) {
+                    $filePath = SITEPATH . $config['Images'] . $res['dl_front_image']; ?>
+                    <a href="<?php echo $filePath; ?>" target="_blank">View Driver's License (Front)</a>
+                  <?php } ?>
+                  <input type="file" name="dl_front_image" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="dl_front" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                  <label for="dl_back">Driver's License (Back)</label>
+                  <?php
+                  if ($res['dl_back_image']) {
+                    $filePath = SITEPATH . $config['Images'] . $res['dl_back_image']; ?>
+                    <a href="<?php echo $filePath; ?>" target="_blank">View Driver's License (Back)</a>
+                  <?php } ?>
+                  <input type="file" name="dl_back_image" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="dl_back" class="form-control">
+                </div>
+              </div>
+
+
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                  <label for="pan_card">PAN Card</label>
+                  <?php
+                  if ($res['pan_card_image']) {
+                    $filePath = SITEPATH . $config['Images'] . $res['pan_card_image']; ?>
+                    <a href="<?php echo $filePath; ?>" target="_blank">View PAN Card</a>
+                  <?php } ?>
+                  <input type="file" name="pan_card_image" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="pan_card" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="form-group">
+                  <label for="other_documents">Other (Documents)</label>
+                  <?php
+                  if ($res['other_documents']) {
+                    $documents = explode(',', $res['other_documents']);
+                    foreach ($documents as $key => $element) {
+                      $filePath = SITEPATH . $config['Images'] . $element; ?>
+                      <a href="<?php echo $filePath; ?>" target="_blank">Docs<?= $key + 1; ?></a>,
+                  <?php }
+                  } ?>
+                  <input type="file" name="other_documents[]" multiple accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="other_documents" class="form-control">
+                </div>
+              </div>
+              <div class="clearfix"></div>
+
+              <div class="col-sm-6 col-md-4 col-lg-3" style=" <?php if ($per['user']['add'] == 1) { ?> display:block;<?php } else { ?> display:none;<?php } ?>">
                 <div class="form-group">
                   <label>Status</label>
                   <select id="user_status" name="user_status" class="form-control">
@@ -461,7 +604,7 @@ if (isset($_GET['id'])) {
                 </div>
               </div>
 
-              <div class="col-sm-6 col-md-4 col-lg-4">
+              <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="form-group">
                   <label>User Role</label>
                   <select id="user_type" name="user_type" class="form-control">
@@ -474,18 +617,12 @@ if (isset($_GET['id'])) {
                 </div>
               </div>
 
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="form-group">
-                  <label>Profile</label>
-                  <input type="file" name="user_logo" accept=".jpg, .jpeg, .png" onchange="validateFileInput(this);" id="user_logo" class="form-control">
-                </div>
-              </div>
 
               <div class="clearfix"></div>
               <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="form-group">
                   <label>Description</label>
-                  <input class="form-control" maxlength="500" required name="user_desc" placeholder="" value="<?php echo $res['user_desc']; ?>" type="text">
+                  <input class="form-control" maxlength="500" name="user_desc" placeholder="Write something here........" value="<?php echo $res['user_desc']; ?>" type="text">
                 </div>
               </div>
 

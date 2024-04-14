@@ -51,8 +51,9 @@ if ($per['user']['view'] == 0) { ?>
                 <!-- <td><strong>Image</strong></td> -->
                 <td><strong>District Name</strong></td>
                 <td><strong>State Name</strong></td>
-                <td><strong>District Start Date</strong></td>
+                <!-- <td><strong>District Start Date</strong></td> -->
                 <td><strong>Description</strong></td>
+                <td><strong>Status</strong></td>
                 <td><strong>Action</strong></td>
               </tr>
             </thead>
@@ -67,13 +68,21 @@ if ($per['user']['view'] == 0) { ?>
                   <!-- <td>
                     <a class="iframe" href="#"><img src="<?php //echo SITEPATH; 
                                                           ?>upload/thumb/<?php //echo $rows['district_img']; 
-                                                                                                ?>" width="50px" height="50px"></a>
+                                                                          ?>" width="50px" height="50px"></a>
                   </td> -->
                   <td><?php echo $rows['district_name']; ?></td>
                   <td><?php echo $res['name']; ?></td>
-                  <td><?php echo $rows['district_startfrom']; ?></td>
+                  <!-- <td><?php echo $rows['district_startfrom']; ?></td> -->
                   <td><?php echo $rows['district_description']; ?></td>
-                  <td id="font12" width="15%"><a href="<?php echo SITEPATH; ?>admin/action/district.php?action=status&id=<?php echo  urlencode(encryptIt($rows['district_id'])); ?>" <?php if ($rows['district_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')"><i class="fa fa-angle-double-up"></i>
+                  <td>
+
+                    <?php if ($rows['district_status'] == 0) { ?>
+                      <i class="fa fa-check-circle" title="Active" style="color: green;"></i>
+                    <?php } else { ?>
+                      <i class="fa fa-times-circle" title="Pending" style="color: red;"></i>
+                    <?php  } ?>
+                  </td>
+                  <td id="font12" width="15%"><a href="javascript:void(0)" onclick="return confirmStatus('<?= urlencode(encryptIt($rows['district_id'])); ?>');" <?php if ($rows['district_status'] == "0") { ?> onMouseOver="showbox('active<?php echo $i; ?>')" onMouseOut="hidebox('active<?php echo $i; ?>')"><i class="fa fa-angle-double-up"></i>
                     <?php } else { ?>
                       onMouseOver="showbox('inactive<?php echo $i; ?>')" onMouseOut="hidebox('inactive<?php echo $i; ?>')"> <i class="fa fa-angle-double-down"></i>
                     <?php } ?>
@@ -93,11 +102,12 @@ if ($per['user']['view'] == 0) { ?>
                       <p>Edit</p>
                     </div>
                     &nbsp;&nbsp;
-                    <a href="#" onClick="return confirmDelete('<?php echo  urlencode(encryptIt($rows['district_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i>
+
+                    <!-- <a href="#" onClick="return confirmDelete('<?php echo  urlencode(encryptIt($rows['district_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i>
                     </a>
                     <div id="Delete<?php echo $i; ?>" class="hide1">
                       <p>Delete</p>
-                    </div>
+                    </div> -->
                   </td>
                 </tr>
               <?php
@@ -125,6 +135,24 @@ if ($per['user']['view'] == 0) { ?>
               });
 
               return false;
+            }
+
+            function confirmStatus(id) {
+              Swal.fire({
+                title: 'Confirmation',
+                text: 'Are you sure you want to change the status of this district ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  var statusChange = `<?= SITEPATH; ?>admin/action/district.php?action=status&id=${id}`;
+
+                  window.location.href = statusChange;
+                }
+              });
+
             }
           </script>
 
