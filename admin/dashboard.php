@@ -421,153 +421,108 @@ include_once("common/head.php");
                 </ol>
             </section>
 
+            <?php if ($_SESSION['AdminLogin'] == 1) { ?>
 
-            <section class="content">
+                <section class="content">
 
-                <!-- Cart start form here -->
-                <div class="row">
+                    <!-- Cart start form here -->
+                    <div class="row">
 
-                    <div class="col-lg-6 col-xs-6">
-                        <div class="custom-box user">
-                            <div class="inner">
-                                <h3 class="text-center"><?= count(getuser_byList()); ?></h3>
-                                <p class="text-center">User List Count</p>
-                            </div>
-                            <a href="<?php echo SITEPATH; ?>admin/user">
-                                <div class="icon custom-icon user text-center"><i class="fas fa-user"></i></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-xs-6">
-                        <div class="custom-box customer">
-                            <div class="inner">
-                                <h3 class="text-center"><?= count(getcustomer_byList()); ?></h3>
-                                <p class="text-center">Customer List Count</p>
-                            </div>
-                            <a href="<?php echo SITEPATH; ?>admin/customer">
-                                <div class="icon custom-icon customer text-center"><i class="fas fa-users"></i></div>
-                            </a>
-                        </div>
-                    </div>
-
-
-                    <!-- <div class="col-lg-4 col-xs-6">
-                        <div class="custom-box product">
-                            <div class="inner">
-                                <h3 class="text-center">42</h3>
-                                <p class="text-center">Product List Count</p>
-                            </div>
-                            <div class="icon custom-icon product text-center"><i class="fas fa-shopping-cart"></i></div>
-                        </div>
-                    </div> -->
-
-                    <!-- <div class="col-lg-4 col-xs-6">
-                        <div class="custom-box order">
-                            <div class="inner">
-                                <h3 class="text-center"><?= count(12); ?></h3>
-                                <p class="text-center">Order List Count</p>
-                            </div>
-                            <div class="icon custom-icon order text-center"><i class="fas fa-list-alt"></i></div>
-                        </div>
-                    </div> -->
-                </div>
-                <!-- Cart start form end -->
-
-
-                <div class="row">
-                    <div class="chit-chat-layer1">
-                        <!-- customer list  -->
-                        <div class="col-md-12 chit-chat-layer1-left">
-                            <div class="work-progres">
-                                <div class="chit-chat-heading">Latest Top 10 Customer List </div>
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th><strong>Name</strong></th>
-                                                <th><strong>Email</strong></th>
-                                                <th><strong>Number</strong></th>
-                                                <th><strong>Address</strong></th>
-                                                <th><strong>Status</strong></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $customerList = getcustomer_byList(10);
-                                            foreach ($customerList as $index => $customer) {
-                                                $custState = getState_byID($customer['cust_state']);
-                                                $cust_taluka = gettaluka_byID($customer['cust_taluka_id']);
-                                                $getdistrict_byID = getdistrict_byID($customer['cust_district_id']);
-                                            ?>
-                                                <tr>
-                                                    <td><?php echo $index + 1; ?></td>
-                                                    <td><?php echo $customer['cust_first_name']; ?></td>
-                                                    <td><?php echo $customer['cust_email']; ?></td>
-                                                    <td><?php echo $customer['cust_phone']; ?></td>
-                                                    <td>
-                                                        <div style="font-weight: bold;">
-                                                            <?php echo $customer['cust_address'] ?>,
-                                                            <span style="color: #333;"><?php echo $custState['name']; ?></span>
-                                                            <span style="color: #333;"><?php echo $getdistrict_byID['district_name']; ?></span>
-                                                            <span style="color: #333;"><?php echo $cust_taluka['taluka_name']; ?></span>-
-                                                            <span style="color: #333;"><?php echo $customer['cust_pincode']; ?></span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <?php if ($customer['cust_status'] == 0) { ?>
-                                                            <i class="fa fa-check-circle" title="Active" style="color: green;"></i>
-                                                        <?php } else { ?>
-                                                            <i class="fa fa-times-circle" title="Pending" style="color: red;"></i>
-                                                        <?php  } ?>
-                                                    </td>
-                                                </tr>
-                                            <?php
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="custom-box user">
+                                <div class="inner">
+                                    <h3 class="text-center"><?= count(getuser_byList()); ?></h3>
+                                    <p class="text-center">User List Count</p>
                                 </div>
+                                <a href="<?php echo SITEPATH; ?>admin/user">
+                                    <div class="icon custom-icon user text-center"><i class="fas fa-user"></i></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-xs-6">
+                            <div class="custom-box customer">
+                                <div class="inner">
+                                    <h3 class="text-center"><?= count(getcustomer_byList()); ?></h3>
+                                    <p class="text-center">Customer List Count</p>
+                                </div>
+                                <a href="<?php echo SITEPATH; ?>admin/customer">
+                                    <div class="icon custom-icon customer text-center"><i class="fas fa-users"></i></div>
+                                </a>
                             </div>
                         </div>
 
 
-                        <!-- order list  -->
-                        <div class="chit-chat-layer1" style="margin-top: 20px;">
-                            <!-- order list  -->
-                            <!-- <div class="col-md-12">
+                        <!-- <div class="col-lg-4 col-xs-6">
+                            <div class="custom-box product">
+                                <div class="inner">
+                                    <h3 class="text-center">42</h3>
+                                    <p class="text-center">Product List Count</p>
+                                </div>
+                                <div class="icon custom-icon product text-center"><i class="fas fa-shopping-cart"></i></div>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="col-lg-4 col-xs-6">
+                            <div class="custom-box order">
+                                <div class="inner">
+                                    <h3 class="text-center">23</h3>
+                                    <p class="text-center">Order List Count</p>
+                                </div>
+                                <div class="icon custom-icon order text-center"><i class="fas fa-list-alt"></i></div>
+                            </div>
+                        </div> -->
+                    </div>
+                    <!-- Cart start form end -->
+
+
+                    <div class="row">
+                        <div class="chit-chat-layer1">
+                            <!-- customer list  -->
+                            <div class="col-md-12 chit-chat-layer1-left">
                                 <div class="work-progres">
-                                    <div class="chit-chat-heading">Latest Top 10 Order List </div>
+                                    <div class="chit-chat-heading">Latest Top 10 Customer List </div>
                                     <div class="table-responsive">
                                         <table class="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Order Number</th>
-                                                    <th>Name</th>
-                                                    <th>Email</th>
-                                                    <th>Mobile</th>
-                                                    <th>Address</th>
-                                                    <th>Payment Status</th>
+                                                    <th><strong>Name</strong></th>
+                                                    <th><strong>Email</strong></th>
+                                                    <th><strong>Number</strong></th>
+                                                    <th><strong>Address</strong></th>
+                                                    <th><strong>Status</strong></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                // $orderList = getorders_list(10);
-                                                // pr($orderList);
-                                                foreach ($orderList as $index => $order) {
-
+                                                $customerList = getcustomer_byList(10);
+                                                foreach ($customerList as $index => $customer) {
+                                                    $custState = getState_byID($customer['cust_state']);
+                                                    $cust_taluka = gettaluka_byID($customer['cust_taluka_id']);
+                                                    $getdistrict_byID = getdistrict_byID($customer['cust_district_id']);
                                                 ?>
                                                     <tr>
                                                         <td><?php echo $index + 1; ?></td>
-                                                        <td><?php echo $order['order_number']; ?></td>
-                                                        <td><?php echo $order['first_name'] . ' ' . $order['last_name']; ?></td>
-                                                        <td><?php echo $order['email']; ?></td>
-                                                        <td><?php echo $order['mobile_number']; ?></td>
-                                                        <td><?php echo $order['cust_billing_address']; ?>
-                                                            <?php echo $order['customer_city'] . ' ' . $order['customer_state'] . '-' . $order['zip_code'] . ' ' . $order['customer_country']; ?></td>
-                                                        <td><?= ($order['payment_status'] == 0) ? 'Pending' : 'Success'; ?></td>
+                                                        <td><?php echo $customer['cust_first_name']; ?></td>
+                                                        <td><?php echo $customer['cust_email']; ?></td>
+                                                        <td><?php echo $customer['cust_phone']; ?></td>
+                                                        <td>
+                                                            <div style="font-weight: bold;">
+                                                                <?php echo $customer['cust_address'] ?>,
+                                                                <span style="color: #333;"><?php echo $custState['name']; ?></span>
+                                                                <span style="color: #333;"><?php echo $getdistrict_byID['district_name']; ?></span>
+                                                                <span style="color: #333;"><?php echo $cust_taluka['taluka_name']; ?></span>-
+                                                                <span style="color: #333;"><?php echo $customer['cust_pincode']; ?></span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($customer['cust_status'] == 0) { ?>
+                                                                <i class="fa fa-check-circle" title="Active" style="color: green;"></i>
+                                                            <?php } else { ?>
+                                                                <i class="fa fa-times-circle" title="Pending" style="color: red;"></i>
+                                                            <?php  } ?>
+                                                        </td>
                                                     </tr>
                                                 <?php
                                                 }
@@ -576,15 +531,124 @@ include_once("common/head.php");
                                         </table>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
+
+
+                            <!-- order list  -->
+                            <div class="chit-chat-layer1" style="margin-top: 20px;">
+                                <!-- order list  -->
+                                <!-- <div class="col-md-12">
+                                    <div class="work-progres">
+                                        <div class="chit-chat-heading">Latest Top 10 Order List </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Order Number</th>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Mobile</th>
+                                                        <th>Address</th>
+                                                        <th>Payment Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    // $orderList = getorders_list(10);
+                                                    // pr($orderList);
+                                                    foreach ($orderList as $index => $order) {
+
+                                                    ?>
+                                                        <tr>
+                                                            <td><?php echo $index + 1; ?></td>
+                                                            <td><?php echo $order['order_number']; ?></td>
+                                                            <td><?php echo $order['first_name'] . ' ' . $order['last_name']; ?></td>
+                                                            <td><?php echo $order['email']; ?></td>
+                                                            <td><?php echo $order['mobile_number']; ?></td>
+                                                            <td><?php echo $order['cust_billing_address']; ?>
+                                                                <?php echo $order['customer_city'] . ' ' . $order['customer_state'] . '-' . $order['zip_code'] . ' ' . $order['customer_country']; ?></td>
+                                                            <td><?= ($order['payment_status'] == 0) ? 'Pending' : 'Success'; ?></td>
+                                                        </tr>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                            </div>
 
                         </div>
-
                     </div>
-                </div>
 
-                <!-- <div class="clearfix"></div> -->
-            </section>
+                    <!-- <div class="clearfix"></div> -->
+                </section>
+
+            <?php } else { ?>
+
+                <section id="none-admin">
+                    <style>
+                        #none-admin {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: #f4f4f4;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .welcome-container {
+                            text-align: center;
+                            padding: 40px;
+                            background-color: #ffffff;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            max-width: 80%;
+                            color: #333;
+                        }
+
+                        h1 {
+                            color: #007bff;
+                            font-size: 36px;
+                            margin-bottom: 20px;
+                        }
+
+                        p {
+                            color: #666;
+                            line-height: 1.6;
+                            margin-bottom: 20px;
+                        }
+
+                        a {
+                            text-decoration: none;
+                            color: #007bff;
+                            font-weight: bold;
+                            transition: color 0.3s ease;
+                        }
+
+                        a:hover {
+                            color: #0056b3;
+                            /* Darker shade of blue on hover */
+                        }
+                    </style>
+
+                    <div class="welcome-container">
+                        <h1>Welcome!</h1>
+                        <p>Oops! It seems you do not have access to this dashboard.</p>
+                        <p>If you believe this is an error, please contact support for assistance.</p>
+                    </div>
+                </section>
+
+            <?php } ?>
+
+
+
         </div>
     </div>
     <footer class="main-footer">
