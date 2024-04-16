@@ -22,6 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
                 </div>
                 <input id="data_id" name="data_id" type="hidden" value="' . $employee_id . '" />
                 <input id="selected_month" name="selected_month" type="hidden" value="' . $selected_month . '" />
+                <input name="gross_salary" type="hidden" value="12000" />
         
                 <div class="col-sm-3 col-md-3 col-lg-3">
                     <div class="form-group">
@@ -148,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
             $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
                 <label>Achieved Total Point</label>
-                <input class="form-control" name="total_point"  min="0" placeholder="Total Point" value="' . $totalPoint . '" type="number">
+                <input class="form-control"  name="total_point"  min="0" placeholder="Total Point" value="' . $totalPoint . '" type="number">
             </div>
           </div>
 
@@ -170,6 +171,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
             <div class="form-group">
                 <label>Other Pay Amount</label>
                 <input class="form-control" step="0.1" name="other_pay_amount" min="0" placeholder="Other Pay Amount" type="number">
+            </div>
+            </div>
+
+            <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="form-group">
+                <label>Other Deduction</label>
+                <input class="form-control" step="1" name="other_deduction" min="1" placeholder="Other Deduction" type="number">
             </div>
             </div>
             

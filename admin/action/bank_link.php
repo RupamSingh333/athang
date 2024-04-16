@@ -6,6 +6,8 @@ switch ($action) {
     case "save":
         $field = array();
         $newLink = get_safe_post('newLink');
+        $link_desc = get_safe_post('link_desc');
+        // pr($_POST);exit;
 
         // Check if the link already exists
         $getBankLink_byID = getBankLink_byID($newLink);
@@ -16,6 +18,7 @@ switch ($action) {
         }
 
         $field['link'] = $newLink;
+        $field['link_desc'] = $link_desc;
         $output = save_command(tbl_bank_link, $field, "bank_link_id ", $primary_value);
         $_SESSION['msg'] = $output;
         break;

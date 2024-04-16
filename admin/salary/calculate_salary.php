@@ -17,7 +17,7 @@ if ($_POST['action'] == 'delete') {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+
     // Extract data from POST request
     $employee_id = $_POST['data_id'];
     $selected_month = $_POST['selected_month'];
@@ -39,8 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $BS = $_POST['BS'];
     $total_point = $_POST['total_point'];
     $total_salary = $_POST['total_salary'];
+    $gross_salary = $_POST['gross_salary'];
     $total_calculated_salary = $_POST['total_calculated_salary'];
     $other_pay_amount = $_POST['other_pay_amount'];
+    $other_deduction = $_POST['other_deduction'];
 
 
     $selected_month_year = date('Y-m-d', strtotime($selected_month));
@@ -61,8 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
 
         // Prepare the SQL query
-        $sql = "INSERT INTO employee_salary_data (employee_id, selected_month, first_name, user_email, user_phone, basic_salary, petrol, mobile_recharge, extra_allowance, working_target, total_working_days, Food_License, Shop_Act, Bank_Account, Demat_Account, ITR, BS, total_point, total_salary, total_calculated_salary, other_pay_amount) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO employee_salary_data (employee_id, selected_month, first_name, user_email, user_phone, basic_salary, petrol, mobile_recharge, extra_allowance, working_target, total_working_days, Food_License, Shop_Act, Bank_Account, Demat_Account, ITR, BS, total_point, total_salary,gross_salary, total_calculated_salary, other_pay_amount,other_deduction) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Prepare the statement
         $stmt = mysqli_prepare($link, $sql);
@@ -70,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Bind parameters with the statement
         mysqli_stmt_bind_param(
             $stmt,
-            'isssssssssiiiiiiiiiid',
+            'isssssssssiiiiiiiiiiiii',
             $employee_id,
             $selected_month,
             $first_name,
@@ -90,8 +92,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $BS,
             $total_point,
             $total_salary,
+            $gross_salary,
             $total_calculated_salary,
-            $other_pay_amount
+            $other_pay_amount,
+            $other_deduction
         );
 
         // Execute the statement
@@ -100,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['errorType'] = "success";
             // echo "Data inserted successfully";
         } else {
-            // echo "Error: " . mysqli_error($link);
+            echo "Error: " . mysqli_error($link); die;
             $_SESSION['msg'] = "Error: " . mysqli_error($link);
             $_SESSION['errorType'] = "error";
         }

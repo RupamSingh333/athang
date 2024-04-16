@@ -6,6 +6,7 @@ switch ($action) {
     case "save":
         $field = array();
         $newLink = get_safe_post('newLink');
+        $link_desc = get_safe_post('link_desc');
 
         // Check if the link already exists
         $getDematLink_byID = getDematLink_byID($newLink);
@@ -16,6 +17,7 @@ switch ($action) {
         }
 
         $field['link'] = $newLink;
+        $field['link_desc'] = $link_desc;
         $output = save_command(tbl_demat_link, $field, "demat_link_id ", $primary_value);
         $_SESSION['msg'] = $output;
         break;

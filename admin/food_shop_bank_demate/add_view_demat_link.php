@@ -63,6 +63,7 @@ if ($per['demat_account']['add'] == 0) { ?>
                                     <div class="form-group">
                                         <label for="newLink">Link:</label>
                                         <input type="url" class="form-control" id="newLink" name="newLink" required>
+                                        <input class="form-control" maxlength="500" name="link_desc" placeholder="Write something here........"type="text">
                                         <input type="hidden" name="action" value="save">
                                     </div>
 
@@ -86,8 +87,9 @@ if ($per['demat_account']['add'] == 0) { ?>
                             <tr>
                                 <td><strong>Sr.No</strong></td>
                                 <td><strong>Link</strong></td>
+                                <td><strong>Desc</strong></td>
                                 <td><strong>Status</strong></td>
-                                <td><strong>Action</strong></td>
+                                <!-- <td><strong>Action</strong></td> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -101,6 +103,7 @@ if ($per['demat_account']['add'] == 0) { ?>
                                     <td>
                                         <?php echo ($rows['link']); ?>
                                     </td>
+                                    <td><?=$rows['link_desc'];?></td>
                                     <td>
 
                                         <?php if ($rows['status'] == 'Y') { ?>
@@ -112,7 +115,7 @@ if ($per['demat_account']['add'] == 0) { ?>
                                         <?php } ?>
                                     </td>
 
-                                    <td id="font12" style="width:10%">
+                                    <!-- <td id="font12" style="width:10%">
 
                                         <?php if ($per['demat_account']['del'] == 1) { ?>
                                             <a href="javascript:void(0)" onclick="return confirmDelete('<?php echo urlencode(encryptIt($rows['demat_link_id'])); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')"><i class="fa fa-times"></i></a>
@@ -122,7 +125,7 @@ if ($per['demat_account']['add'] == 0) { ?>
 
 
                                         <?php } ?>
-                                    </td>
+                                    </td> -->
                                 </tr>
 
                             <?php

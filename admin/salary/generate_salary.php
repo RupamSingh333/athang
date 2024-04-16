@@ -127,6 +127,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                     <th>Working Target(Point)</th>
                                                     <th>Achieved Total Point</th>
                                                     <th>Total Working Days</th>
+                                                    <th>Gross Salary</th>
                                                     <th>Total Salary</th>
                                                     <th>Calculated Salary</th>
                                                     <th>Other Pay Amount</th>
@@ -145,6 +146,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                         <td><?php echo $data['working_target']; ?></td>
                                                         <td><?php echo $data['total_point']; ?></td>
                                                         <td><?php echo $data['total_working_days']; ?></td>
+                                                        <td><?php echo $data['gross_salary']; ?></td>
                                                         <td><?php echo $data['total_salary']; ?></td>
                                                         <td><?php echo $data['total_calculated_salary']; ?></td>
                                                         <td><?php echo $data['other_pay_amount']; ?></td>
@@ -244,7 +246,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                     let ITR = parseFloat($('input[name="ITR"]').val()) || 0;
                     let B_S = parseFloat($('input[name="BS"]').val()) || 0;
                     let totalPoint = Food_License + Shop_Act + Bank_Account + Demat_Account + ITR + B_S;
-                    $('input[name="total_point"]').val(totalPoint);
+                    $('input[name="total_point"]').val(parseFloat(totalPoint));
                     calculateSalary();
                 }
 
@@ -254,7 +256,7 @@ if ($per['salary_management']['view'] == 0) { ?>
                     let mobile_recharge = parseFloat($('input[name="mobile_recharge"]').val()) || 0;
                     let extra_allowance = parseFloat($('input[name="extra_allowance"]').val()) || 0;
                     let totalSalary = basic_salary + petrol + mobile_recharge + extra_allowance;
-                    $('input[name="total_salary"]').val(totalSalary);
+                    $('input[name="total_salary"]').val(parseFloat(totalSalary));
                     calculateSalary();
                 }
 
@@ -280,12 +282,12 @@ if ($per['salary_management']['view'] == 0) { ?>
                     if (totalPoint > workingTarget) {
                         let excessPoints = totalPoint - workingTarget;
                         let excessSalary = excessPoints * (salary / workingTarget);
-                        totalCalculateSalary = salary + excessSalary;
+                        totalCalculateSalary = Math.round(salary + excessSalary);
                     } else {
-                        totalCalculateSalary = salary * (percentageAchieved / 100);
+                        totalCalculateSalary = Math.round(salary * (percentageAchieved / 100));
                     }
 
-                    $('input[name="total_calculated_salary"]').val(totalCalculateSalary.toFixed(2));
+                    $('input[name="total_calculated_salary"]').val(parseFloat(totalCalculateSalary.toFixed(2)));
                 }
             </script>
 
