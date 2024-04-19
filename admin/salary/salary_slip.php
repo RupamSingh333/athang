@@ -1,3 +1,6 @@
+<?php
+include("../../system_config.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
