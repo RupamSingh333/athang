@@ -151,6 +151,9 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                         <td><?php echo $data['total_calculated_salary']; ?></td>
                                                         <td><?php echo $data['other_pay_amount']; ?></td>
                                                         <td>
+                                                            <a href="salary_slip.php" target="_blank" rel="noopener noreferrer">
+                                                            <i class="fa fa-file"></i>
+                                                            </a>
                                                             <?php
                                                             if ($per['salary_management']['del'] == 1) { ?>
                                                                 <a href="javascript:void(0);" onclick="return confirmDelete('<?php echo urlencode($data['id']); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')">
