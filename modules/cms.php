@@ -25,10 +25,18 @@ define("tbl_bank_account", "bank_account");
 define("tbl_demat_account", "demat_account");
 define("tbl_itr", "itr");
 define("tbl_bs", "bs");
+define("tbl_emp_salary_data", "employee_salary_data");
 
 function getBsCustId($customer_id)
 {
     $sql = "select * from " . tbl_bs . " where customer_id='" . $customer_id . "' and status = 0 limit 0,1 ";
+    $array = FetchRow($sql);
+    return $array;
+}
+
+function getEmployeeSalaryDataById($id)
+{
+    $sql = "select * from " . tbl_emp_salary_data . " where id=" . $id;
     $array = FetchRow($sql);
     return $array;
 }

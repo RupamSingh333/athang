@@ -124,13 +124,13 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                     <th>ID</th>
                                                     <th>Employee Name</th>
                                                     <th>Selected Month</th>
-                                                    <th>Working Target(Point)</th>
-                                                    <th>Achieved Total Point</th>
-                                                    <th>Total Working Days</th>
+                                                    <th>Total Working</th>
                                                     <th>Gross Salary</th>
                                                     <th>Total Salary</th>
+                                                    <th>Other Pay</th>
+                                                    <th>Other Deduction</th>
                                                     <th>Calculated Salary</th>
-                                                    <th>Other Pay Amount</th>
+                                                    <th>Descriptions</th>
                                                     <th>Action</th>
                                                     <!-- Add more table headers for other columns as needed -->
                                                 </tr>
@@ -140,26 +140,32 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                     $empData = getuser_byID($data['employee_id']);
                                                 ?>
                                                     <tr>
-                                                        <td><?php echo $data['id']; ?></td>
-                                                        <td><?php echo $empData['first_name']; ?></td>
-                                                        <td><?php echo date('m-Y', strtotime($data['selected_month'])); ?></td>
-                                                        <td><?php echo $data['working_target']; ?></td>
-                                                        <td><?php echo $data['total_point']; ?></td>
-                                                        <td><?php echo $data['total_working_days']; ?></td>
-                                                        <td><?php echo $data['gross_salary']; ?></td>
-                                                        <td><?php echo $data['total_salary']; ?></td>
-                                                        <td><?php echo $data['total_calculated_salary']; ?></td>
-                                                        <td><?php echo $data['other_pay_amount']; ?></td>
+                                                        <td><?= $data['id']; ?></td>
+                                                        <td><?= $empData['first_name']; ?></td>
+                                                        <td><?= date('m-Y', strtotime($data['selected_month'])); ?></td>
                                                         <td>
-                                                            <a href="salary_slip.php" target="_blank" rel="noopener noreferrer">
-                                                            <i class="fa fa-file"></i>
+                                                            <span>Target(Point):</span> <?= $data['working_target']; ?><br>
+                                                            <span>Achieved(Point):<?= $data['total_point']; ?></span><br>
+                                                            <span>Working(Days):<?= $data['total_point']; ?></span>
+                                                        </td>
+                                                        <!-- <td><?= $data['total_point']; ?></td>
+                                                        <td><?= $data['total_working_days']; ?></td> -->
+                                                        <td><?= $data['gross_salary']; ?></td>
+                                                        <td><?= $data['total_salary']; ?></td>
+                                                        <td><?= $data['other_pay_amount']; ?></td>
+                                                        <td><?= $data['other_deduction']; ?></td>
+                                                        <td><?= $data['total_calculated_salary']; ?></td>
+                                                        <td><?= $data['descriptions']; ?></td>
+                                                        <td>
+                                                            <a href="salary_slip.php?id=<?= urlencode(encryptIt($data['id'])); ?>" target="_blank" rel="noopener noreferrer">
+                                                                <i class="fa fa-file"></i>
                                                             </a>
                                                             <?php
                                                             if ($per['salary_management']['del'] == 1) { ?>
-                                                                <a href="javascript:void(0);" onclick="return confirmDelete('<?php echo urlencode($data['id']); ?>');" onMouseOver="showbox('Delete<?php echo $i; ?>')" onMouseOut="hidebox('Delete<?php echo $i; ?>')">
+                                                                <a href="javascript:void(0);" onclick="return confirmDelete('<?= urlencode($data['id']); ?>');" onMouseOver="showbox('Delete<?= $i; ?>')" onMouseOut="hidebox('Delete<?= $i; ?>')">
                                                                     <i class="fa fa-times"></i>
                                                                 </a>
-                                                                <div id="Delete<?php echo $i; ?>" class="hide1">
+                                                                <div id="Delete<?= $i; ?>" class="hide1">
                                                                     <p>Delete</p>
                                                                 </div>
                                                             <?php } ?>
@@ -263,31 +269,30 @@ if ($per['salary_management']['view'] == 0) { ?>
                     calculateSalary();
                 }
 
-
-                // function calculateSalary() {
-                //     let totalPoint = parseFloat($('input[name="total_point"]').val()) || 0;
-                //     let salary = parseFloat($('input[name="total_salary"]').val()) || 0;
-                //     // Calculate percentage achieved
-                //     let workingTarget = parseFloat($('input[name="working_target"]').val()) || 0;
-                //     let percentageAchieved = (totalPoint / workingTarget) * 100;
-                //     percentageAchieved = Math.min(percentageAchieved, 100); // Ensure it doesn't exceed 100%
-                //     let totalCalculateSalary = salary * (percentageAchieved / 100);
-                //     $('input[name="total_calculated_salary"]').val(totalCalculateSalary.toFixed(2));
-                // }
-
                 function calculateSalary() {
+
+                    let petrol = parseFloat($('input[name="petrol"]').val()) || 0;
+                    let mobile_recharge = parseFloat($('input[name="mobile_recharge"]').val()) || 0;
+                    let extra_allowance = parseFloat($('input[name="extra_allowance"]').val()) || 0;
+                    let basic_salary = parseFloat($('input[name="basic_salary"]').val()) || 0;
+                    let other_pay_amount = parseFloat($('input[name="other_pay_amount"]').val()) || 0;
+                    let other_deduction = parseFloat($('input[name="other_deduction"]').val()) || 0;
+                    let salary = (petrol + mobile_recharge + extra_allowance + other_pay_amount) - other_deduction;
+
                     let totalPoint = parseFloat($('input[name="total_point"]').val()) || 0;
-                    let salary = parseFloat($('input[name="total_salary"]').val()) || 0;
                     let workingTarget = parseFloat($('input[name="working_target"]').val()) || 0;
                     let percentageAchieved = (totalPoint / workingTarget) * 100;
                     percentageAchieved = Math.min(percentageAchieved, 100);
+
                     let totalCalculateSalary = 0;
-                    if (totalPoint > workingTarget) {
+                    if (percentageAchieved < 30) {
+                        totalCalculateSalary = salary;
+                    } else if (totalPoint > workingTarget) {
                         let excessPoints = totalPoint - workingTarget;
-                        let excessSalary = excessPoints * (salary / workingTarget);
-                        totalCalculateSalary = Math.round(salary + excessSalary);
+                        let excessSalary = excessPoints * (basic_salary / workingTarget);
+                        totalCalculateSalary = salary + Math.round(basic_salary + excessSalary);
                     } else {
-                        totalCalculateSalary = Math.round(salary * (percentageAchieved / 100));
+                        totalCalculateSalary = salary + Math.round(basic_salary * (percentageAchieved / 100));
                     }
 
                     $('input[name="total_calculated_salary"]').val(parseFloat(totalCalculateSalary.toFixed(2)));

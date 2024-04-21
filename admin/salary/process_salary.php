@@ -49,14 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
                     <div class="form-group">
                         <label>User Role</label>
                     <select id="user_type" disabled name="user_type" class="form-control">';
-                foreach ($config['user_type'] as $key => $value) {
-                  if ($key == 1) {
-                    continue;
-                  }
-                  $selected = ($key == $employee_details['user_type']) ? ' selected="selected"' : '';
-                  $html .= '<option ' . $selected . ' value="' . $key . '">' . $value . '</option>';
-                }
-                $html .= '</select>
+  foreach ($config['user_type'] as $key => $value) {
+    if ($key == 1) {
+      continue;
+    }
+    $selected = ($key == $employee_details['user_type']) ? ' selected="selected"' : '';
+    $html .= '<option ' . $selected . ' value="' . $key . '">' . $value . '</option>';
+  }
+  $html .= '</select>
                     </div>
                 </div>
 
@@ -72,28 +72,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
               <div class="col-sm-2 col-md-2 col-lg-2">
                 <div class="form-group">
                   <label>Basic Salary</label>
-                  <input class="form-control" name="basic_salary" step="0.1" onchange="sumOfTotalSalary();" min="0" placeholder="Basic Salary" value="' . $employee_details['basic_salary'] . '" type="number">
+                  <input class="form-control" name="basic_salary" step="1" onchange="sumOfTotalSalary();" min="0" placeholder="Basic Salary" value="' . $employee_details['basic_salary'] . '" type="number">
                 </div>
               </div>
 
               <div class="col-sm-2 col-md-2 col-lg-2">
                 <div class="form-group">
                   <label>Petrol</label>
-                  <input class="form-control" name="petrol" step="0.1" min="0" onchange="sumOfTotalSalary();" placeholder="Petrol Expense" value="' . $employee_details['petrol'] . '" type="number">
+                  <input class="form-control" name="petrol" step="1" min="0" onchange="sumOfTotalSalary();" placeholder="Petrol Expense" value="' . $employee_details['petrol'] . '" type="number">
                 </div>
               </div>
 
               <div class="col-sm-2 col-md-2 col-lg-2">
                 <div class="form-group">
                   <label>Mobile Recharge</label>
-                  <input class="form-control" name="mobile_recharge" step="0.1" onchange="sumOfTotalSalary();" min="0" placeholder="Mobile Recharge Expense" value="' . $employee_details['mobile_recharge'] . '" type="number">
+                  <input class="form-control" name="mobile_recharge" step="1" onchange="sumOfTotalSalary();" min="0" placeholder="Mobile Recharge Expense" value="' . $employee_details['mobile_recharge'] . '" type="number">
                 </div>
               </div>
 
               <div class="col-sm-2 col-md-2 col-lg-2">
                 <div class="form-group">
                   <label>Extra Allowance</label>
-                  <input class="form-control" name="extra_allowance" step="0.1" onchange="sumOfTotalSalary();" min="0" placeholder="Extra Allowance" value="' . $employee_details['extra_allowance'] . '" type="number">
+                  <input class="form-control" name="extra_allowance" step="1" onchange="sumOfTotalSalary();" min="0" placeholder="Extra Allowance" value="' . $employee_details['extra_allowance'] . '" type="number">
                 </div>
               </div>
 
@@ -119,34 +119,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
                 </div>
             </div>';
 
-            $totalPoint = 0;
+  $totalPoint = 0;
 
-            foreach ($getAllPointsByEmpId as $key => $totalCount) {
-              $totalPoint += $totalCount;
-              $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
+  foreach ($getAllPointsByEmpId as $key => $totalCount) {
+    $totalPoint += $totalCount;
+    $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
                                                                           <div class="form-group">
                                                                               <label>' . $key . '</label>
                                                                               <input class="form-control" onchange="calculateTotalPoint();" name="' . $key . '" min="0" placeholder="' . $key . '" value="' . $totalCount . '" type="number">
                                                                           </div>
                                                                           </div>';
-            }
+  }
 
-            $salary = $employee_details['basic_salary'] + $employee_details['petrol'] + $employee_details['mobile_recharge'] + $employee_details['extra_allowance'];
-            $percentageAchieved = ($totalPoint / $employee_details['working_target']) * 100;
-            $percentageAchieved = min($percentageAchieved, 100);
-            // $totalCalculateSalary = $salary * ($percentageAchieved / 100);
+  $salary = $employee_details['petrol'] + $employee_details['mobile_recharge'] + $employee_details['extra_allowance'];
+  $basic_salary = $employee_details['basic_salary'];
+  $working_target = $employee_details['working_target'];
 
-            // Calculate total calculated salary
-            if ($totalPoint > $employee_details['working_target']) {
-              $excessPoints = $totalPoint - $employee_details['working_target'];
-              $excessSalary = $excessPoints * ($salary / $employee_details['working_target']);
-              $totalCalculateSalary = $salary + $excessSalary;
-            } else {
-              $totalCalculateSalary = $salary * ($percentageAchieved / 100);
-            }
+  $percentageAchieved = ($totalPoint / $employee_details['working_target']) * 100;
+  $percentageAchieved = min($percentageAchieved, 100);
+  // $totalCalculateSalary = $salary * ($percentageAchieved / 100);
+
+  // Calculate totalCalculateSalary
+  if ($percentageAchieved < 30) {
+    $totalCalculateSalary = $salary;
+  } else if ($totalPoint > $employee_details['working_target']) {
+    $excessPoints = $totalPoint - $employee_details['working_target'];
+    $excessSalary = $excessPoints * ($basic_salary / $employee_details['working_target']);
+    $totalCalculateSalary = $salary + $excessSalary;
+  } else {
+    $totalCalculateSalary = $salary + ($basic_salary * ($percentageAchieved / 100));
+    // pr($basic_salary * ($percentageAchieved / 100));
+  }
 
 
-            $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
+  $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
                 <label>Achieved Total Point</label>
                 <input class="form-control"  name="total_point"  min="0" placeholder="Total Point" value="' . $totalPoint . '" type="number">
@@ -155,43 +161,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
 
             <div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
-                <label>Total Salary</label>
-                <input class="form-control" step="0.1" name="total_salary" onchange="calculateSalary();" min="0" placeholder="Total Salary" value="' . $salary . '" type="number">
-            </div>
-            </div>
-            
-            <div class="col-sm-2 col-md-2 col-lg-2">
-                <div class="form-group">
-                    <label>Calculated Salary</label>
-                    <input class="form-control" step="0.1" name="total_calculated_salary" min="0" placeholder="Total Point" value="' . $totalCalculateSalary . '" type="number">
-                </div>
-            </div>
-
-            <div class="col-sm-2 col-md-2 col-lg-2">
-            <div class="form-group">
                 <label>Other Pay Amount</label>
-                <input class="form-control" step="0.1" name="other_pay_amount" min="0" placeholder="Other Pay Amount" type="number">
+                <input class="form-control" step="1" name="other_pay_amount" onchange="calculateSalary();" min="0" placeholder="Other Pay Amount" type="number">
             </div>
             </div>
 
             <div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
                 <label>Other Deduction</label>
-                <input class="form-control" step="1" name="other_deduction" min="1" placeholder="Other Deduction" type="number">
+                <input class="form-control" step="1" name="other_deduction" onchange="calculateSalary();" min="0" placeholder="Other Deduction" type="number">
+            </div>
+            </div>
+
+            <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="form-group">
+                <label>Total Salary</label>
+                <input class="form-control" step="1" name="total_salary" onchange="calculateSalary();" min="0" placeholder="Total Salary" value="' . ($salary + $basic_salary) . '" type="number">
             </div>
             </div>
             
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <div class="form-group">
+                    <label>Calculated Salary</label>
+                    <input class="form-control" step="1" name="total_calculated_salary" min="0" placeholder="Total Point" value="' . $totalCalculateSalary . '" type="number">
+                </div>
+            </div>
+            
             <div class="clearfix"></div>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <div class="form-group">
+                <label>Description</label>
+                <input class="form-control" maxlength="500" name="descriptions" placeholder="Write something here........" type="text">
+              </div>
+            </div>
 
             <div class="text-center">
             <button type="submit" class="btn btn-danger">Generate Salary</button>
             </div>
             </div>';
 
-        $html .= '</form> </div></section>';
+  $html .= '</form> </div></section>';
 
-      echo $html;
-    } else {
-      echo "Invalid request";
-      die;
-    }
+  echo $html;
+} else {
+  echo "Invalid request";
+  die;
+}

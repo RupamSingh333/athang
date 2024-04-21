@@ -1,5 +1,133 @@
 <?php
 include("../../system_config.php");
+$data_id = urlencode(decryptIt(get_safe_get('id')));
+// pr($data_id);exit;
+$getEmployeeSalaryDataById = getEmployeeSalaryDataById($data_id);
+$getuser_byID = getuser_byID($getEmployeeSalaryDataById['employee_id']);
+// pr($getEmployeeSalaryDataById);;
+// pr($getuser_byID);exit;
+
+function write_num($val)
+{
+    $result = ''; // Initialize the result string
+
+    if (floor($val / 1000) > 0) {
+        $temp = floor($val / 1000);
+        $val -= $temp * 1000;
+        $result .= ucfirst(write_num($temp)) . " Thousand ";
+        if ($val == 0) return $result;
+    }
+
+    if (floor($val / 100) > 0) {
+        $temp = floor($val / 100);
+        $val -= $temp * 100;
+        $result .= ucfirst(write_num($temp)) . " Hundred ";
+        if ($val == 0) return $result;
+    }
+
+    if ($val > 19) {
+        if (floor($val / 10) > 0) {
+            $temp = floor($val / 10);
+            $val -= $temp * 10;
+            switch ($temp) {
+                case 9:
+                    $result .= "Ninety";
+                    break;
+                case 8:
+                    $result .= "Eighty";
+                    break;
+                case 7:
+                    $result .= "Seventy";
+                    break;
+                case 6:
+                    $result .= "Sixty";
+                    break;
+                case 5:
+                    $result .= "Fifty";
+                    break;
+                case 4:
+                    $result .= "Forty";
+                    break;
+                case 3:
+                    $result .= "Thirty";
+                    break;
+                case 2:
+                    $result .= "Twenty";
+                    break;
+            }
+            if ($val > 0) {
+                $result .= "-";
+                $result .= write_num($val);
+            }
+        }
+    } else {
+        switch ($val) {
+            case 19:
+                $result .= "Nineteen";
+                break;
+            case 18:
+                $result .= "Eighteen";
+                break;
+            case 17:
+                $result .= "Seventeen";
+                break;
+            case 16:
+                $result .= "Sixteen";
+                break;
+            case 15:
+                $result .= "Fifteen";
+                break;
+            case 14:
+                $result .= "Fourteen";
+                break;
+            case 13:
+                $result .= "Thirteen";
+                break;
+            case 12:
+                $result .= "Twelve";
+                break;
+            case 11:
+                $result .= "Eleven";
+                break;
+            case 10:
+                $result .= "Ten";
+                break;
+            case 9:
+                $result .= "Nine";
+                break;
+            case 8:
+                $result .= "Eight";
+                break;
+            case 7:
+                $result .= "Seven";
+                break;
+            case 6:
+                $result .= "Six";
+                break;
+            case 5:
+                $result .= "Five";
+                break;
+            case 4:
+                $result .= "Four";
+                break;
+            case 3:
+                $result .= "Three";
+                break;
+            case 2:
+                $result .= "Two";
+                break;
+            case 1:
+                $result .= "One";
+                break;
+            case 0:
+                $result .= "Zero";
+                break;
+        }
+    }
+
+    return ucfirst($result); // Capitalize the first character of the result
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +135,7 @@ include("../../system_config.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salary Slip</title>
+    <title><?= date('Y-F-', strtotime($getEmployeeSalaryDataById['selected_month'])); ?>Salary Slip</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -145,15 +273,15 @@ include("../../system_config.php");
 
         <table>
             <tr>
-                <th align="center" colspan="2">SALARY SLIP FOR APRIL 2024</th>
+                <th align="center" colspan="2">SALARY SLIP FOR <?= date('F Y', strtotime($getEmployeeSalaryDataById['selected_month'])); ?></th>
             </tr>
             <tr>
                 <td><strong>Name of Employee:</strong></td>
-                <td>Mr. ABC</td>
+                <td><?= $getEmployeeSalaryDataById['first_name']; ?></td>
             </tr>
             <tr>
                 <td><strong>Designation:</strong></td>
-                <td>Marketing Executive/Clerk/BM</td>
+                <td> <?php echo $config['user_type'][$getuser_byID['user_type']]; ?></td>
             </tr>
         </table>
 
@@ -166,41 +294,44 @@ include("../../system_config.php");
             </tr>
             <tr>
                 <td>BASIC</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['basic_salary']); ?></td>
                 <td>LEAVE</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['basic_salary']); ?></td>
             </tr>
             <tr>
                 <td>PETROL ALLOWANCE</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['petrol']); ?></td>
                 <td>OTHER DEDUCTION</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['other_deduction']); ?></td>
             </tr>
             <tr>
                 <td>MOBILE RECHARGE</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['mobile_recharge']); ?></td>
                 <td>ADVANCE</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['other_pay_amount']); ?></td>
             </tr>
             <tr>
                 <td>INCENTIVE</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['other_pay_amount']); ?></td>
                 <td></td>
                 <td></td>
             </tr>
             <tr class="total">
                 <td>Total Earnings</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['basic_salary']); ?></td>
                 <td>Total Deductions</td>
-                <td>*****</td>
+                <td><?= number_format($getEmployeeSalaryDataById['other_deduction']); ?></td>
             </tr>
             <tr>
                 <td colspan="2" class="total">NET PAYABLE</td>
-                <td colspan="2" class="total">*****</td>
+                <td colspan="2" class="total"><?= number_format($getEmployeeSalaryDataById['total_calculated_salary']); ?></td>
             </tr>
         </table>
+        <?php 
+        $amountInWord =  write_num($getEmployeeSalaryDataById['total_calculated_salary']); 
 
-        <p style="margin-top: 20px;"><strong>In words:</strong> [Amount in words]</p>
+        ?>
+        <p style="margin-top: 20px;"><strong>In words:</strong> <?= $amountInWord; ?></p>
     </div>
 </body>
 
