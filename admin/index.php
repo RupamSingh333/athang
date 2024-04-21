@@ -39,7 +39,7 @@ include("../system_config.php");
         <div class="login-box">
           <div class="login-logo"> 
             <a href="">
-              <img src="<?php echo SITEPATH; ?>upload/logo.jpeg" class="img-responsive center-block">
+              <img src="<?php echo SITEPATH; ?>upload/logo.png" class="img-responsive center-block">
           </a> 
           </div>
         </div>
@@ -50,8 +50,6 @@ include("../system_config.php");
             if (isset($_SESSION['msg'])) {
               $message = $_SESSION['msg'];
               unset($_SESSION['msg']);
-              // print_r($_SESSION);
-              // die;
 
               // Display the flash message using SweetAlert
               echo "<script>
