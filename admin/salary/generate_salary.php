@@ -245,59 +245,88 @@ if ($per['salary_management']['view'] == 0) { ?>
                 }
             </script>
 
-
             <script>
-                function calculateTotalPoint() {
-                    let Food_License = parseFloat($('input[name="Food_License"]').val()) || 0;
-                    let Shop_Act = parseFloat($('input[name="Shop_Act"]').val()) || 0;
-                    let Bank_Account = parseFloat($('input[name="Bank_Account"]').val()) || 0;
-                    let Demat_Account = parseFloat($('input[name="Demat_Account"]').val()) || 0;
-                    let ITR = parseFloat($('input[name="ITR"]').val()) || 0;
-                    let B_S = parseFloat($('input[name="BS"]').val()) || 0;
-                    let totalPoint = Food_License + Shop_Act + Bank_Account + Demat_Account + ITR + B_S;
-                    $('input[name="total_point"]').val(parseFloat(totalPoint));
+                $(document).ready(function() {
+                    // Document is ready, now bind events and initialize functions
+                    $('input[name="Food_License"]').on('input', calculateTotalPoint);
+                    $('input[name="Shop_Act"]').on('input', calculateTotalPoint);
+                    $('input[name="Bank_Account"]').on('input', calculateTotalPoint);
+                    $('input[name="Demat_Account"]').on('input', calculateTotalPoint);
+                    $('input[name="ITR"]').on('input', calculateTotalPoint);
+                    $('input[name="BS"]').on('input', calculateTotalPoint);
+
+                    $('input[name="basic_salary"]').on('input', sumOfTotalSalary);
+                    $('input[name="petrol"]').on('input', sumOfTotalSalary);
+                    $('input[name="mobile_recharge"]').on('input', sumOfTotalSalary);
+                    $('input[name="extra_allowance"]').on('input', sumOfTotalSalary);
+
+                    // Call calculateSalary initially after all bindings are set
                     calculateSalary();
+                });
+
+                function calculateTotalPoint() {
+                    try {
+                        let Food_License = parseFloat($('input[name="Food_License"]').val()) || 0;
+                        let Shop_Act = parseFloat($('input[name="Shop_Act"]').val()) || 0;
+                        let Bank_Account = parseFloat($('input[name="Bank_Account"]').val()) || 0;
+                        let Demat_Account = parseFloat($('input[name="Demat_Account"]').val()) || 0;
+                        let ITR = parseFloat($('input[name="ITR"]').val()) || 0;
+                        let B_S = parseFloat($('input[name="BS"]').val()) || 0;
+                        let totalPoint = Food_License + Shop_Act + Bank_Account + Demat_Account + ITR + B_S;
+                        $('input[name="total_point"]').val(parseFloat(totalPoint));
+                        calculateSalary();
+                    } catch (error) {
+                        console.error("An error occurred while calculating total points:", error);
+                    }
                 }
 
                 function sumOfTotalSalary() {
-                    let basic_salary = parseFloat($('input[name="basic_salary"]').val()) || 0;
-                    let petrol = parseFloat($('input[name="petrol"]').val()) || 0;
-                    let mobile_recharge = parseFloat($('input[name="mobile_recharge"]').val()) || 0;
-                    let extra_allowance = parseFloat($('input[name="extra_allowance"]').val()) || 0;
-                    let totalSalary = basic_salary + petrol + mobile_recharge + extra_allowance;
-                    $('input[name="total_salary"]').val(parseFloat(totalSalary));
-                    calculateSalary();
+                    try {
+                        let basic_salary = parseFloat($('input[name="basic_salary"]').val()) || 0;
+                        let petrol = parseFloat($('input[name="petrol"]').val()) || 0;
+                        let mobile_recharge = parseFloat($('input[name="mobile_recharge"]').val()) || 0;
+                        let extra_allowance = parseFloat($('input[name="extra_allowance"]').val()) || 0;
+                        let totalSalary = basic_salary + petrol + mobile_recharge + extra_allowance;
+                        $('input[name="total_salary"]').val(parseFloat(totalSalary));
+                        calculateSalary();
+                    } catch (error) {
+                        console.error("An error occurred while calculating total salary:", error);
+                    }
                 }
 
                 function calculateSalary() {
+                    try {
+                        let petrol = parseFloat($('input[name="petrol"]').val()) || 0;
+                        let mobile_recharge = parseFloat($('input[name="mobile_recharge"]').val()) || 0;
+                        let extra_allowance = parseFloat($('input[name="extra_allowance"]').val()) || 0;
+                        let basic_salary = parseFloat($('input[name="basic_salary"]').val()) || 0;
+                        let other_pay_amount = parseFloat($('input[name="other_pay_amount"]').val()) || 0;
+                        let other_deduction = parseFloat($('input[name="other_deduction"]').val()) || 0;
+                        let salary = (petrol + mobile_recharge + extra_allowance + other_pay_amount) - other_deduction;
 
-                    let petrol = parseFloat($('input[name="petrol"]').val()) || 0;
-                    let mobile_recharge = parseFloat($('input[name="mobile_recharge"]').val()) || 0;
-                    let extra_allowance = parseFloat($('input[name="extra_allowance"]').val()) || 0;
-                    let basic_salary = parseFloat($('input[name="basic_salary"]').val()) || 0;
-                    let other_pay_amount = parseFloat($('input[name="other_pay_amount"]').val()) || 0;
-                    let other_deduction = parseFloat($('input[name="other_deduction"]').val()) || 0;
-                    let salary = (petrol + mobile_recharge + extra_allowance + other_pay_amount) - other_deduction;
+                        let totalPoint = parseFloat($('input[name="total_point"]').val()) || 0;
+                        let workingTarget = parseFloat($('input[name="working_target"]').val()) || 0;
+                        let percentageAchieved = (totalPoint / workingTarget) * 100;
+                        percentageAchieved = Math.min(percentageAchieved, 100);
 
-                    let totalPoint = parseFloat($('input[name="total_point"]').val()) || 0;
-                    let workingTarget = parseFloat($('input[name="working_target"]').val()) || 0;
-                    let percentageAchieved = (totalPoint / workingTarget) * 100;
-                    percentageAchieved = Math.min(percentageAchieved, 100);
+                        let totalCalculateSalary = 0;
+                        if (percentageAchieved < 30) {
+                            totalCalculateSalary = salary;
+                        } else if (totalPoint > workingTarget) {
+                            let excessPoints = totalPoint - workingTarget;
+                            let excessSalary = excessPoints * (basic_salary / workingTarget);
+                            totalCalculateSalary = salary + Math.round(basic_salary + excessSalary);
+                        } else {
+                            totalCalculateSalary = salary + Math.round(basic_salary * (percentageAchieved / 100));
+                        }
 
-                    let totalCalculateSalary = 0;
-                    if (percentageAchieved < 30) {
-                        totalCalculateSalary = salary;
-                    } else if (totalPoint > workingTarget) {
-                        let excessPoints = totalPoint - workingTarget;
-                        let excessSalary = excessPoints * (basic_salary / workingTarget);
-                        totalCalculateSalary = salary + Math.round(basic_salary + excessSalary);
-                    } else {
-                        totalCalculateSalary = salary + Math.round(basic_salary * (percentageAchieved / 100));
+                        $('input[name="total_calculated_salary"]').val(parseFloat(totalCalculateSalary.toFixed(2)));
+                    } catch (error) {
+                        console.error("An error occurred while calculating salary:", error);
                     }
-
-                    $('input[name="total_calculated_salary"]').val(parseFloat(totalCalculateSalary.toFixed(2)));
                 }
             </script>
+
 
             <script>
                 $(document).ready(function() {
