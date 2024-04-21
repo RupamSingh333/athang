@@ -277,7 +277,7 @@ function write_num($val)
             </tr>
             <tr>
                 <td><strong>Name of Employee:</strong></td>
-                <td><?= $getEmployeeSalaryDataById['first_name']; ?></td>
+                <td><?= ucwords($getEmployeeSalaryDataById['first_name']); ?></td>
             </tr>
             <tr>
                 <td><strong>Designation:</strong></td>
