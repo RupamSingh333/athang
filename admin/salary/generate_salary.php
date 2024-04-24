@@ -153,14 +153,14 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                         <!-- <td><?= $data['total_point']; ?></td>
                                                         <td><?= $data['total_working_days']; ?></td> -->
                                                         <!-- <td><?= $data['gross_salary']; ?></td> -->
-                                                        <td><?= $data['total_salary']; ?></td>
-                                                        <td><?= $data['other_pay_amount']; ?></td>
-                                                        <td><?= $data['other_deduction']; ?></td>
-                                                        <td><?= $data['advance_pay']; ?></td>
-                                                        <td><?= $data['leave_amount']; ?></td>
-                                                        <td><?= $data['total_calculated_salary_percentage']; ?></td>
-                                                        <td><?= $data['total_calculated_salary']; ?></td>
-                                                        <td><?= $data['descriptions']; ?></td>
+                                                        <td><?= number_format($data['total_salary']); ?></td>
+                                                        <td><?= number_format($data['other_pay_amount']); ?></td>
+                                                        <td><?= number_format($data['other_deduction']); ?></td>
+                                                        <td><?= number_format($data['advance_pay']); ?></td>
+                                                        <td><?= number_format($data['leave_amount']); ?></td>
+                                                        <td><?= number_format($data['total_calculated_salary_percentage']); ?></td>
+                                                        <td><?= number_format($data['total_calculated_salary']); ?></td>
+                                                        <td><?= ($data['descriptions']); ?></td>
                                                         <td>
                                                             <a href="salary_slip.php?id=<?= urlencode(encryptIt($data['id'])); ?>" target="_blank" rel="noopener noreferrer">
                                                                 <i class="fa fa-file"></i>
