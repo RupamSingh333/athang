@@ -294,9 +294,9 @@ function write_num($val)
             </tr>
             <tr>
                 <td>BASIC</td>
-                <td><?= number_format($getEmployeeSalaryDataById['basic_salary']); ?></td>
+                <td><?= number_format($getEmployeeSalaryDataById['total_calculated_salary_percentage']); ?></td>
                 <td>LEAVE</td>
-                <td><?= number_format($getEmployeeSalaryDataById['basic_salary']); ?></td>
+                <td><?= number_format($getEmployeeSalaryDataById['leave_amount']); ?></td>
             </tr>
             <tr>
                 <td>PETROL ALLOWANCE</td>
@@ -308,27 +308,27 @@ function write_num($val)
                 <td>MOBILE RECHARGE</td>
                 <td><?= number_format($getEmployeeSalaryDataById['mobile_recharge']); ?></td>
                 <td>ADVANCE</td>
-                <td><?= number_format($getEmployeeSalaryDataById['other_pay_amount']); ?></td>
+                <td><?= number_format($getEmployeeSalaryDataById['advance_pay']); ?></td>
             </tr>
             <tr>
-                <td>INCENTIVE</td>
-                <td><?= number_format($getEmployeeSalaryDataById['other_pay_amount']); ?></td>
+                <td>Extra Allowance + Incentive</td>
+                <td><?= number_format($getEmployeeSalaryDataById['other_pay_amount'] + $getEmployeeSalaryDataById['extra_allowance']); ?></td>
                 <td></td>
                 <td></td>
             </tr>
             <tr class="total">
                 <td>Total Earnings</td>
-                <td><?= number_format($getEmployeeSalaryDataById['basic_salary']); ?></td>
+                <td><?= number_format($getEmployeeSalaryDataById['total_calculated_salary_percentage'] + $getEmployeeSalaryDataById['petrol'] + $getEmployeeSalaryDataById['mobile_recharge'] + $getEmployeeSalaryDataById['other_pay_amount'] + $getEmployeeSalaryDataById['extra_allowance']); ?></td>
                 <td>Total Deductions</td>
-                <td><?= number_format($getEmployeeSalaryDataById['other_deduction']); ?></td>
+                <td><?= number_format($getEmployeeSalaryDataById['leave_amount'] + $getEmployeeSalaryDataById['other_deduction'] + $getEmployeeSalaryDataById['advance_pay']); ?></td>
             </tr>
             <tr>
                 <td colspan="2" class="total">NET PAYABLE</td>
                 <td colspan="2" class="total"><?= number_format($getEmployeeSalaryDataById['total_calculated_salary']); ?></td>
             </tr>
         </table>
-        <?php 
-        $amountInWord =  write_num($getEmployeeSalaryDataById['total_calculated_salary']); 
+        <?php
+        $amountInWord =  write_num($getEmployeeSalaryDataById['total_calculated_salary']);
 
         ?>
         <p style="margin-top: 20px;"><strong>In words:</strong> <?= $amountInWord; ?></p>

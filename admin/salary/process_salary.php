@@ -22,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
                 </div>
                 <input id="data_id" name="data_id" type="hidden" value="' . $employee_id . '" />
                 <input id="selected_month" name="selected_month" type="hidden" value="' . $selected_month . '" />
-                <input name="gross_salary" type="hidden" value="12000" />
         
                 <div class="col-sm-3 col-md-3 col-lg-3">
                     <div class="form-group">
@@ -137,32 +136,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
 
   $percentageAchieved = ($totalPoint / $employee_details['working_target']) * 100;
   $percentageAchieved = min($percentageAchieved, 100);
-  // $totalCalculateSalary = $salary * ($percentageAchieved / 100);
+  $totalCalculateSalary = $salary * ($percentageAchieved / 100);
 
   // Calculate totalCalculateSalary
   if ($percentageAchieved < 30) {
     $totalCalculateSalary = $salary;
+    $totalPercentageOfTheSalary = 0;
   } else if ($totalPoint > $employee_details['working_target']) {
     $excessPoints = $totalPoint - $employee_details['working_target'];
     $excessSalary = $excessPoints * ($basic_salary / $employee_details['working_target']);
     $totalCalculateSalary = $salary + $excessSalary;
+    $totalPercentageOfTheSalary = $excessSalary;
   } else {
     $totalCalculateSalary = $salary + ($basic_salary * ($percentageAchieved / 100));
-    // pr($basic_salary * ($percentageAchieved / 100));
+    $totalPercentageOfTheSalary = $basic_salary * ($percentageAchieved / 100);
   }
 
 
   $html .= '<div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
                 <label>Achieved Total Point</label>
-                <input class="form-control"  name="total_point"  min="0" placeholder="Total Point" value="' . $totalPoint . '" type="number">
+                <input class="form-control"  name="total_point" readonly min="0" placeholder="Total Point" value="' . $totalPoint . '" type="number">
             </div>
           </div>
 
+
             <div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
-                <label>Other Pay Amount</label>
-                <input class="form-control" step="1" name="other_pay_amount" onchange="calculateSalary();" min="0" placeholder="Other Pay Amount" type="number">
+                <label>Incentive</label>
+                <input class="form-control" step="1" name="other_pay_amount" onchange="calculateSalary();" min="0" placeholder="Incentive" type="number">
             </div>
             </div>
 
@@ -175,18 +177,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_SERVER['HTTP_X_REQUESTED_WI
 
             <div class="col-sm-2 col-md-2 col-lg-2">
             <div class="form-group">
-                <label>Total Salary</label>
-                <input class="form-control" step="1" name="total_salary" onchange="calculateSalary();" min="0" placeholder="Total Salary" value="' . ($salary + $basic_salary) . '" type="number">
+                <label>Advance Pay</label>
+                <input class="form-control" step="1" name="advance_pay" onchange="calculateSalary();" min="0" placeholder="Advance Pay" type="number">
             </div>
             </div>
-            
+
             <div class="col-sm-2 col-md-2 col-lg-2">
-                <div class="form-group">
-                    <label>Calculated Salary</label>
-                    <input class="form-control" step="1" name="total_calculated_salary" min="0" placeholder="Total Point" value="' . $totalCalculateSalary . '" type="number">
-                </div>
+            <div class="form-group">
+                <label>Leave Amount</label>
+                <input class="form-control" step="1" name="leave_amount" onchange="calculateSalary();" min="0" placeholder="Leave Amount" type="number">
             </div>
-            
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="form-group">
+                <label>Basic Salary Amount(%)</label>
+                <input class="form-control" readonly step="1" name="total_calculated_salary_percentage" min="0" placeholder="Total Point" value="' . $totalPercentageOfTheSalary . '" type="number">
+            </div>
+            </div>
+
+            <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="form-group">
+                <label>Total Calculated Salary</label>
+                <input class="form-control" step="1" readonly name="total_calculated_salary" min="0" placeholder="Total Calculated Salary" value="' . ($totalCalculateSalary) . '" type="number">
+            </div>
+            </div>
+
+            <div class="col-sm-2 col-md-2 col-lg-2">
+            <div class="form-group">
+                <label>Total Salary</label>
+                <input class="form-control" step="1" readonly name="total_salary" onchange="calculateSalary();" min="0" placeholder="Total Salary" value="' . ($salary + $basic_salary) . '" type="number">
+            </div>
+            </div>
+
+                       
             <div class="clearfix"></div>
             <div class="col-sm-12 col-md-12 col-lg-12">
               <div class="form-group">

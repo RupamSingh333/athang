@@ -125,10 +125,12 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                     <th>Employee Name</th>
                                                     <th>Selected Month</th>
                                                     <th>Total Working</th>
-                                                    <th>Gross Salary</th>
                                                     <th>Total Salary</th>
-                                                    <th>Other Pay</th>
+                                                    <th>Incentive</th>
                                                     <th>Other Deduction</th>
+                                                    <th>Advance Pay</th>
+                                                    <th>Leave Amount</th>
+                                                    <th>Basic Salary(%)</th>
                                                     <th>Calculated Salary</th>
                                                     <th>Descriptions</th>
                                                     <th>Action</th>
@@ -150,10 +152,13 @@ if ($per['salary_management']['view'] == 0) { ?>
                                                         </td>
                                                         <!-- <td><?= $data['total_point']; ?></td>
                                                         <td><?= $data['total_working_days']; ?></td> -->
-                                                        <td><?= $data['gross_salary']; ?></td>
+                                                        <!-- <td><?= $data['gross_salary']; ?></td> -->
                                                         <td><?= $data['total_salary']; ?></td>
                                                         <td><?= $data['other_pay_amount']; ?></td>
                                                         <td><?= $data['other_deduction']; ?></td>
+                                                        <td><?= $data['advance_pay']; ?></td>
+                                                        <td><?= $data['leave_amount']; ?></td>
+                                                        <td><?= $data['total_calculated_salary_percentage']; ?></td>
                                                         <td><?= $data['total_calculated_salary']; ?></td>
                                                         <td><?= $data['descriptions']; ?></td>
                                                         <td>
@@ -300,9 +305,14 @@ if ($per['salary_management']['view'] == 0) { ?>
                         let mobile_recharge = parseFloat($('input[name="mobile_recharge"]').val()) || 0;
                         let extra_allowance = parseFloat($('input[name="extra_allowance"]').val()) || 0;
                         let basic_salary = parseFloat($('input[name="basic_salary"]').val()) || 0;
+
                         let other_pay_amount = parseFloat($('input[name="other_pay_amount"]').val()) || 0;
+
+                        let advance_pay = parseFloat($('input[name="advance_pay"]').val()) || 0;
+                        let leave_amount = parseFloat($('input[name="leave_amount"]').val()) || 0;
                         let other_deduction = parseFloat($('input[name="other_deduction"]').val()) || 0;
-                        let salary = (petrol + mobile_recharge + extra_allowance + other_pay_amount) - other_deduction;
+
+                        let salary = (petrol + mobile_recharge + extra_allowance + other_pay_amount) - (other_deduction + advance_pay + leave_amount);
 
                         let totalPoint = parseFloat($('input[name="total_point"]').val()) || 0;
                         let workingTarget = parseFloat($('input[name="working_target"]').val()) || 0;
@@ -312,15 +322,20 @@ if ($per['salary_management']['view'] == 0) { ?>
                         let totalCalculateSalary = 0;
                         if (percentageAchieved < 30) {
                             totalCalculateSalary = salary;
+                            totalPercentageOfTheSalary = 0;
                         } else if (totalPoint > workingTarget) {
                             let excessPoints = totalPoint - workingTarget;
                             let excessSalary = excessPoints * (basic_salary / workingTarget);
                             totalCalculateSalary = salary + Math.round(basic_salary + excessSalary);
+                            totalPercentageOfTheSalary = Math.round(basic_salary + excessSalary);
+
                         } else {
                             totalCalculateSalary = salary + Math.round(basic_salary * (percentageAchieved / 100));
+                            totalPercentageOfTheSalary = Math.round(basic_salary * (percentageAchieved / 100));
                         }
 
                         $('input[name="total_calculated_salary"]').val(parseFloat(totalCalculateSalary.toFixed(2)));
+                        $('input[name="total_calculated_salary_percentage"]').val(parseFloat(totalPercentageOfTheSalary.toFixed(2)));
                     } catch (error) {
                         console.error("An error occurred while calculating salary:", error);
                     }
